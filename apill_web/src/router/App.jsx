@@ -1,12 +1,12 @@
 import React from 'react'
-import AppInfo from '../pages/AppInfo'
-import ProductInfo from '../pages/ProductInfo'
+import AppInfoPage from '../pages/AppInfoPage'
+import ProductInfoPage from '../pages/ProductInfoPage'
 
 const App = () => {
   return (
     <>
-      <AppInfo />
-      <ProductInfo />
+      <AppInfoPage />
+      <ProductInfoPage />
     </>
   )
 }
