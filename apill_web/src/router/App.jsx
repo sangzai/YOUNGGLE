@@ -1,15 +1,15 @@
 import React from 'react'
-import AppInfo from '../pages/AppInfo'
-import ProductInfo from '../pages/ProductInfo'
+import AppInfoPage from '../pages/AppInfoPage'
+import ProductInfoPage from '../pages/ProductInfoPage'
 import Mainpage from '../pages/Mainpage'
 
 const App = () => {
   return (
-    <>
-      <Mainpage/>
-      <AppInfo />
-      <ProductInfo />
-    </>
+    <div>
+      <Mainpage />
+      <AppInfoPage />
+      <ProductInfoPage />
+    </div>
   )
 }
 
