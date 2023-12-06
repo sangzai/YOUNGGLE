@@ -1,0 +1,58 @@
+.MainDash{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    /* align-items: center; */
+}
+
+.Navbar{
+  position: absolute;
+}
+
+.main-icon{
+  position: relative;
+  top: 50%;
+  left: 2%;
+}
+
+.Menu{
+  position: relative;
+  top: 50%;
+  left: 90%;
+}
+
+
+.imgslide {
+  /* background-image:url('../img/sleep1.jpg');
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+  background-attachment: fixed; */
+}
+
+.thumbs {
+  margin-left: 15%;
+}
+
+.carousel .slide {
+  /* border-radius: 20px;  */
+  /* 둥글게 만들고 싶은 정도를 조절하세요 */
+  overflow: hidden;
+}
+
+@media screen and (max-width: 1200px) {
+
+    .MainDash{
+        justify-content: flex-start;
+        /* margin-top: 2rem; */
+    }
+    
+}
+
+@media screen and (max-width: 768px) {
+
+  .MainDash{
+    align-items: center;
+  }
+  
+}
