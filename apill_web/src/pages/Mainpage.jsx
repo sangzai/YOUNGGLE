@@ -1,5 +1,5 @@
 import React from 'react'
-import Mainslide from '../components/mainpage/main/Mainslide'
+import Mainslide from '../components/N01mainpage/Mainslide'
 
 const Mainpage = () => {
   return (

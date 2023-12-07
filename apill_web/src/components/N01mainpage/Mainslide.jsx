@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import sleep1 from '../../../img/sleep1.jpg';
-import sleep2 from '../../../img/sleep2.jpg';
-import sleep3 from '../../../img/sleep3.jpg';
-import sleep4 from '../../../img/sleep4.jpg';
-import Logo from '../../../img/MainLogo.png';
+import sleep1 from '../../img/sleep1.jpg';
+import sleep2 from '../../img/sleep2.jpg';
+import sleep3 from '../../img/sleep3.jpg';
+import sleep4 from '../../img/sleep4.jpg';
+import Logo from '../../img/MainLogo.png';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './Mainslide.css';
@@ -21,18 +21,21 @@ const Mainslide = () => {
     return () => {
       clearInterval(interval); 
     };
-  }, [images.length]); //[]안에 있는 값이 변할때 렌더링, 비어있으면 처음에만 적용됨!
+  }, []); //[]안에 있는 값이 변할때 렌더링, 비어있으면 처음에만 적용됨!
 
   const toggleMenu=()=>{
     setIsMenuOpen(!isMenuOpen);
   }
   return (
     <div className='MainDash'>
-      <div className='Navbar'>
-        <img classname="img" src={Logo} alt='Logo' style={{width:'55px', height: '55px'}}/>
-        <button className='Menu' onClick={toggleMenu}>Menu</button>    
+      <header class="header">
+        <h2 classname="logo">
+        <img src={Logo} alt='Logo' style={{width:'50px', height: '50px'}}/>
+        </h2>
+        <div class="btn-grp">
+          <button className='Menu' onClick={toggleMenu}>Menu</button>    
         {isMenuOpen &&(
-          <div className='MenuList'>
+        <div className='MenuList'>
             <a href='#'>홈</a>
             <a href='#'>제품 소개</a>
             {/* <a href='#'>Acus 소개</a> */}
@@ -41,6 +44,7 @@ const Mainslide = () => {
           </div>
         )} 
       </div>
+      </header>
       <div className='imgslide'>
           {/* showThumbs={false} -> 밑에 같이 뜨는 사진 없애는 코드*/}
         <Carousel showThumbs={false} selectedItem={currentSlide} onChange={(nextSlide) => setCurrentSlide(nextSlide)}
@@ -49,6 +53,10 @@ const Mainslide = () => {
         showStatus={false} 
         // 무한루프 설정(넘어갈때 중간 슬라이드 안거치도록)
         infiniteLoop={true}
+        // 화살표 보이지 않도록 설정
+        showArrows={false}
+        // 이미지 아래의 점을 보이지 않도록 설정
+        showIndicators={false}
         >
           {images.map((image, index) => (
             <div key={index}>

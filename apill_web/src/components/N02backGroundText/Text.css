@@ -1,0 +1,25 @@
+.animate{
+    opacity: 1;
+    transform: translateZ(0);
+  }
+
+.highlight{
+    position: relative;
+    z-index: 2;
+    font-weight: 600;
+}
+
+.primaryHighlight{
+    background-color: rgb(129, 120, 201);
+    color: black;
+}
+
+.blackHighlight{
+    background-color: rgb(162, 161, 165);
+    color: black;
+
+}
+
+.text{
+    color: rgb(165, 161, 161);
+}
