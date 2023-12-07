@@ -7,11 +7,11 @@ import TextPage from '../pages/TextPage'
 
 const App = () => {
   return (
-    <div>
+    <div className='appcontainer'>
       <Mainpage />
       <TextPage/>
-      <AppInfoPage />
       <ProductInfoPage />
+      <AppInfoPage />
     </div>
   )
 }

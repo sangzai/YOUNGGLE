@@ -30,7 +30,7 @@ const Mainslide = () => {
     <div className='MainDash'>
       <header class="header">
         <h2 classname="logo">
-        <img src={Logo} alt='Logo' style={{width:'50px', height: '50px'}}/>
+          <img className='logoimg' src={Logo} alt='Logo' style={{width:'50px', height: '50px'}}/>
         </h2>
         <div class="btn-grp">
           <button className='Menu' onClick={toggleMenu}>Menu</button>    
