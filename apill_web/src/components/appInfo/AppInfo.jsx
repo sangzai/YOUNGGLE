@@ -2,8 +2,12 @@ import React from 'react'
 import "./AppInfo.css"
 
 const AppInfo = () => {
-  return (
-    <div>AppInfo</div>
+return (
+    <div className='appinfo'>
+      <div className='app-main'>
+        <div className='phone'></div>
+      </div>
+    </div>
   )
 }
 

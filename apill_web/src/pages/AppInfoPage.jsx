@@ -1,8 +1,11 @@
 import React from 'react'
+import AppInfo from '../components/appInfo/AppInfo'
 
 const AppInfoPage = () => {
   return (
-    <div>AppInfoPage</div>
+    <div>
+      <AppInfo />
+    </div>
   )
 }
 
