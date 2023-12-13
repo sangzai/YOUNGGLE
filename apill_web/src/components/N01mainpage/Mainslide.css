@@ -4,14 +4,6 @@
     justify-content: space-evenly;
 }
 
-/* 
-.logo{
-  position: absolute;
-  top: 30%;
-  left: 5%;
-}
-*/
-
 .logoimg {
   position: absolute;
   top: 20%;
@@ -40,15 +32,6 @@
 
 }
 
-.imgslide {
-  
-  /* background-image:url('../img/sleep1.jpg');
-  background-repeat: no-repeat;
-  background-position: top center;
-  background-size: cover;
-  background-attachment: fixed; */
-  margin-bottom: 10%;
-}
 
 .carousel .slide {
   /* border-radius: 20px;  */

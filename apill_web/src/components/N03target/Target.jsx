@@ -1,0 +1,5 @@
+import target1 from '../../img/target1.png'
+import target2 from '../../img/target2.png'
+import target3 from '../../img/target3.png'
+import target4 from '../../img/target4.png'
+import target5 from '../../img/target5.png'
