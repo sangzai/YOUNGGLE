@@ -44,6 +44,7 @@ class HomePage extends StatelessWidget {
                   // TODO : 파이차트 구현
                   PieChart(
                     PieChartData(
+                      sections: [],
 
                       centerSpaceRadius: 2.0,
                       centerSpaceColor: Colors.transparent,
