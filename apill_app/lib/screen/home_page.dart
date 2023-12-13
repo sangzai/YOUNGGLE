@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -38,6 +41,14 @@ class HomePage extends StatelessWidget {
               Stack(
                 alignment: Alignment.center,
                 children: [
+                  // TODO : 파이차트 구현
+                  PieChart(
+                    PieChartData(
+
+                      centerSpaceRadius: 2.0,
+                      centerSpaceColor: Colors.transparent,
+                    )
+                  ),
                   Container(
                     height: 250,
                     width: 250,
@@ -72,8 +83,19 @@ class HomePage extends StatelessWidget {
                 color: Colors.white.withOpacity(0.6),
                 iconSize: 40,
               ),
+
             ],
-          )
+          ),
+          Divider(
+            color: Colors.white.withOpacity(0.5),thickness: 2,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("수면분석",style: Theme.of(context).textTheme.headlineLarge,
+              ),
+            ],
+          ),
         ],
       )
     );

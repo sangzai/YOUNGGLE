@@ -41,7 +41,7 @@ class _MyAppPageState extends State<MyAppPage> {
       backgroundColor: Colors.transparent,
       // 네비게이션 리스트에 있는 화면의 요소를 가지고 온다
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.fromLTRB(14, 6, 14, 6),
         child: _navIndex.elementAt(_selectedIndex),
       ),
       //
