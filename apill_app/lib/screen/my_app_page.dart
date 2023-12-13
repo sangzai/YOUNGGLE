@@ -40,7 +40,10 @@ class _MyAppPageState extends State<MyAppPage> {
       // Scaffold 의 배경화면을 투명하게
       backgroundColor: Colors.transparent,
       // 네비게이션 리스트에 있는 화면의 요소를 가지고 온다
-      body: _navIndex.elementAt(_selectedIndex),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: _navIndex.elementAt(_selectedIndex),
+      ),
       //
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(

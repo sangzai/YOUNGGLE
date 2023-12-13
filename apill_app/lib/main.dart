@@ -17,6 +17,16 @@ class MyApp extends StatelessWidget {
     // Get방식으로 route 진행 해주기 위해서는
     // MaterialApp >> GetMaterialApp으로 수정
     return GetMaterialApp(
+      title: "ApilL",
+      theme: ThemeData(
+        fontFamily: "Pretendard",
+        textTheme: TextTheme(
+          headlineLarge: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 31,
+              fontWeight: FontWeight.w500),
+          headlineMedium: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 24),
+          bodyMedium: TextStyle(color: Colors.white.withOpacity(0.5)),
+        ),
+      ),
       home: BackGroundImageContainer(
           child: MyAppPage()
       ),

@@ -94,9 +94,8 @@ flutter:
           weight: 700
         - asset: assets/fonts/Pretendard-ExtraBold.otf
           weight: 800
-        - asset: fonts/Pretendard-Black.otf
+        - asset: assets/fonts/Pretendard-Black.otf
           weight: 900
-
     - family: NotoSansKR
       fonts:
         - asset: assets/fonts/NotoSansKR-Thin.ttf
@@ -115,9 +114,8 @@ flutter:
           weight: 700
         - asset: assets/fonts/NotoSansKR-ExtraBold.ttf
           weight: 800
-        - asset: fonts/NotoSansKR-Black.ttf
+        - asset: assets/fonts/NotoSansKR-Black.ttf
           weight: 900
-
     - family: NotoSans
       fonts:
         - asset: assets/fonts/NotoSans-Thin.ttf
@@ -136,16 +134,15 @@ flutter:
           weight: 700
         - asset: assets/fonts/NotoSans-ExtraBold.ttf
           weight: 800
-        - asset: fonts/NotoSans-Black.ttf
+        - asset: assets/fonts/NotoSans-Black.ttf
           weight: 900
-
     - family: GmarketSans
       fonts:
-        - asset: assets/fonts/GmarketSans-Light.otf
+        - asset: assets/fonts/GmarketSansLight.otf
           weight: 300
-        - asset: assets/fonts/GmarketSans-Medium.otf
+        - asset: assets/fonts/GmarketSansMedium.otf
           weight: 500
-        - asset: assets/fonts/GmarketSans-Bold.otf
+        - asset: assets/fonts/GmarketSansBold.otf
           weight: 700
 
   #   - family: Schyler
