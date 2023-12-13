@@ -17,11 +17,6 @@ class MyApp extends StatelessWidget {
     // Get방식으로 route 진행 해주기 위해서는
     // MaterialApp >> GetMaterialApp으로 수정
     return GetMaterialApp(
-      // color: Colors.black,
-      // theme: ThemeData(
-      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
-      //   useMaterial3: true,
-      // ),
       home: BackGroundImageContainer(
           child: MyAppPage()
       ),
