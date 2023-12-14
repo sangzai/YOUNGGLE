@@ -8,16 +8,17 @@ const ProductInfo = () => {
         const handleScroll = () => {
             const advElements = document.querySelectorAll('.product-adv1, .product-adv2, .product-adv3, .product-adv4, .product-adv5, .product-adv6');
     
-            advElements.forEach((element, index) => {
-                const top = element.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
+            const firstElement = advElements[0];
+            const top = firstElement.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
     
-                if (top < windowHeight * 0.75) {
+            if (top < windowHeight * 0.75) {
+                advElements.forEach((element, index) => {
                     element.style.transitionDelay = `${index * 0.2}s`;
                     element.classList.add('visible');
-                }
-            });
-        };
+                });
+            }
+        };    
 
         window.addEventListener('scroll', handleScroll);
 
