@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mainproject_apill/screen/alarm_page.dart';
-import 'package:mainproject_apill/screen/home_page.dart';
+import 'package:mainproject_apill/screen/homepage/home_page.dart';
 import 'package:mainproject_apill/screen/setting_page.dart';
 import 'package:mainproject_apill/screen/sleep_page.dart';
 import 'package:mainproject_apill/screen/statistic_page.dart';
@@ -40,48 +40,50 @@ class _MyAppPageState extends State<MyAppPage> {
       // Scaffold 의 배경화면을 투명하게
       backgroundColor: Colors.transparent,
       // 네비게이션 리스트에 있는 화면의 요소를 가지고 온다
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 6, 14, 6),
-        child: _navIndex.elementAt(_selectedIndex),
-      ),
+      body: _navIndex.elementAt(_selectedIndex),
       //
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent
+      bottomNavigationBar: SizedBox(
+        height: 65,
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent
+          ),
+          child: BottomNavigationBar(
+              iconSize: 30,
+              backgroundColor: Colors.transparent,
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.white.withOpacity(0.5),
+              currentIndex: _selectedIndex,
+              onTap: _onNavTapped,
+              type: BottomNavigationBarType.fixed,
+              showUnselectedLabels: false,
+              showSelectedLabels: false,
+              selectedFontSize: 0,
+              unselectedFontSize: 0,
+              items: [
+                BottomNavigationBarItem(
+                    icon: FaIcon(FontAwesomeIcons.house),
+                    label: '•'
+                ),
+                BottomNavigationBarItem(
+                    icon: FaIcon(FontAwesomeIcons.chartLine),
+                    label: '•'
+                ),
+                BottomNavigationBarItem(
+                    icon: Image.asset('assets/image/MoonBG.png',width: 60),
+                    label: '•'
+                ),
+                BottomNavigationBarItem(
+                    icon: FaIcon(FontAwesomeIcons.clock),
+                    label: '•'
+                ),
+                BottomNavigationBarItem(
+                    icon: FaIcon(FontAwesomeIcons.gear),
+                    label: '•'
+                ),
+              ]),
         ),
-        child: BottomNavigationBar(
-          iconSize: 28,
-          backgroundColor: Colors.transparent,
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.white.withOpacity(0.5),
-            currentIndex: _selectedIndex,
-            onTap: _onNavTapped,
-            type: BottomNavigationBarType.fixed,
-            showUnselectedLabels: false,
-            showSelectedLabels: false,
-            items: [
-              BottomNavigationBarItem(
-                  icon: FaIcon(FontAwesomeIcons.house),
-                  label: '•'
-              ),
-              BottomNavigationBarItem(
-                  icon: FaIcon(FontAwesomeIcons.chartLine),
-                  label: '•'
-              ),
-              BottomNavigationBarItem(
-                  icon: Image.asset('assets/image/MoonBG.png',width: 50),
-                  label: '•'
-              ),
-              BottomNavigationBarItem(
-                  icon: FaIcon(FontAwesomeIcons.clock),
-                  label: '•'
-              ),
-              BottomNavigationBarItem(
-                  icon: FaIcon(FontAwesomeIcons.gear),
-                  label: '•'
-              ),
-            ]),
       ),
     );
   }
