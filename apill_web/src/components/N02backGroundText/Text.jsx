@@ -6,6 +6,7 @@ import target2 from '../../img/target2.png'
 import target3 from '../../img/target3.png'
 import target4 from '../../img/target4.png'
 import target5 from '../../img/target5.png'
+import Slider from './Slider.jsx'
 
 const Text = () => {
   useEffect(() => {
@@ -30,8 +31,11 @@ const Text = () => {
     };
   }, []);
 
+  const images=[target1,target2,target3,target4,target5]
+
+
   return (
-    <div style={{padding:'10%'}}>
+    <div style={{padding:'15%'}}>
     <div className="text" style={{ textAlign: 'center', lineHeight: '2'}}>
       <div className='animate scroll1' style={{ lineHeight: '1.3'}}>
         아직도&nbsp; 
@@ -58,11 +62,8 @@ const Text = () => {
     </div>
     {/* 타겟 */}
     <div className='target-wrap'>
-      <img  className='target' src={target1} ></img>
-      <img  className='target' src={target2} ></img>
-      <img  className='target' src={target3} ></img>
-      <img  className='target' src={target4} ></img>
-      <img  className='target' src={target5} ></img>
+      <Slider images={images}/>
+      {/* <img className="target" src={target1}/> */}
 
     </div>
 

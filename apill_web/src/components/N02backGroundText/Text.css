@@ -79,7 +79,6 @@
 
 .circle-lg{
     
-
     position: absolute;
     height: calc(70vw);
     width: calc(70vw);
@@ -87,7 +86,7 @@
     border-radius: 50%;
     animation: circle-grow 1.7s infinite linear;
     transition: all 0.5s;
-    z-index: 5;
+    z-index: -2;
 
 
 }
@@ -98,27 +97,9 @@
     background-color: rgb(40, 39, 39);
     border-radius: 50%;
     opacity: 0.5;
-    z-index: 50;
+    z-index: -1;
     left: 50%;
     animation: circle-grow 1.7s infinite linear;
     transition: all 0.5s;
 }
 
-.targetslide-wrap{
-    position: relative;
-}
-
-.target-wrap{
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.target{
-    position: absolute;
-    bottom: -70px;
-    height: calc(50vw);
-    width: calc(50vw);
-    z-index: 60;
-}
