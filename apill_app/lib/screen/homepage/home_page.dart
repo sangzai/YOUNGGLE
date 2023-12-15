@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mainproject_apill/screen/homepage/barchart_practice.dart';
 import 'package:mainproject_apill/screen/homepage/home_linechart.dart';
 import 'package:mainproject_apill/screen/homepage/home_piechart.dart';
 
@@ -113,10 +114,24 @@ class HomePage extends StatelessWidget {
                   // TODO 그래프 구현 2
                   child: Column(
                     children: [
-                      Expanded(child: Padding(
-                        padding: const EdgeInsets.only(top: 15,bottom: 4,),
-                        child: HomeLineChart(),
+                      Expanded(flex: 13,child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Container(color: Colors.transparent,child: HomeLineChart()),
                       )),
+                      Expanded(flex: 1,child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Container(color: Colors.transparent,
+                            child: Padding(
+                              // TODO 그래프끼리 길이 맞춰줘야함
+                              padding: const EdgeInsets.only(left: 32),
+                              child: HorizontalBarChart(),
+                            )),
+                      )),
+                      Row(
+                        children: [
+                          
+                        ],
+                      )
 
                     ],
                   ),
