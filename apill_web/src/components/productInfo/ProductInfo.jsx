@@ -27,7 +27,7 @@ const ProductInfo = () => {
         };
     }, []);
     
-    return (
+    return ( 
         <div id='productinfo' className='productinfo'>
             <div className='productinfo-left-section'>
                 <div className='productinfo-left-top-circle' />
