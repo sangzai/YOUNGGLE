@@ -21,11 +21,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "Pretendard",
         textTheme: TextTheme(
-          headlineLarge: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 31,
+          headlineLarge: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 26,
               fontWeight: FontWeight.w500),
-          headlineMedium: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 24),
+          headlineMedium: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 22),
           bodyMedium: TextStyle(color: Colors.white.withOpacity(0.5)),
         ),
+        // 클릭 되있는 색
+        highlightColor: Colors.green,
+        // 클릭 했을때 번지는 색
+        splashColor: Colors.blue,
+        // applyElevationOverlayColor: true,
+        cardTheme: CardTheme(
+          color: Colors.red,
+
+        ),
+
       ),
       home: BackGroundImageContainer(
           child: MyAppPage()
