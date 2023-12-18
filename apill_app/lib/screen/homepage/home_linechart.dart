@@ -8,34 +8,25 @@ class HomeLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return AspectRatio(
-      // 자식 위젯의 가로 세로 비율
-      aspectRatio: 3,
-      child: Expanded(
-        child: Padding(
-          padding: const EdgeInsets.only(right: 16, left: 6),
-          child: LineChart(
-            LineChartData(
-              // 선 클릭시 설정
-              lineTouchData: lineTouchData,
-              // 차트 내부 격자선 데이터 설정
-              gridData: gridData,
-              // 차트 바깥 축에 대한 정보 설정
-              titlesData: titlesData1,
+    return LineChart(
+      LineChartData(
+        // 선 클릭시 설정
+        lineTouchData: lineTouchData,
+        // 차트 내부 격자선 데이터 설정
+        gridData: gridData,
+        // 차트 바깥 축에 대한 정보 설정
+        titlesData: titlesData1,
 
-              borderData: FlBorderData(show: false),
-              // TODO : 차트 전체 길이 조정
-              lineBarsData: lineBarsData1,
-              minX: 0,
-              maxX: 14,
-              maxY: 4,
-              minY: 0,
+        borderData: FlBorderData(show: false),
+        // TODO : 차트 전체 길이 조정
+        lineBarsData: lineBarsData1,
+        minX: 0,
+        maxX: 14,
+        maxY: 4,
+        minY: 0.8,
 
-            ),
-
-          ),
-        ),
       ),
+
     );
   }// 빌더 끝
   LineTouchData get lineTouchData => LineTouchData(
@@ -95,28 +86,28 @@ class HomeLineChart extends StatelessWidget {
     // 제목간 간격
     interval: 1,
     // 제목과 차트 간격
-    reservedSize: 50,
+    reservedSize: 30,
   );
 
   // TODO : 좌측 차트에 나오는 정보
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
-      fontSize: 13,
+      fontSize: 14,
     );
     String text;
     switch (value.toInt()) {
       case 1:
-        text = '깸';
+        text = '깊은 수면';
         break;
       case 2:
-        text = '램 수면';
-        break;
-      case 3:
         text = '얕은 수면';
         break;
+      case 3:
+        text = ' 램 수면';
+        break;
       case 4:
-        text = '깊은 수면';
+        text = '깸';
         break;
       default:
         return Container();

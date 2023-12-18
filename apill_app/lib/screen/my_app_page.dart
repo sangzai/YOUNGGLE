@@ -63,23 +63,28 @@ class _MyAppPageState extends State<MyAppPage> {
               unselectedFontSize: 0,
               items: [
                 BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.house),
+                    icon: FaIcon(FontAwesomeIcons.house,
+                      size: _selectedIndex == 0 ? 35 : 30),
                     label: '•'
                 ),
                 BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.chartLine),
+                    icon: FaIcon(FontAwesomeIcons.chartLine,
+                      size: _selectedIndex == 1 ? 35 : 30),
                     label: '•'
                 ),
                 BottomNavigationBarItem(
-                    icon: Image.asset('assets/image/MoonBG.png',width: 60),
+                    icon: Image.asset('assets/image/MoonBG.png',
+                        width: _selectedIndex == 2 ? 65 : 60),
                     label: '•'
                 ),
                 BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.clock),
+                    icon: FaIcon(FontAwesomeIcons.clock,
+                      size: _selectedIndex == 3 ? 35 : 30),
                     label: '•'
                 ),
                 BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.gear),
+                    icon: FaIcon(FontAwesomeIcons.gear,
+                      size: _selectedIndex == 4 ? 35 : 30),
                     label: '•'
                 ),
               ]),
