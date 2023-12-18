@@ -44,6 +44,10 @@
 
 .line{
     height: calc(10vw);
+    justify-content: center;
+    align-items: center;
+    display: inline;
+    margin-bottom: 20px;
 
 }
 
@@ -102,4 +106,5 @@
     animation: circle-grow 1.7s infinite linear;
     transition: all 0.5s;
 }
+
 

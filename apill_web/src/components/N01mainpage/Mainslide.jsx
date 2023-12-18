@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Menu from './FlyoutMenus';
 import sleep1 from '../../img/sleep1.jpg';
 import sleep2 from '../../img/sleep2.jpg';
 import sleep3 from '../../img/sleep3.jpg';
@@ -11,7 +12,7 @@ import './Mainslide.css';
 const Mainslide = () => {
   const images = [sleep1, sleep2, sleep3, sleep4];
   const [currentSlide, setCurrentSlide] = useState(0);  //초기값 (인덱스 0)
-  const [isMenuOpen,setIsMenuOpen]=useState(false);
+  // const [isMenuOpen,setIsMenuOpen]=useState(false);
 
   useEffect(() => { //변화가 생길때 감지
     const interval = setInterval(() => {
@@ -21,33 +22,28 @@ const Mainslide = () => {
     return () => {
       clearInterval(interval); 
     };
-  }, []); //[]안에 있는 값이 변할때 렌더링, 비어있으면 처음에만 적용됨!
+  }, [images.length]); //[]안에 있는 값이 변할때 렌더링, 비어있으면 처음에만 적용됨!
 
-  const toggleMenu=()=>{
-    setIsMenuOpen(!isMenuOpen);
-  }
+  // const toggleMenu=()=>{
+  //   setIsMenuOpen(!isMenuOpen);
+  // }
   return (
-    <div className='MainDash'>
+    <div className='MainDash' id='main'>
       <header class="header">
         <h2 classname="logo">
-          <img className='logoimg' src={Logo} alt='Logo' style={{width:'50px', height: '50px'}}/>
+          <img className='logoimg' src={Logo} alt='Logo'/>
         </h2>
-        <div class="btn-grp">
-          <button className='Menu' onClick={toggleMenu}>Menu</button>    
-        {isMenuOpen &&(
-        <div className='MenuList'>
-            <a href='#'>홈</a>
-            <a href='#'>제품 소개</a>
-            {/* <a href='#'>Acus 소개</a> */}
-            <a href='#'>팀소개</a>
-
-          </div>
-        )} 
+        <div class="Menu">
+          <Menu/>
       </div>
       </header>
       <div className='imgslide'>
           {/* showThumbs={false} -> 밑에 같이 뜨는 사진 없애는 코드*/}
-        <Carousel showThumbs={false} selectedItem={currentSlide} onChange={(nextSlide) => setCurrentSlide(nextSlide)}
+        <Carousel 
+        showThumbs={false} selectedItem={currentSlide} 
+        onChange={(nextSlide) => {
+          setCurrentSlide(nextSlide===images.length ?0:nextSlide);
+        }}
         transitionTime={2000}
         // 슬라이드 상태 표시줄을 숨김
         showStatus={false} 
@@ -63,10 +59,7 @@ const Mainslide = () => {
               <img src={image} alt={`Image ${index}`} />
             </div>
           ))}
-        </Carousel>
-
-        
-          
+        </Carousel> 
       </div>
     </div>
   );

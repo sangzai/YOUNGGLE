@@ -28,10 +28,10 @@ const AppInfo = () => {
     }, 5000); 
 
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
   return (
-    <div className="appinfo">
+    <div id='appinfo' className="appinfo">
       <div
         className="app-main"
         style={{
