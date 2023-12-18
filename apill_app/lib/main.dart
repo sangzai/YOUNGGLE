@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mainproject_apill/screen/loginpage/login_page.dart';
 import 'package:mainproject_apill/screen/my_app_page.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: BackGroundImageContainer(
-          child: MyAppPage()
+          child: LoginPage()
       ),
     );
   }
