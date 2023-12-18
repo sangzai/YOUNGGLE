@@ -1,0 +1,15 @@
+.MenuIcon{
+    padding-inline: 12px;
+    font-size: 19px;
+    font-weight: 100;
+    background-color: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    border-radius: 8px;
+  }
+  
+  .icon{
+    width: calc(3.5vw);
+    height: calc(3.5vw);
+  
+  }

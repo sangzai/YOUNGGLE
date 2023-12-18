@@ -6,8 +6,9 @@
 
 .logoimg {
   position: absolute;
-  top: 30%;
+  top: 40%;
   left: 2%;
+  width: 60px;
 }
 
 .Navbar{
@@ -18,8 +19,8 @@
 
 .Menu{
   position: absolute;
-  top: 30%;
-  right: 13%;
+  top: 55%;
+  right: 7%;
 }
 
 .header{
