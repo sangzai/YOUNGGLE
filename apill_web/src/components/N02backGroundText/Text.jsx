@@ -11,7 +11,7 @@ import Slider from './Slider.jsx'
 const Text = () => {
   useEffect(() => {
     const handleScroll = () => {
-      const advElements = document.querySelectorAll('.scroll1, .scroll2');
+      const advElements = document.querySelectorAll('.scroll1, .scroll2, .scroll3');
 
       advElements.forEach((element, index) => {
         const top = element.getBoundingClientRect().top;
@@ -35,7 +35,8 @@ const Text = () => {
 
 
   return (
-    <div style={{padding:'15%'}}>
+  
+    <div className='whole' style={{padding:'15%'}}>
     <div className="text" style={{ textAlign: 'center', lineHeight: '2'}}>
       <div className='animate scroll1' style={{ lineHeight: '1.3'}}>
         아직도&nbsp; 

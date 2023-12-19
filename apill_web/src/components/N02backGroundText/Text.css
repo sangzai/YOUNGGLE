@@ -1,3 +1,9 @@
+.whole{
+  overflow: hidden;
+  height:calc(110vw);
+    
+}
+
 .animate{
     opacity: 1;
     transform: translateZ(0);
@@ -22,9 +28,15 @@
 
 .text{
     color: rgb(165, 161, 161);
+    height: calc(100vw / 16 * 7);
+    font-size: 3.3vw;
 }
+
+  
+
 .scroll1,
-.scroll2{
+.scroll2,
+.scroll3{
     opacity: 0;
     transform: translateY(50px);
     transition: opacity 1s ease, transform 2s ease;
@@ -32,15 +44,12 @@
 }
 
 .scroll1.visible,
-.scroll2.visible{
+.scroll2.visible,
+.scroll3.visible{
     opacity: 1;
     transform: translateY(0);
 }
 
-.text{
-    height: calc(100vw / 16 * 7);
-    font-size: 3.3vw;
-}
 
 .line{
     height: calc(10vw);
@@ -84,8 +93,8 @@
 .circle-lg{
     
     position: absolute;
-    height: calc(70vw);
-    width: calc(70vw);
+    height: calc(80vw);
+    width: calc(80vw);
     background-color: rgb(40, 39, 39);
     border-radius: 50%;
     animation: circle-grow 1.7s infinite linear;
@@ -96,8 +105,8 @@
 }
 
 .circle-md{
-    height: calc(55vw);
-    width: calc(55vw);
+    height: calc(60vw);
+    width: calc(60vw);
     background-color: rgb(40, 39, 39);
     border-radius: 50%;
     opacity: 0.5;
