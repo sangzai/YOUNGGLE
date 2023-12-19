@@ -1,11 +1,11 @@
 import React from 'react'
-import ProductInfo from '../components/productinfo/ProductInfo'
+import ProductInfo from '../components/productinfo/Productinfo'
 
 
 const ProductInfoPage = () => {
   return (
     <div>
-      <ProductInfo/>
+      <ProductInfo />
     </div>
   )
 }
