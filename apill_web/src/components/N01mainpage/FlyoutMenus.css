@@ -3,7 +3,8 @@ a{
 }
 
 .MenuIcon{
-    padding-inline: 12px;
+    /* padding-inline: 10px; */
+    padding:6px;
     font-size: 19px;
     font-weight: 100;
     background-color: transparent;
