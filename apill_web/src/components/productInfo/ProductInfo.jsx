@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import React from 'react'
-import "./ProductInfo.css"
+import "./Productinfo.css"
 import product from './img/apill.png'
 
 const ProductInfo = () => {

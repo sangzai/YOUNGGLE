@@ -5,7 +5,7 @@
     position: relative;
 } */
 
-.slide{
+.slideTarget{
     flex: 0 0 20%; 
     transition: transform 1s ease;
     position: relative;
@@ -13,6 +13,7 @@
     /* align-items: center; > 수직 방향에서 아이템 정렬 -> 이게 들어가면 맨 위 사진이 작아짐*/
     display: flex;
     flex-direction: row;
+    bottom: 100px;
     
 }
 
@@ -24,13 +25,12 @@
 .left{
     transform: translateX(-30%) scale(0.85);
     z-index: 1;
-    
 
 }
 
 .right{
     transform: translateX(30%) scale(0.85);
-    z-index: 1;
+    z-index:1;
 
 }
 

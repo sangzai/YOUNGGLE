@@ -1,10 +1,11 @@
 import React from 'react'
-import AppInfo from '../components/appinfo/AppInfo'
+import AppInfo from '../components/appinfo/Appinfo'
+
 
 const AppInfoPage = () => {
   return (
     <div>
-      <AppInfo/>
+      <AppInfo />
     </div>
   )
 }

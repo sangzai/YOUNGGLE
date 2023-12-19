@@ -1,13 +1,13 @@
 .appinfo {
     flex: 1;
-    height: calc(100vw / 16 * 7.5);
+    height: calc(100vw / 16 * 8);
     display: flex;
     position: relative; 
     overflow: hidden;
 }
 
 .app-main {
-    width: 19.7%;
+    width: 21%;
     height: 80%;
     /* background-image:  url('./img/app_main.png');  */
     background-size: cover; 
@@ -15,16 +15,104 @@
     position: absolute;
     bottom: 1%; 
     left: 40%;
-    /* transition: opacity 1s ease-in-out; */
+    transition: opacity 1s ease-in-out;
+    opacity: 1;
 }
 
 .app-tutorial-dic {
-    width: 30%;
+    width: 32%;
     height: 26.7%;
     background-image:  url('./img/app_tutorial_dic.png'); 
     background-size: contain; 
     background-position: center;
     position: absolute;
-    bottom: 40%; 
+    bottom: 50%; 
     left: 5%;
 }
+
+.app-chart-dic {
+    width: 32%;
+    height: 26.7%;
+    background-image:  url('./img/app_chart_dic.png'); 
+    background-size: contain; 
+    background-position: center;
+    position: absolute;
+    bottom: 10%; 
+    left: 5%;
+}
+
+.app-alarm-dic {
+    width: 32%;
+    height: 26.7%;
+    background-image:  url('./img/app_alarm_dic.png'); 
+    background-size: contain; 
+    background-position: center;
+    position: absolute;
+    bottom: 50%; 
+    right: 5%;
+}
+
+.app-control-dic {
+    width: 32%;
+    height: 26.7%;
+    background-image:  url('./img/app_control_dic.png'); 
+    background-size: contain; 
+    background-position: center;
+    position: absolute;
+    bottom: 10%; 
+    right: 5%;
+}
+
+/*
+.app-tutorial-dic-dotted-line {
+    border-bottom: 5px dotted #92b337;
+    border-left: 5px dotted #92b337;
+    width: 29%;
+    height: 8%;
+    position: absolute;
+    bottom: 44%;
+    left: 10.5%;
+}
+
+.app-chart-dic-dotted-line {
+    border-top: 5px dotted #92b337;
+    border-left: 5px dotted #92b337;
+    width: 29%;
+    height: 8%;
+    position: absolute;
+    bottom: 36%;
+    left: 10.5%;
+}
+
+.app-alarm-dic-dotted-line {
+    border-bottom: 5px dotted #92b337;
+    border-right: 5px dotted #92b337;
+    width: 29%;
+    height: 8%;
+    position: absolute;
+    bottom: 44%;
+    right: 10.5%;
+}
+
+.app-control-dic-dotted-line {
+    border-top: 5px dotted #92b337;
+    border-right: 5px dotted #92b337;
+    width: 29%;
+    height: 8%;
+    position: absolute;
+    bottom: 36%;
+    right: 10.5%;
+}
+*/
+
+
+.app-dic > div {
+    opacity: 0.2; /* 전체 요소를 흐려지도록 설정 */
+    transition: opacity 1s ease-in-out; /* 전환 효과를 줄 수 있는 transition 속성 */
+  }
+  
+  /* 특정 요소만 밝아지도록 설정 */
+  .app-dic > div.active {
+    opacity: 1;
+  }
+  

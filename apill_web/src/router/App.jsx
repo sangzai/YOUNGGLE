@@ -5,6 +5,9 @@ import ProductInfoPage from '../pages/ProductInfoPage'
 import Mainpage from '../pages/Mainpage'
 import TextPage from '../pages/TextPage'
 import Menu from '../components/N01mainpage/FlyoutMenus'
+import TeamInfoPage from '../pages/TeamInfoPage'
+import BannerPage from '../pages/BannerPage'
+
 const App = () => {
   return (
     <div className='appcontainer'>
@@ -12,6 +15,8 @@ const App = () => {
       <TextPage/>
       <ProductInfoPage />
       <AppInfoPage />
+      <TeamInfoPage />
+      <BannerPage/>
     </div>
   )
 }

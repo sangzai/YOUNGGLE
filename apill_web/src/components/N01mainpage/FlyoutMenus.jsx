@@ -1,8 +1,6 @@
 import { Fragment } from 'react'
 import './FlyoutMenus.css'
 import Mainslide from './Mainslide'
-import ProductInfo from '../productinfo/ProductInfo'
-import AppInfo from '../appinfo/AppInfo'
 // 팀소개 페이지도 import해야함
 import { Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
@@ -41,7 +39,7 @@ export default function Menu() {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
       >
-        <Popover.Panel className="absolute right-[-20px] z-10 mt-5 flex w-screen max-w-max px-4">
+        <Popover.Panel className="absolute right-[-40px] z-10 mt-5 flex w-screen max-w-max px-4">
           <div className="w-screen flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5"
           style={{maxWidth:'23rem'}}>
             <div className="p-4">
