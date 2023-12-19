@@ -6,8 +6,9 @@
 
 .logoimg {
   position: absolute;
-  top: 20%;
+  top: 40%;
   left: 2%;
+  width: 60px;
 }
 
 .Navbar{
@@ -17,9 +18,10 @@
 
 
 .Menu{
+  padding-inline: 3px;
   position: absolute;
-  top: 20%;
-  right: 13%;
+  top: 55%;
+  right: 11%;
 }
 
 .header{
@@ -36,7 +38,7 @@
 .carousel .slide {
   /* border-radius: 20px;  */
   /* 둥글게 만들고 싶은 정도를 조절하세요 */
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 @media screen and (max-width: 1200px) {

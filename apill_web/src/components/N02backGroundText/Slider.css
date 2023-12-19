@@ -1,0 +1,50 @@
+ /* .slider{
+    display: flex;
+    overflow: hidden;
+    height: 300px;
+    position: relative;
+} */
+
+.slide{
+    flex: 0 0 20%; 
+    transition: transform 1s ease;
+    position: relative;
+    justify-content: center; /* 수평방향에서 아이템 정렬 */
+    /* align-items: center; > 수직 방향에서 아이템 정렬 -> 이게 들어가면 맨 위 사진이 작아짐*/
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.center{
+    transform: scale(1);
+    z-index: 2;
+}
+
+.left{
+    transform: translateX(-30%) scale(0.85);
+    z-index: 1;
+    
+
+}
+
+.right{
+    transform: translateX(30%) scale(0.85);
+    z-index: 1;
+
+}
+
+.target-wrap{
+    position: relative;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+}
+
+.target{
+    position: absolute;
+    bottom: -70px;
+    height: calc(50vw);
+    width: calc(50vw);
+    z-index: 60;
+}
