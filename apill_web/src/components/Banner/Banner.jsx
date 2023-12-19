@@ -11,14 +11,14 @@ const Banner = () => {
         <div className='fixed-grp'>
             <div className='left-grp'>
                 <a href='#'>
-                    <div>
+                    <div className='group1' >
                         <div className='position1'>
                             <img className='bannerMainLogo' src={mainlogo} alt='logo'/>
-                        </div>
-                        <div className='position2'>
-                            <p className='left-grp-bottom1'>A-pill로 힐링하고 싶다면</p>
-                            <p className='left-grp-bottom2'>주문하기 버튼 클릭!</p>
-                            <img src={arrow} alt=''/>
+                     
+                            <p className='type1'>A-pill로 힐링하고 싶다면</p>
+                            <h3 className='type2'>주문하기 버튼 클릭!</h3>
+                   
+                            <img className='arrow' src={arrow} alt='arrow'/>
                         </div>
                     </div> 
 
@@ -28,6 +28,7 @@ const Banner = () => {
                 <a href="https://www.apple.com/app-store/">
                  <img src={appstore} className='google img' alt='GooglePlay'/>
                 </a>
+
                 <a href="https://play.google.com/store">
                  <img src={googleplay} className='appstore img' alt='App Store'/>
                 </a>
