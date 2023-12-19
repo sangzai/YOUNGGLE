@@ -20,9 +20,9 @@ const Slider = ({ images }) => {
                 return (
                     <div
                         key={index}
-                        className={`slideTarget ${position}`}
+                        className={`slideTarget ${position} target${index}`}
                     >
-                        <img className="target" src={image} alt={`Slide ${index + 1}`} />
+                        <img className='target' src={image} alt={`Slide ${index + 1}`} />
                     </div>
                 );
             })}
