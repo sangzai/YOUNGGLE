@@ -1,0 +1,38 @@
+.teaminfo {
+    flex: 1;
+    height: calc(100vw / 16 * 4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; 
+    overflow: hidden;
+
+}
+
+.teaminfo-box {
+    width: 90%;
+    height: 80%;
+    border-top: 5px double rgba(192, 194, 207, 0.5);
+    margin-top: 10%;
+    margin-bottom: 5%;
+    display: flex;
+}
+
+.team-who {
+    width: 50%;
+    height: 100%;
+    padding-top: 5%;
+    padding-left: 5%;
+    font-size: 1.5vw;
+    color: rgb(165, 161, 161);
+    
+}
+
+.team-what {
+    width: 50%;
+    height: 100%;
+    padding-top: 5%;
+    padding-left: 10%;
+    font-size: 2.5vw;
+    color: rgb(165, 161, 161);
+}

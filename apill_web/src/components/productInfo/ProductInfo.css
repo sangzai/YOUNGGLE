@@ -1,6 +1,6 @@
 .productinfo {
     flex: 1;
-    height: calc(100vw / 16 * 7.5);
+    height: calc(100vw / 16 * 8);
     display: flex;
     position: relative; 
     overflow: hidden;
