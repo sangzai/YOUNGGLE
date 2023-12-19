@@ -177,6 +177,7 @@ class _AddAlarmDialogState extends State<AddAlarmDialog> {
     final timeFormat = DateFormat.Hm();
 
     return AlertDialog(
+      backgroundColor: Colors.white.withOpacity(0.6),
       title: Text('알람 추가'),
       content: Column(
         mainAxisSize: MainAxisSize.min,

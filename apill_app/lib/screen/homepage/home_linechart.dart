@@ -30,7 +30,7 @@ class HomeLineChart extends StatelessWidget {
     );
   }// 빌더 끝
   LineTouchData get lineTouchData => LineTouchData(
-    // 터치시 라인 지워버리기
+    // 터치시 나오는 수직 라인 지우기
     getTouchLineEnd: (barData, spotIndex) => 0,
     getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
       return spotIndexes.map((spotIndex) {
@@ -86,7 +86,7 @@ class HomeLineChart extends StatelessWidget {
     // 제목간 간격
     interval: 1,
     // 제목과 차트 간격
-    reservedSize: 30,
+    reservedSize: 32,
   );
 
   // TODO : 좌측 차트에 나오는 정보
@@ -98,16 +98,13 @@ class HomeLineChart extends StatelessWidget {
     String text;
     switch (value.toInt()) {
       case 1:
-        text = '깊은 수면';
+        text = '깊은\n수면';
         break;
       case 2:
-        text = '얕은 수면';
+        text = '얕은\n수면';
         break;
       case 3:
-        text = ' 램 수면';
-        break;
-      case 4:
-        text = '깸';
+        text = ' 램\n수면';
         break;
       default:
         return Container();
