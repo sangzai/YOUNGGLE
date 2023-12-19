@@ -35,12 +35,6 @@
 }
 
 
-.carousel .slide {
-  /* border-radius: 20px;  */
-  /* 둥글게 만들고 싶은 정도를 조절하세요 */
-  /* overflow: hidden; */
-}
-
 @media screen and (max-width: 1200px) {
 
     .MainDash{
