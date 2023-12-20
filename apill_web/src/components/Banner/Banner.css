@@ -1,13 +1,25 @@
-@-webkit-keyframes horizontal-scroll {
+@keyframes horizontal-scroll {
     0% {
       transform: translateX(0);
+      opacity: 0.25;
+
     }
+    50% {
+        transform: translateX(15%);
+        opacity: 0.8;
+  
+      }
     100% {
-      transform: translateX(100%);
+      transform: translateX(30%);
+      opacity:0;
+
     }
   }
-
-
+a:active,
+a:focus,
+a{
+    color:rgb(62, 9, 220) ;
+}
 
 .banner{
     padding: 13px;
@@ -22,26 +34,48 @@
     color: #1e1c1c;
     text-align: justify;
     z-index: 100;
-    padding-left: calc(5vw);
     padding-bottom:27px;
     padding-top: 12px;
+}
+.wholeLR{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    /* gap: 10px; */
 }
 
 .bannerMainLogo{
     width: 63px;
     padding-right: 20px;
     padding-left: 10px;
-    padding-top: 2px;
+    padding-top: 3px;
+}
+
+.orderText{
+    width: 220px;
+    padding-left: 18px;
 }
 
 .left-grp{
+    display: flex;
     background-color: rgb(108, 102, 213);
     border-radius: 10px;
     width: 400px;
     height: 65px;
     padding-bottom: 4px;
+    align-items: center;
+}
+
+.right-grp{
+    display: flex;
+    align-items: center;
 
 }
+.type1,
+.type2{
+    margin: -3px;
+}
+
 .group1{
     align-items: center;
     display: -webkit-box;
@@ -53,15 +87,13 @@
    font-weight: 600;
 }
 .arrow{
-    width: 100px;
-    height: 100px;
-    -webkit-animation-name: horizontal-scroll;
+    width: 40px;
+    height: 40px;
+    animation: horizontal-scroll 1.5s infinite linear;;
 }
 
-.right-grp{
-    /* position: absolute; */
-}
-.type1,
-.type2{
-    margin: 0;
+.img{
+    width: 200px;
+    padding-right: 10px;
+    
 }

@@ -36,3 +36,9 @@
     font-size: 2.5vw;
     color: rgb(165, 161, 161);
 }
+
+.blank{
+    background-color: white;
+    width: 100%;
+    height: 99px;
+}
