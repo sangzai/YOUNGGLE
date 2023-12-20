@@ -21,7 +21,18 @@ a{
     color:rgb(62, 9, 220) ;
 }
 
+.banner.visible{
+    opacity: 1;
+}
+
+.banner.hidden{
+    opacity: 0;
+    pointer-events: none;
+}
 .banner{
+    
+    opacity: 0.95;
+    transition: all 1s ease-in-out;
     padding: 13px;
     transition: all 1s;
     position: fixed;
@@ -97,3 +108,4 @@ a{
     padding-right: 10px;
     
 }
+

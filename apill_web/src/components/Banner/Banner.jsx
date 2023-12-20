@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import appstore from '../../img/appstore.png'
 import googleplay from '../../img/googleplay.png'
 import mainlogo from '../../img/MainLogo.png'
@@ -6,8 +6,28 @@ import arrow from '../../img/arrow.png'
 import './Banner.css'
 
 const Banner = () => {
+    const [isVisible, setIsVisible]=useState(false);
+
+    useEffect(()=>{
+        const handleScroll=()=>{
+            const scrollPosition =window.scrollY;
+            const triggerPosition=200;
+
+            if(scrollPosition>triggerPosition){
+                setIsVisible(true);
+            }else{
+                setIsVisible(false);
+            }
+
+        };
+        window.addEventListener('scroll', handleScroll);
+
+        return()=>{
+            window.removeEventListener('scroll', handleScroll)
+        };
+    },[]);
     return (
-        <div className='banner'>
+        <div className={`banner ${isVisible?'visible': 'hidden'}`}>
             <div className='wholeLR'>
                 <a href='#'>
                     <div className='left-grp'>
@@ -21,7 +41,7 @@ const Banner = () => {
 
                     </div>
                 </a>
-                
+
                 <div className='right-grp'>
                     <a href="https://www.apple.com/app-store/">
                         <img src={appstore} className='google img' alt='GooglePlay' />
