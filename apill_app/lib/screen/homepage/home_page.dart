@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mainproject_apill/screen/homepage/home_barchart.dart';
 import 'package:mainproject_apill/screen/homepage/home_linechart.dart';
 import 'package:mainproject_apill/screen/homepage/home_piechart.dart';
+import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -26,7 +27,7 @@ class HomePage extends StatelessWidget {
                     // TODO : 날짜 가져오기 구현
                   },
                   icon: FaIcon(FontAwesomeIcons.calendarCheck,
-                    color: Colors.white.withOpacity(0.6),
+                    color: AppColors.appColorWhite60,
                     size: 30,)
                 ),
               ],
@@ -155,7 +156,8 @@ class HomePage extends StatelessWidget {
 
                 ),
               ),
-            )
+            ),
+            
           ],)
       ),
     );

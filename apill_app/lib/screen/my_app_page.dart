@@ -3,8 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mainproject_apill/screen/alarm_page.dart';
 import 'package:mainproject_apill/screen/homepage/home_page.dart';
 import 'package:mainproject_apill/screen/setting_page.dart';
-import 'package:mainproject_apill/screen/sleep_page.dart';
+import 'package:mainproject_apill/screen/sleeppage/sleep_page2.dart';
 import 'package:mainproject_apill/screen/statistic_page.dart';
+import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class MyAppPage extends StatefulWidget {
   const MyAppPage({super.key});
@@ -53,7 +54,7 @@ class _MyAppPageState extends State<MyAppPage> {
               iconSize: 30,
               backgroundColor: Colors.transparent,
               selectedItemColor: Colors.white,
-              unselectedItemColor: Colors.white.withOpacity(0.5),
+              unselectedItemColor: AppColors.appColorWhite50,
               currentIndex: _selectedIndex,
               onTap: _onNavTapped,
               type: BottomNavigationBarType.fixed,
@@ -74,7 +75,8 @@ class _MyAppPageState extends State<MyAppPage> {
                 ),
                 BottomNavigationBarItem(
                     icon: Image.asset('assets/image/MoonBG.png',
-                        width: _selectedIndex == 2 ? 65 : 60),
+                        width: _selectedIndex == 2 ? 65 : 60,
+                        opacity: _selectedIndex == 2 ? AlwaysStoppedAnimation(1) : AlwaysStoppedAnimation(0.5)),
                     label: '•'
                 ),
                 BottomNavigationBarItem(

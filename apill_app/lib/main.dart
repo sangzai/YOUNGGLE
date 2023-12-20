@@ -3,6 +3,7 @@ import 'package:mainproject_apill/screen/loginpage/join_page.dart';
 import 'package:mainproject_apill/screen/loginpage/login_page.dart';
 import 'package:mainproject_apill/screen/my_app_page.dart';
 import 'package:get/get.dart';
+import 'package:mainproject_apill/widgets/appcolors.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 
 // assets/image/background.png
@@ -21,6 +22,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: "ApilL",
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.transparent,
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.appColorBlue),
         fontFamily: "Pretendard",
         textTheme: TextTheme(
           headlineLarge: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 26,
@@ -28,16 +32,6 @@ class MyApp extends StatelessWidget {
           headlineMedium: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 22),
           bodyMedium: TextStyle(color: Colors.white.withOpacity(0.5)),
         ),
-        // 클릭 되있는 색
-        highlightColor: Colors.green,
-        // 클릭 했을때 번지는 색
-        splashColor: Colors.blue,
-        // applyElevationOverlayColor: true,
-        cardTheme: CardTheme(
-          color: Colors.red,
-
-        ),
-
       ),
       home: BackGroundImageContainer(
           child: MyAppPage()
