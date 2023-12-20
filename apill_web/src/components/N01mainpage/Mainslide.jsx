@@ -5,6 +5,8 @@ import sleep2 from '../../img/sleep2.jpg';
 import sleep3 from '../../img/sleep3.jpg';
 import sleep4 from '../../img/sleep4.jpg';
 import Logo from '../../img/MainLogo.png';
+import Logo_Apill from '../../img/Logo_Apill.png';
+
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './Mainslide.css';
@@ -30,7 +32,7 @@ const Mainslide = () => {
     <div id='main' className='MainDash'>
       <header class="header">
         <h2 classname="logo">
-          <img className='logoimg' src={Logo} alt='Logo'/>
+          <img className='logoimg' src={Logo_Apill} alt='Logo'/>
         </h2>
         <div class="Menu">
           <Menu/>
