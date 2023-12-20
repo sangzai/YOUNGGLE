@@ -21,9 +21,7 @@ const Banner = () => {
 
                     </div>
                 </a>
-
-
-
+                
                 <div className='right-grp'>
                     <a href="https://www.apple.com/app-store/">
                         <img src={appstore} className='google img' alt='GooglePlay' />
