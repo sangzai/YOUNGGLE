@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
 
       ),
       home: BackGroundImageContainer(
-          child: LoginPage()
+          child: MyAppPage()
       ),
     );
   }
