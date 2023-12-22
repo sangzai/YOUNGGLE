@@ -138,8 +138,6 @@ class _AddAlarmDialogState extends State<AddAlarmDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO : 사용 안함 경고
-    final timeFormat = DateFormat.Hm();
 
     return AlertDialog(
       backgroundColor: Colors.white.withOpacity(0.8),
@@ -321,8 +319,6 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO : 사용 안함 경고
-    final timeFormat = DateFormat.Hm();
 
     return AlertDialog(
       title: Text('알람 수정'),
