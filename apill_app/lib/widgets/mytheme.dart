@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
 
 final ThemeData myTheme = ThemeData(
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.transparent,
+
+  ),
+
   scaffoldBackgroundColor: Colors.transparent,
 
   useMaterial3: true,
@@ -12,10 +18,27 @@ final ThemeData myTheme = ThemeData(
   fontFamily: "Pretendard",
 
   textTheme: TextTheme(
-    headlineLarge: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 26,
-        fontWeight: FontWeight.w500),
-    headlineMedium: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 22),
-    bodyMedium: TextStyle(color: Colors.white.withOpacity(0.5)),
+    headlineLarge: TextStyle(
+        color: Colors.white.withOpacity(0.8),
+        fontSize: 60.sp,
+        fontWeight: FontWeight.w600),
+    headlineMedium: TextStyle(
+        color: Colors.white.withOpacity(0.8),
+        fontSize: 50.sp,
+        fontWeight: FontWeight.w500
+    ),
+
+    titleLarge: TextStyle(
+        color: Colors.white.withOpacity(0.9),
+        fontSize: 60.sp,
+        fontWeight: FontWeight.w700),
+    titleMedium: TextStyle(
+    color: Colors.white.withOpacity(0.9),
+    fontSize: 50.sp,
+    fontWeight: FontWeight.w600),
+
+    bodyLarge: TextStyle(color: Colors.white.withOpacity(0.8),fontSize: 40.sp),
+    bodyMedium: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 30.sp),
   ),
 
   elevatedButtonTheme: ElevatedButtonThemeData(

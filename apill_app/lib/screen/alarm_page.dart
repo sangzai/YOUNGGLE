@@ -1,35 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mainproject_apill/widgets/appcolors.dart';
-import 'package:mainproject_apill/widgets/mytheme.dart';
-
-class DigitalClock extends StatelessWidget {
-  final int value;
-  final VoidCallback onTap;
-
-  DigitalClock({required this.value, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: Center(
-          child: Text(
-            value.toString().padLeft(2, '0'),
-            style: TextStyle(fontSize: 24),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({Key? key});

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/screen/sleeppage/autoheight_controller.dart';
 import 'package:mainproject_apill/screen/sleeppage/snoring_controller.dart';
@@ -20,7 +21,6 @@ class SleepPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 100,),
 
             // 베개의 현재 높이
             Container(
@@ -28,20 +28,25 @@ class SleepPage extends StatelessWidget {
               width: 200,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(180),
+                border: Border.all(
+                    color: AppColors.appColorWhite60,width: 10
+                ),
                 color: AppColors.appColorBlue
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  Text("베개높이",style: Theme.of(context).textTheme.headlineLarge),
                   // TODO : 베개 높이 값 받아오기
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0),
+                  Positioned(
                     child: Text('00',style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                       fontSize: 90,
                     )),
                   ),
-                  SizedBox(height: 30),
+                  Positioned(
+                      top: 20,
+                      child: Text('현재높이',style: Theme.of(context).textTheme.bodyLarge)
+                  ),
+
                 ],
               ),
             ),
@@ -53,56 +58,77 @@ class SleepPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  // 코골이 추적 스위치
-                  AspectRatio(
-                    aspectRatio: 3/2,
-                    child: Container(
+
+                  // 자세추적 스위치
+                  Container(
+                    width: 350.w,
                     decoration: BoxDecoration(
                       color: AppColors.appColorBlue,
                       borderRadius: BorderRadius.circular(15),
                     ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('코골이 추적',style: Theme.of(context).textTheme.headlineLarge,),
-                          Obx(() => Switch(
-                                value: Get.find<SnoringCon>().snoringCheck.value,
-                                onChanged: (value) {
-                                Get.find<SnoringCon>().snoringCheck.value = value;
-                              })
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('자세추적',style: Theme.of(context).textTheme.headlineMedium,),
+                        Obx(() => Switch(
+                            value: Get.find<AutoHeightCon>().autoHeightCheck.value,
+                            onChanged: (value) {
+                              Get.find<AutoHeightCon>().autoHeightCheck.value = value;
+                            })
+                        )
+                      ],
                     ),
                   ),
 
                   // 자동 높이 조절 스위치
-                  AspectRatio(
-                    aspectRatio: 3/2,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.appColorBlue,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('자동높이조절',style: Theme.of(context).textTheme.headlineLarge,),
-                          Obx(() => Switch(
-                                    value: Get.find<AutoHeightCon>().autoHeightCheck.value,
-                                    onChanged: (value) {
-                                      Get.find<AutoHeightCon>().autoHeightCheck.value = value;
-                                    })
-                          )
-                        ],
-                      ),
+                  Container(
+                    width: 350.w,
+                    decoration: BoxDecoration(
+                      color: AppColors.appColorBlue,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('자동높이조절',textAlign:TextAlign.center, style: Theme.of(context).textTheme.headlineMedium,),
+                        Obx(() => Switch(
+                                  value: Get.find<AutoHeightCon>().autoHeightCheck.value,
+                                  onChanged: (value) {
+                                    Get.find<AutoHeightCon>().autoHeightCheck.value = value;
+                                  })
+                        )
+                      ],
                     ),
                   ),
 
                 ],
               ),
             ),
-            // 수면 버튼 높낮이 버튼 총 3개
+            SizedBox(height: 30,),
+
+
+            // 코골이 추적 스위치
+            Container(
+              width: 350.w,
+              height: 100,
+              decoration: BoxDecoration(
+                color: AppColors.appColorBlue,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('코골이추적',textAlign:TextAlign.center,style: Theme.of(context).textTheme.headlineMedium,),
+                  Obx(() => Switch(
+                      value: Get.find<SnoringCon>().snoringCheck.value,
+                      onChanged: (value) {
+                        Get.find<SnoringCon>().snoringCheck.value = value;
+                      })
+                  ),
+                ],
+              ),
+            ),
+
             SizedBox(height: 60,),
 
             Row(
@@ -124,27 +150,7 @@ class SleepPage extends StatelessWidget {
                       )
                   ),
                 ),
-                // 동작 버튼
-                Expanded(
-                  flex: 3,
-                  child: ElevatedButton(
-                      onPressed: (){
-                        // TODO: 코골이 추적, 자동높이조절의 여부를 파악해서 수면 시작
-                      },
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: Size.fromHeight(90),
-                      ),
-                      child: Row(
-                        children: [
-                          Image.asset('assets/image/OnlyMoon.png',width: 40,),
-                          SizedBox(width: 10,),
-                          Text('수면\nStart',
-                            style: Theme.of(context).textTheme.headlineLarge,)
-                  
-                        ],
-                      )
-                  ),
-                ),
+
                 // 높이 높이는 버튼
                 Expanded(
                   flex: 2,
