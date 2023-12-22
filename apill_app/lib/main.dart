@@ -30,6 +30,12 @@ class MyApp extends StatelessWidget {
     FlutterNativeSplash.remove();
     // Get방식으로 route 진행 해주기 위해서는
     // MaterialApp >> GetMaterialApp으로 수정
+
+    // ScreenUtilInit : 반응형 구현을 위한 라이브러리
+    // 예시 SIZE의 화면 기준으로 구현
+    // width: 50.w,
+    // height: 200.h
+    // fontsize: 15.sp
     return ScreenUtilInit(
       designSize: const Size(1100,2400),
       builder: (context, child) {
