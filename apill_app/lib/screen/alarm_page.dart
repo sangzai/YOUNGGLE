@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({Key? key});
