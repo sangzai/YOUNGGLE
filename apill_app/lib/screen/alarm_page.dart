@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mainproject_apill/widgets/appcolors.dart';
+import 'package:mainproject_apill/widgets/mytheme.dart';
 
 class DigitalClock extends StatelessWidget {
   final int value;
@@ -41,16 +43,9 @@ class _AlarmPageState extends State<AlarmPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    return Stack(
         fit: StackFit.expand,
         children: [
-          // 배경 이미지
-          Image.asset(
-            'assets/image/background.png',
-            fit: BoxFit.cover,
-          ),
-          // 앱 바
           AppBar(
             backgroundColor: Colors.transparent,
             title: Text(
@@ -123,8 +118,8 @@ class _AlarmPageState extends State<AlarmPage> {
             ),
           ),
         ],
-      ),
-    );
+      );
+
   }
 
   // 선택된 알람 삭제
@@ -177,7 +172,7 @@ class _AddAlarmDialogState extends State<AddAlarmDialog> {
     final timeFormat = DateFormat.Hm();
 
     return AlertDialog(
-      backgroundColor: Colors.white.withOpacity(0.6),
+      backgroundColor: Colors.white.withOpacity(0.8),
       title: Text('알람 추가'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -191,12 +186,13 @@ class _AddAlarmDialogState extends State<AddAlarmDialog> {
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: [ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('취소'),
-          ),
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('취소'),
+            ),
             ElevatedButton(
               onPressed: () {
 
@@ -212,6 +208,12 @@ class _AddAlarmDialogState extends State<AddAlarmDialog> {
 
   void _showTimePicker(BuildContext context) async {
     final pickedTime = await showTimePicker(
+      cancelText: "취소",
+      confirmText: "확인",
+      helpText: "",
+      hourLabelText: "시간",
+      minuteLabelText: "분",
+
       context: context,
       initialTime: selectedTime,
     );
@@ -304,34 +306,20 @@ class _AlarmTileState extends State<AlarmTile> {
   }
 
   Widget _buildToggleImage(bool isOn) {
-    final imagePath = isOn
-        ? 'assets/image/OnlyMoon.png'
-        : 'assets/image/WhiteMoonLogo.png';
 
-    return Stack(
-      children: [
+    final imageColor = isOn ? Colors.amber : Colors.white;
+
+    return
         Image.asset(
-          imagePath,
+          'assets/image/OnlyMoon.png',
           width: 40,
           height: 40,
+          color : imageColor,
           errorBuilder: (context, error, stackTrace) {
             return Text('이미지 오류');
           },
-        ),
-        if (widget.alarm.isSelected)
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Container(
-              padding: EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-            ),
-          ),
-      ],
-    );
+        );
+
   }
 
   String _formatTime(TimeOfDay time) {
@@ -416,10 +404,4 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
     final editedAlarm = Alarm(selectedTime, isOn: widget.editingAlarm.isOn, isSelected: widget.editingAlarm.isSelected);
     Navigator.of(context).pop(editedAlarm);
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: AlarmPage(),
-  ));
 }

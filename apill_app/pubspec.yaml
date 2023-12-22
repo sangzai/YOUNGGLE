@@ -38,6 +38,8 @@ dependencies:
   font_awesome_flutter: ^10.6.0
   get: ^4.6.6
   fl_chart: ^0.65.0
+  flutter_native_splash: ^2.3.8
+  flutter_screenutil: ^5.9.0
 
 
 dev_dependencies:
@@ -150,3 +152,66 @@ flutter:
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+
+  background_image: "assets/image/splash_screen.png"
+
+  android_12:
+  # The image parameter sets the splash screen icon image.  If this parameter is not specified,
+  # the app's launcher icon will be used instead.
+  # Please note that the splash screen will be clipped to a circle on the center of the screen.
+  # App icon with an icon background: This should be 960×960 pixels, and fit within a circle
+  # 640 pixels in diameter.
+  # App icon without an icon background: This should be 1152×1152 pixels, and fit within a circle
+  # 768 pixels in diameter.
+  #image: assets/android12splash.png
+
+  # Splash screen background color.
+  #color: "#42a5f5"
+
+  # App icon background color.
+  #icon_background_color: "#111111"
+
+  # The branding property allows you to specify an image used as branding in the splash screen.
+    branding: assets/image/splash_screen.png
+
+  # The image_dark, color_dark, icon_background_color_dark, and branding_dark set values that
+  # apply when the device is in dark mode. If they are not specified, the app will use the
+  # parameters from above.
+    image_dark: assets/image/splash_screen.png
+  #color_dark: "#042a49"
+  #icon_background_color_dark: "#eeeeee"
+
+  # The android, ios and web parameters can be used to disable generating a splash screen on a given
+  # platform.
+    android: true
+  #ios: false
+  #web: false
+
+  # Platform specific images can be specified with the following parameters, which will override
+  # the respective parameter.  You may specify all, selected, or none of these parameters:
+  #color_android: "#42a5f5"
+  #color_dark_android: "#042a49"
+  #color_ios: "#42a5f5"
+  #color_dark_ios: "#042a49"
+  #color_web: "#42a5f5"
+  #color_dark_web: "#042a49"
+    image_android: assets/image/splash_screen.png
+    image_dark_android: assets/image/splash_screen.png
+  #image_ios: assets/splash-ios.png
+  #image_dark_ios: assets/splash-invert-ios.png
+  #image_web: assets/splash-web.gif
+  #image_dark_web: assets/splash-invert-web.gif
+    background_image_android: "assets/image/splash_screen.png"
+    background_image_dark_android: "assets/image/splash_screen.png"
+  #background_image_ios: "assets/background-ios.png"
+  #background_image_dark_ios: "assets/dark-background-ios.png"
+  #background_image_web: "assets/background-web.png"
+  #background_image_dark_web: "assets/dark-background-web.png"
+  #branding_android: assets/brand-android.png
+  #branding_dark_android: assets/dart_dark-android.png
+  #branding_ios: assets/brand-ios.png
+  #branding_dark_ios: assets/dart_dark-ios.png
+  #branding_web: assets/brand-web.gif
+  #branding_dark_web: assets/dart_dark-web.gif

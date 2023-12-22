@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mainproject_apill/screen/alarm_page.dart';
 import 'package:mainproject_apill/screen/homepage/home_page.dart';
 import 'package:mainproject_apill/screen/setting_page.dart';
-import 'package:mainproject_apill/screen/sleeppage/sleep_page2.dart';
+import 'package:mainproject_apill/screen/sleeppage/sleep_page.dart';
 import 'package:mainproject_apill/screen/statistic_page.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
@@ -21,7 +21,6 @@ class _MyAppPageState extends State<MyAppPage> {
   // 보여줄 화면 리스트
   final List<Widget> _navIndex = [
     HomePage(),
-    StatisticPage(),
     SleepPage(),
     AlarmPage(),
     SettingPage(),
@@ -31,7 +30,10 @@ class _MyAppPageState extends State<MyAppPage> {
   // 페이지 렌더링을 위해 setState 사용
   void _onNavTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      if (_selectedIndex != index) {
+        _selectedIndex = index;
+
+      }
     });
   }
 
@@ -69,27 +71,23 @@ class _MyAppPageState extends State<MyAppPage> {
                     label: '•'
                 ),
                 BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.chartLine,
-                      size: _selectedIndex == 1 ? 35 : 30),
-                    label: '•'
-                ),
-                BottomNavigationBarItem(
                     icon: Image.asset('assets/image/MoonBG.png',
-                        width: _selectedIndex == 2 ? 65 : 60,
-                        opacity: _selectedIndex == 2 ? AlwaysStoppedAnimation(1) : AlwaysStoppedAnimation(0.5)),
+                      width: _selectedIndex == 1 ? 65 : 60,
+                      opacity: _selectedIndex == 1 ? AlwaysStoppedAnimation(1) : AlwaysStoppedAnimation(0.5)),
                     label: '•'
                 ),
                 BottomNavigationBarItem(
                     icon: FaIcon(FontAwesomeIcons.clock,
-                      size: _selectedIndex == 3 ? 35 : 30),
+                      size: _selectedIndex == 2 ? 35 : 30),
                     label: '•'
                 ),
                 BottomNavigationBarItem(
                     icon: FaIcon(FontAwesomeIcons.gear,
-                      size: _selectedIndex == 4 ? 35 : 30),
+                      size: _selectedIndex == 3 ? 35 : 30),
                     label: '•'
                 ),
-              ]),
+              ]
+          ),
         ),
       ),
     );

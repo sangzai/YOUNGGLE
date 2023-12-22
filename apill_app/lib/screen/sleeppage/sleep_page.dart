@@ -21,7 +21,8 @@ class SleepPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 100,),
-            // 현재 높이
+
+            // 베개의 현재 높이
             Container(
               height: 200,
               width: 200,
@@ -32,21 +33,27 @@ class SleepPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("베개높이",style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 30
-                  )),
+                  Text("베개높이",style: Theme.of(context).textTheme.headlineLarge),
                   // TODO : 베개 높이 값 받아오기
-                  Text('00단계',style: Theme.of(context).textTheme.headlineLarge),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 0),
+                    child: Text('00',style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      fontSize: 90,
+                    )),
+                  ),
+                  SizedBox(height: 30),
                 ],
               ),
             ),
             SizedBox(height: 30,),
+
             // 코골이 추적, 자동 높이 조절
             SizedBox(
               height: 100,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  // 코골이 추적 스위치
                   AspectRatio(
                     aspectRatio: 3/2,
                     child: Container(
@@ -68,6 +75,8 @@ class SleepPage extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  // 자동 높이 조절 스위치
                   AspectRatio(
                     aspectRatio: 3/2,
                     child: Container(
@@ -97,46 +106,60 @@ class SleepPage extends StatelessWidget {
             SizedBox(height: 60,),
 
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                    onPressed: (){},
-                    icon: Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(90),
-                        color: AppColors.appColorBlue,
+                // 높이 낮추는 버튼
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                      onPressed: (){
+                      // TODO : 높이 낮추기
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder()
                       ),
                       child: Icon(Icons.remove,
-                        size: 80,
+                        size: 60,
                         color: AppColors.appColorWhite,
-                      ),
-                    )
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.appColorBlue,
-                    shape: CircleBorder(),
+                      )
                   ),
-                    onPressed: (){},
-                    child: Icon(Icons.add,color: Colors.white,size: 80,)
                 ),
-                IconButton(
-
-                  onPressed: (){},
-                  icon: Container(
-                    height: 80,
-                    width: 80,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(90),
-                      color: AppColors.appColorBlue,
-                    ),
-                    child: Icon(Icons.add,
-                      size: 80,
-                      color: AppColors.appColorWhite,
-                    ),
-                  )
+                // 동작 버튼
+                Expanded(
+                  flex: 3,
+                  child: ElevatedButton(
+                      onPressed: (){
+                        // TODO: 코골이 추적, 자동높이조절의 여부를 파악해서 수면 시작
+                      },
+                      style: ElevatedButton.styleFrom(
+                          fixedSize: Size.fromHeight(90),
+                      ),
+                      child: Row(
+                        children: [
+                          Image.asset('assets/image/OnlyMoon.png',width: 40,),
+                          SizedBox(width: 10,),
+                          Text('수면\nStart',
+                            style: Theme.of(context).textTheme.headlineLarge,)
+                  
+                        ],
+                      )
+                  ),
+                ),
+                // 높이 높이는 버튼
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                      onPressed: (){
+                        // TODO : 높이 올리기
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: CircleBorder()
+                      ),
+                      child: Icon(Icons.add,
+                        size: 60,
+                        color: AppColors.appColorWhite,
+                      )
+                  ),
                 ),
               ],
             )
