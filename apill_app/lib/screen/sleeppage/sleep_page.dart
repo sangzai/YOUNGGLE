@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:mainproject_apill/screen/sleeppage/autoheight_controller.dart';
-import 'package:mainproject_apill/screen/sleeppage/snoring_controller.dart';
+import 'package:mainproject_apill/screen/sleeppage/dorsal_decubitus_height_controller.dart';
+import 'package:mainproject_apill/screen/sleeppage/lateral_decubitus_height_controller.dart';
+import 'package:mainproject_apill/screen/sleeppage/pillow_height_controller.dart';
+import 'package:mainproject_apill/screen/sleeppage/sleep_position_controller.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class SleepPage extends StatelessWidget {
   SleepPage({Key? key}) : super(key: key);
 
-  SnoringCon snoringCon = Get.put(SnoringCon());
-  AutoHeightCon autoHeightCon = Get.put(AutoHeightCon());
 
-  static const double buttonheight = 60;
+  // TODO : 기능 흐름도
+  // 베개 허브와 통신으로 사용자의 자세를 받아옴
+  // 사용자의 자세에 따라서 sleepPosiotion의 상태를 true, false로 변경
+  // 사용자의 자세에 따라서 그 자세의 설정값을 베개 허브에 보내줌
+  // 설정을 보내주고 베개의 현재 높이를 통신으로 받아서 현재 높이에 보여줌
+
+
+  // 자세 구별 true : 등누운자세, false : 옆누운자세
+  final sleepPositionCon = Get.put(SleepPosition());
+  // 등누운 자세 높이 설정
+  final dorsalHeightCon = Get.put(DorsalHeightCon());
+  // 옆누운 자세 높이 설정
+  final lateralHeightCon = Get.put(LateralHeightCon());
+  // 현재 베개 높이
+  final pillowHeightCon = Get.put(PillowHeight());
 
   @override
   Widget build(BuildContext context) {
@@ -21,151 +34,169 @@ class SleepPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(height: 150),
 
             // 베개의 현재 높이
-            Container(
-              height: 200,
-              width: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(180),
-                border: Border.all(
-                    color: AppColors.appColorWhite60,width: 10
-                ),
-                color: AppColors.appColorBlue
-              ),
+            SizedBox(
+              height : 160,
               child: Stack(
+                fit: StackFit.expand,
                 alignment: Alignment.center,
                 children: [
-                  // TODO : 베개 높이 값 받아오기
+                  Obx(() {
+                    final displayHeight = sleepPositionCon.sleepPosition.value
+                        ? dorsalHeightCon.dosalHeight.value.toInt()
+                        : lateralHeightCon.lateralHeight.value.toInt();
+
+                    return Positioned(
+                      top: 10,
+                      child: Text(
+                        '$displayHeight',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          fontSize: 100,
+                        ),
+                      ),
+                    );
+                  }),
                   Positioned(
-                    child: Text('00',style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 90,
-                    )),
-                  ),
-                  Positioned(
-                      top: 20,
+                      top: 0,
                       child: Text('현재높이',style: Theme.of(context).textTheme.bodyLarge)
                   ),
-
-                ],
-              ),
-            ),
-            SizedBox(height: 30,),
-
-            // 코골이 추적, 자동 높이 조절
-            SizedBox(
-              height: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-
-                  // 자세추적 스위치
-                  Container(
-                    width: 350.w,
-                    decoration: BoxDecoration(
-                      color: AppColors.appColorBlue,
-                      borderRadius: BorderRadius.circular(15),
+                  // TODO : 나중에 지워야할 스위치
+                  Positioned(
+                    bottom: 0,
+                    child: Obx(() => Switch(
+                        value: sleepPositionCon.sleepPosition.value,
+                        onChanged: (value) {
+                          sleepPositionCon.sleepPosition.value = value;
+                        },
+                    )
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('자세추적',style: Theme.of(context).textTheme.headlineMedium,),
-                        Obx(() => Switch(
-                            value: Get.find<AutoHeightCon>().autoHeightCheck.value,
-                            onChanged: (value) {
-                              Get.find<AutoHeightCon>().autoHeightCheck.value = value;
-                            })
-                        )
-                      ],
-                    ),
-                  ),
+                  )
 
-                  // 자동 높이 조절 스위치
-                  Container(
-                    width: 350.w,
-                    decoration: BoxDecoration(
-                      color: AppColors.appColorBlue,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('자동높이조절',textAlign:TextAlign.center, style: Theme.of(context).textTheme.headlineMedium,),
-                        Obx(() => Switch(
-                                  value: Get.find<AutoHeightCon>().autoHeightCheck.value,
-                                  onChanged: (value) {
-                                    Get.find<AutoHeightCon>().autoHeightCheck.value = value;
-                                  })
-                        )
-                      ],
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
-            SizedBox(height: 30,),
-
-
-            // 코골이 추적 스위치
-            Container(
-              width: 350.w,
-              height: 100,
-              decoration: BoxDecoration(
-                color: AppColors.appColorBlue,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('코골이추적',textAlign:TextAlign.center,style: Theme.of(context).textTheme.headlineMedium,),
-                  Obx(() => Switch(
-                      value: Get.find<SnoringCon>().snoringCheck.value,
-                      onChanged: (value) {
-                        Get.find<SnoringCon>().snoringCheck.value = value;
-                      })
-                  ),
                 ],
               ),
             ),
 
             SizedBox(height: 60,),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
               children: [
-                // 높이 낮추는 버튼
-                Expanded(
-                  flex: 2,
-                  child: ElevatedButton(
-                      onPressed: (){
-                      // TODO : 높이 낮추기
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder()
+                Text("등누운자세 높이",style: Theme.of(context).textTheme.headlineLarge),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // 높이 낮추는 버튼
+                    Expanded(
+                      child: ElevatedButton(
+                          onPressed: (){
+                            final dorsal = dorsalHeightCon.dosalHeight;
+                            dorsal.value > 1 ? dorsal.value -= 1 : null;
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: CircleBorder()
+                          ),
+                          child: Icon(Icons.remove,
+                            size: 30,
+                            color: AppColors.appColorWhite,
+                          )
                       ),
-                      child: Icon(Icons.remove,
-                        size: 60,
-                        color: AppColors.appColorWhite,
-                      )
-                  ),
-                ),
+                    ),
 
-                // 높이 높이는 버튼
-                Expanded(
-                  flex: 2,
-                  child: ElevatedButton(
-                      onPressed: (){
-                        // TODO : 높이 올리기
-                      },
-                      style: ElevatedButton.styleFrom(
-                          shape: CircleBorder()
+                    // 슬라이더
+                    Expanded(
+                      flex: 3,
+                      child: Obx(
+                        () => Slider(
+                          value: dorsalHeightCon.dosalHeight.value,
+                          onChanged: (value) {
+                            dorsalHeightCon.dosalHeight.value = value;
+
+                          },
+                            min: 1, max: 10, divisions: 9,),
                       ),
-                      child: Icon(Icons.add,
-                        size: 60,
-                        color: AppColors.appColorWhite,
-                      )
-                  ),
+                    ),
+
+
+                    // 높이 높이는 버튼
+                    Expanded(
+                      child: ElevatedButton(
+                          onPressed: (){
+                            final dorsal = dorsalHeightCon.dosalHeight;
+                            dorsal.value < 10 ? dorsal.value += 1 : null;
+                          },
+                          style: ElevatedButton.styleFrom(
+                              shape: CircleBorder()
+                          ),
+                          child: Icon(Icons.add,
+                            size: 30,
+                            color: AppColors.appColorWhite,
+                          )
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
+            SizedBox(height: 60,),
+
+            Column(
+              children: [
+                Text("옆누운자세 높이",style: Theme.of(context).textTheme.headlineLarge),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // 높이 낮추는 버튼
+                    Expanded(
+                      child: ElevatedButton(
+                          onPressed: (){
+                            final lateral = lateralHeightCon.lateralHeight;
+                            lateral.value > 1 ? lateral.value -= 1 : null;
+                          },
+                          style: ElevatedButton.styleFrom(
+                              shape: CircleBorder()
+                          ),
+                          child: Icon(Icons.remove,
+                            size: 30,
+                            color: AppColors.appColorWhite,
+                          )
+                      ),
+                    ),
+
+                    // 슬라이더
+                    Expanded(
+                      flex: 3,
+                      child: Obx(
+                            () => Slider(
+                            value: lateralHeightCon.lateralHeight.value,
+                            onChanged: (value) {
+                              lateralHeightCon.lateralHeight.value = value;
+
+                            },
+                            min: 1, max: 10, divisions: 9),
+                      ),
+                    ),
+
+
+                    // 높이 높이는 버튼
+                    Expanded(
+                      child: ElevatedButton(
+                          onPressed: (){
+                            final lateral = lateralHeightCon.lateralHeight;
+                            lateral.value < 10 ? lateral.value += 1 : null;
+                          },
+                          style: ElevatedButton.styleFrom(
+                              shape: CircleBorder()
+                          ),
+                          child: Icon(Icons.add,
+                            size: 30,
+                            color: AppColors.appColorWhite,
+                          )
+                      ),
+                    ),
+                  ],
                 ),
               ],
             )

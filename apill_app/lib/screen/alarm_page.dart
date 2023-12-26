@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({Key? key});
@@ -8,6 +10,9 @@ class AlarmPage extends StatefulWidget {
 }
 
 class _AlarmPageState extends State<AlarmPage> {
+  // TODO : 알람을 DB와 핸드폰에 저장
+  // 알람 추가시 현재 선택한 시간이 보이게끔
+
   List<Alarm> alarms = [];
 
   @override
@@ -16,14 +21,9 @@ class _AlarmPageState extends State<AlarmPage> {
         fit: StackFit.expand,
         children: [
           AppBar(
-            backgroundColor: Colors.transparent,
             title: Text(
-              '알람 페이지',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[500],
-              ),
+              '알람',
+              style: Theme.of(context).textTheme.headlineLarge,
             ),
             actions: [
               IconButton(
@@ -31,19 +31,16 @@ class _AlarmPageState extends State<AlarmPage> {
                 onPressed: () {
                   _showAddAlarmDialog(context);
                 },
-                color: Colors.grey[500],
+                color: AppColors.appColorWhite60,
               ),
               IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
                   _deleteSelectedAlarms();
                 },
-                color: Colors.grey[500],
+                color: AppColors.appColorWhite60,
               ),
             ],
-            iconTheme: IconThemeData(
-              color: Colors.grey[500],
-            ),
           ),
           // 알람 목록
           Positioned(
@@ -132,7 +129,7 @@ class _AddAlarmDialogState extends State<AddAlarmDialog> {
   @override
   void initState() {
     super.initState();
-    selectedTime = TimeOfDay.now();
+    selectedTime = TimeOfDay(hour: 6,minute: 0);
   }
 
   @override
@@ -144,10 +141,41 @@ class _AddAlarmDialogState extends State<AddAlarmDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ElevatedButton(
-            onPressed: () => _showTimePicker(context),
-            child: Text('알람 시간 선택'),
+          TextButton(
+            style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(color: AppColors.appColorWhite30)
+              ),
+              backgroundColor: AppColors.appColorBlue10
+            ),
+              onPressed: () => _showTimePicker(context),
+              child: Text(
+                '${_formatTime(selectedTime)}',
+                style: TextStyle(
+                  color: AppColors.appColorBlack.lighten(15),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 90.sp,
+                ),
+              ),
           ),
+          // Text(
+          //   '${_formatTime(selectedTime)}',
+          //   style: TextStyle(
+          //     color: AppColors.appColorBlack.lighten(15),
+          //     fontWeight: FontWeight.w600,
+          //     fontSize: 90.sp,
+          //   ),
+          // ),
+          //
+          // SizedBox(height: 10),
+          //
+          // ElevatedButton(
+          //   onPressed: () => _showTimePicker(context),
+          //   child: Text('알람 시간 선택'),
+          // ),
+          
         ],
       ),
       actions: [
@@ -180,7 +208,6 @@ class _AddAlarmDialogState extends State<AddAlarmDialog> {
       helpText: "",
       hourLabelText: "시간",
       minuteLabelText: "분",
-
       context: context,
       initialTime: selectedTime,
     );
@@ -195,6 +222,14 @@ class _AddAlarmDialogState extends State<AddAlarmDialog> {
   void _saveAlarm(BuildContext context) {
     final newAlarm = Alarm(selectedTime);
     Navigator.of(context).pop(newAlarm);
+  }
+
+  String _formatTime(TimeOfDay time) {
+    final hour = time.hourOfPeriod;
+    final minute = '${time.minute}'.padLeft(2, '0');
+    final period = time.period == DayPeriod.am ? '오전' : '오후';
+
+    return '$period $hour:$minute';
   }
 }
 
@@ -324,10 +359,41 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ElevatedButton(
+          TextButton(
+            style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+
+                    borderRadius: BorderRadius.circular(10),
+                    side: BorderSide(color: AppColors.appColorWhite30)
+                ),
+                backgroundColor: AppColors.appColorBlue10
+            ),
             onPressed: () => _showTimePicker(context),
-            child: Text('알람 시간 선택'),
+            child: Text(
+              '${_formatTime(selectedTime)}',
+              style: TextStyle(
+                color: AppColors.appColorBlack.lighten(15),
+                fontWeight: FontWeight.w600,
+                fontSize: 90.sp,
+              ),
+            ),
           ),
+          // Text(
+          //   '${_formatTime(selectedTime)}',
+          //   style: TextStyle(
+          //     color: AppColors.appColorBlack.lighten(15),
+          //     fontWeight: FontWeight.w600,
+          //     fontSize: 90.sp,
+          //   ),
+          // ),
+          //
+          // SizedBox(height: 10),
+          //
+          // ElevatedButton(
+          //   onPressed: () => _showTimePicker(context),
+          //   child: Text('알람 시간 선택'),
+          // ),
+
         ],
       ),
       actions: [
@@ -354,6 +420,11 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
 
   void _showTimePicker(BuildContext context) async {
     final pickedTime = await showTimePicker(
+      cancelText: "취소",
+      confirmText: "확인",
+      helpText: "",
+      hourLabelText: "시간",
+      minuteLabelText: "분",
       context: context,
       initialTime: selectedTime,
     );
@@ -366,7 +437,19 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
   }
 
   void _saveAlarm(BuildContext context) {
-    final editedAlarm = Alarm(selectedTime, isOn: widget.editingAlarm.isOn, isSelected: widget.editingAlarm.isSelected);
+    final editedAlarm = Alarm(
+        selectedTime,
+        isOn: widget.editingAlarm.isOn,
+        isSelected: widget.editingAlarm.isSelected
+    );
     Navigator.of(context).pop(editedAlarm);
+  }
+
+  String _formatTime(TimeOfDay time) {
+    final hour = time.hourOfPeriod;
+    final minute = '${time.minute}'.padLeft(2, '0');
+    final period = time.period == DayPeriod.am ? '오전' : '오후';
+
+    return '$period $hour:$minute ';
   }
 }

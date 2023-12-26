@@ -4,7 +4,6 @@ import 'package:mainproject_apill/screen/alarm_page.dart';
 import 'package:mainproject_apill/screen/homepage/home_page.dart';
 import 'package:mainproject_apill/screen/setting_page.dart';
 import 'package:mainproject_apill/screen/sleeppage/sleep_page.dart';
-import 'package:mainproject_apill/screen/statistic_page.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class MyAppPage extends StatefulWidget {
@@ -66,7 +65,7 @@ class _MyAppPageState extends State<MyAppPage> {
               unselectedFontSize: 0,
               items: [
                 BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.house,
+                    icon: FaIcon(FontAwesomeIcons.chartLine,
                       size: _selectedIndex == 0 ? 35 : 30),
                     label: '•'
                 ),
