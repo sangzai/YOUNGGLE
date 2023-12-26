@@ -128,8 +128,20 @@ class HomePage extends StatelessWidget {
                   Text("수면분석",style: Theme.of(context).textTheme.headlineLarge,
                   ),
                   IconButton(
-                    onPressed: (){
+                    onPressed: () async {
                     // TODO : 날짜 고르기
+                    //   openDialog();
+                      final selectedDate = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime(2023),
+                        lastDate: DateTime.now(),
+                        locale: const Locale('ko', 'KR'),
+                        helpText: "",
+                        useRootNavigator: false,
+                        initialEntryMode: DatePickerEntryMode.calendarOnly,
+
+                      );
+
                     },
                     icon: Icon(Icons.calendar_month_outlined),
                     color: Colors.white.withOpacity(0.6),
@@ -197,5 +209,21 @@ class HomePage extends StatelessWidget {
     );
 
 
-  }
-}
+  } // 빌드 끝
+
+  // void openDialog() {
+  //   Get.dialog(
+  //     AlertDialog(
+  //       title: const Text('Dialog'),
+  //       content: const Text('This is a dialog'),
+  //       actions: [
+  //         TextButton(
+  //           child: const Text("Close"),
+  //           onPressed: () => Get.back(),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+} // 클래스 끝

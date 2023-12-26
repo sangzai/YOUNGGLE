@@ -6,6 +6,7 @@ import 'package:mainproject_apill/screen/my_app_page.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 import 'package:mainproject_apill/widgets/mytheme.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,16 @@ class MyApp extends StatelessWidget {
       designSize: const Size(1100,2400),
       builder: (context, child) {
         return GetMaterialApp(
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate
+          ],
+          supportedLocales: [
+            Locale('ko'),
+            Locale('en'),
+          ],
+
+
           title: "ApilL",
           theme: myTheme,
           home: const BackGroundImageContainer(
