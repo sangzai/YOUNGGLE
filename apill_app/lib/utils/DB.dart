@@ -20,7 +20,7 @@ Future<void> dbConnector(String sql) async {
     // 전달받은 SQL 쿼리 실행
     var result = await conn.execute(sql);
 
-    if (result != null && result.isNotEmpty) {
+    if (result.isNotEmpty) {
       for (final row in result.rows) {
         print("row.assoc() : ${row.assoc()}");
       }
@@ -32,10 +32,11 @@ Future<void> dbConnector(String sql) async {
     await conn.close();
   }
 }
-// 페이지 임포트 후 밑에와 같이 실행 ^^
 
-void main() {
-  // 다른 페이지에서 SQL 문 전달
-  var sql = 'select * from mibandinterval';
-  dbConnector(sql);
-}
+// 페이지 임포트 후 밑에와 같이 실행 ^^
+//
+// void main() {
+//   // 다른 페이지에서 SQL 문 전달
+//   var sql = 'select * from mibandinterval';
+//   dbConnector(sql);
+// }

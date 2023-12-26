@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mainproject_apill/screen/sleeppage/dorsal_decubitus_height_controller.dart';
-import 'package:mainproject_apill/screen/sleeppage/lateral_decubitus_height_controller.dart';
 import 'package:mainproject_apill/screen/sleeppage/pillow_height_controller.dart';
-import 'package:mainproject_apill/screen/sleeppage/sleep_position_controller.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class SleepPage extends StatelessWidget {
@@ -17,13 +14,7 @@ class SleepPage extends StatelessWidget {
   // 설정을 보내주고 베개의 현재 높이를 통신으로 받아서 현재 높이에 보여줌
 
 
-  // 자세 구별 true : 등누운자세, false : 옆누운자세
-  final sleepPositionCon = Get.put(SleepPosition());
-  // 등누운 자세 높이 설정
-  final dorsalHeightCon = Get.put(DorsalHeightCon());
-  // 옆누운 자세 높이 설정
-  final lateralHeightCon = Get.put(LateralHeightCon());
-  // 현재 베개 높이
+  // 베개 설정용 컨트롤러
   final pillowHeightCon = Get.put(PillowHeight());
 
   @override
@@ -44,9 +35,9 @@ class SleepPage extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Obx(() {
-                    final displayHeight = sleepPositionCon.sleepPosition.value
-                        ? dorsalHeightCon.dosalHeight.value.toInt()
-                        : lateralHeightCon.lateralHeight.value.toInt();
+                    final displayHeight = pillowHeightCon.sleepPosition.value
+                        ? pillowHeightCon.dosalHeight.value.toInt()
+                        : pillowHeightCon.lateralHeight.value.toInt();
 
                     return Positioned(
                       top: 10,
@@ -67,9 +58,9 @@ class SleepPage extends StatelessWidget {
                   Positioned(
                     bottom: 0,
                     child: Obx(() => Switch(
-                        value: sleepPositionCon.sleepPosition.value,
+                        value: pillowHeightCon.sleepPosition.value,
                         onChanged: (value) {
-                          sleepPositionCon.sleepPosition.value = value;
+                          pillowHeightCon.sleepPosition.value = value;
                         },
                     )
                     ),
@@ -91,7 +82,7 @@ class SleepPage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                           onPressed: (){
-                            final dorsal = dorsalHeightCon.dosalHeight;
+                            final dorsal = pillowHeightCon.dosalHeight;
                             dorsal.value > 1 ? dorsal.value -= 1 : null;
                           },
                           style: ElevatedButton.styleFrom(
@@ -109,9 +100,9 @@ class SleepPage extends StatelessWidget {
                       flex: 3,
                       child: Obx(
                         () => Slider(
-                          value: dorsalHeightCon.dosalHeight.value,
+                          value: pillowHeightCon.dosalHeight.value,
                           onChanged: (value) {
-                            dorsalHeightCon.dosalHeight.value = value;
+                            pillowHeightCon.dosalHeight.value = value;
 
                           },
                             min: 1, max: 10, divisions: 9,),
@@ -123,7 +114,7 @@ class SleepPage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                           onPressed: (){
-                            final dorsal = dorsalHeightCon.dosalHeight;
+                            final dorsal = pillowHeightCon.dosalHeight;
                             dorsal.value < 10 ? dorsal.value += 1 : null;
                           },
                           style: ElevatedButton.styleFrom(
@@ -152,7 +143,7 @@ class SleepPage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                           onPressed: (){
-                            final lateral = lateralHeightCon.lateralHeight;
+                            final lateral = pillowHeightCon.lateralHeight;
                             lateral.value > 1 ? lateral.value -= 1 : null;
                           },
                           style: ElevatedButton.styleFrom(
@@ -170,9 +161,9 @@ class SleepPage extends StatelessWidget {
                       flex: 3,
                       child: Obx(
                             () => Slider(
-                            value: lateralHeightCon.lateralHeight.value,
+                            value: pillowHeightCon.lateralHeight.value,
                             onChanged: (value) {
-                              lateralHeightCon.lateralHeight.value = value;
+                              pillowHeightCon.lateralHeight.value = value;
 
                             },
                             min: 1, max: 10, divisions: 9),
@@ -184,7 +175,7 @@ class SleepPage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                           onPressed: (){
-                            final lateral = lateralHeightCon.lateralHeight;
+                            final lateral = pillowHeightCon.lateralHeight;
                             lateral.value < 10 ? lateral.value += 1 : null;
                           },
                           style: ElevatedButton.styleFrom(

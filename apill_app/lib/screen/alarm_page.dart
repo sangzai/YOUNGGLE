@@ -160,21 +160,6 @@ class _AddAlarmDialogState extends State<AddAlarmDialog> {
                 ),
               ),
           ),
-          // Text(
-          //   '${_formatTime(selectedTime)}',
-          //   style: TextStyle(
-          //     color: AppColors.appColorBlack.lighten(15),
-          //     fontWeight: FontWeight.w600,
-          //     fontSize: 90.sp,
-          //   ),
-          // ),
-          //
-          // SizedBox(height: 10),
-          //
-          // ElevatedButton(
-          //   onPressed: () => _showTimePicker(context),
-          //   child: Text('알람 시간 선택'),
-          // ),
           
         ],
       ),
@@ -378,21 +363,6 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
               ),
             ),
           ),
-          // Text(
-          //   '${_formatTime(selectedTime)}',
-          //   style: TextStyle(
-          //     color: AppColors.appColorBlack.lighten(15),
-          //     fontWeight: FontWeight.w600,
-          //     fontSize: 90.sp,
-          //   ),
-          // ),
-          //
-          // SizedBox(height: 10),
-          //
-          // ElevatedButton(
-          //   onPressed: () => _showTimePicker(context),
-          //   child: Text('알람 시간 선택'),
-          // ),
 
         ],
       ),
