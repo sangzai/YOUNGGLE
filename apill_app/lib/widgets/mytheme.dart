@@ -31,14 +31,22 @@ final ThemeData myTheme = ThemeData(
     titleLarge: TextStyle(
         color: Colors.white.withOpacity(0.9),
         fontSize: 60.sp,
-        fontWeight: FontWeight.w700),
+        fontWeight: FontWeight.w700
+    ),
     titleMedium: TextStyle(
-    color: Colors.white.withOpacity(0.9),
-    fontSize: 50.sp,
-    fontWeight: FontWeight.w600),
+        color: Colors.white.withOpacity(0.9),
+        fontSize: 50.sp,
+        fontWeight: FontWeight.w600
+    ),
 
-    bodyLarge: TextStyle(color: Colors.white.withOpacity(0.8),fontSize: 40.sp),
-    bodyMedium: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 30.sp),
+    bodyLarge: TextStyle(
+        color: Colors.white.withOpacity(0.8),
+        fontSize: 40.sp
+    ),
+    bodyMedium: TextStyle(
+        color: Colors.white.withOpacity(0.6),
+        fontSize: 30.sp
+    ),
   ),
 
   elevatedButtonTheme: ElevatedButtonThemeData(
@@ -46,7 +54,7 @@ final ThemeData myTheme = ThemeData(
       // 버튼 텍스트 색
       foregroundColor: AppColors.appColorWhite80,
       // 버튼 배경 색
-      backgroundColor: AppColors.appColorBlue,
+      backgroundColor: AppColors.appColorBlue80,
     )
   ),
 

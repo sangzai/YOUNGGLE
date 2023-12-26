@@ -4,7 +4,6 @@ import 'package:mainproject_apill/screen/alarm_page.dart';
 import 'package:mainproject_apill/screen/homepage/home_page.dart';
 import 'package:mainproject_apill/screen/setting_page.dart';
 import 'package:mainproject_apill/screen/sleeppage/sleep_page.dart';
-import 'package:mainproject_apill/screen/statistic_page.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class MyAppPage extends StatefulWidget {
@@ -66,24 +65,24 @@ class _MyAppPageState extends State<MyAppPage> {
               unselectedFontSize: 0,
               items: [
                 BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.house,
+                    icon: FaIcon(FontAwesomeIcons.chartLine,
                       size: _selectedIndex == 0 ? 35 : 30),
                     label: '•'
                 ),
                 BottomNavigationBarItem(
-                    icon: Image.asset('assets/image/MoonBG.png',
-                      width: _selectedIndex == 1 ? 65 : 60,
+                    icon: Image.asset('assets/image/WhiteMoonLogo.png',
+                      width: _selectedIndex == 1 ? 47 : 43,
                       opacity: _selectedIndex == 1 ? AlwaysStoppedAnimation(1) : AlwaysStoppedAnimation(0.5)),
                     label: '•'
                 ),
                 BottomNavigationBarItem(
                     icon: FaIcon(FontAwesomeIcons.clock,
-                      size: _selectedIndex == 2 ? 35 : 30),
+                      size: _selectedIndex == 2 ? 38 : 35),
                     label: '•'
                 ),
                 BottomNavigationBarItem(
                     icon: FaIcon(FontAwesomeIcons.gear,
-                      size: _selectedIndex == 3 ? 35 : 30),
+                      size: _selectedIndex == 3 ? 38 : 35),
                     label: '•'
                 ),
               ]
