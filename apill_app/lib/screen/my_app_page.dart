@@ -70,19 +70,19 @@ class _MyAppPageState extends State<MyAppPage> {
                     label: '•'
                 ),
                 BottomNavigationBarItem(
-                    icon: Image.asset('assets/image/MoonBG.png',
-                      width: _selectedIndex == 1 ? 65 : 60,
+                    icon: Image.asset('assets/image/WhiteMoonLogo.png',
+                      width: _selectedIndex == 1 ? 47 : 43,
                       opacity: _selectedIndex == 1 ? AlwaysStoppedAnimation(1) : AlwaysStoppedAnimation(0.5)),
                     label: '•'
                 ),
                 BottomNavigationBarItem(
                     icon: FaIcon(FontAwesomeIcons.clock,
-                      size: _selectedIndex == 2 ? 35 : 30),
+                      size: _selectedIndex == 2 ? 38 : 35),
                     label: '•'
                 ),
                 BottomNavigationBarItem(
                     icon: FaIcon(FontAwesomeIcons.gear,
-                      size: _selectedIndex == 3 ? 35 : 30),
+                      size: _selectedIndex == 3 ? 38 : 35),
                     label: '•'
                 ),
               ]
