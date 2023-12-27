@@ -89,6 +89,11 @@ final ThemeData myTheme = ThemeData(
     helpTextStyle: TextStyle(fontSize: 0),
   ),
 
+  datePickerTheme: DatePickerThemeData(
+    backgroundColor: AppColors.appColorBlue.lighten(60),
+    headerHelpStyle: TextStyle(fontSize: 0),
+  )
+
 
 );
 

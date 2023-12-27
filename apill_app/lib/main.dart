@@ -43,7 +43,8 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate
           ],
           supportedLocales: [
             Locale('ko'),
