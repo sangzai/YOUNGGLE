@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:mainproject_apill/screen/homepage/getSelectDate.dart';
 import 'package:mainproject_apill/screen/homepage/statistic_controller.dart';
 import 'package:mainproject_apill/screen/homepage/detail_statistic_page.dart';
 import 'package:mainproject_apill/screen/homepage/statisitc_barchart.dart';
 import 'package:mainproject_apill/screen/homepage/statistic_linechart.dart';
 import 'package:mainproject_apill/screen/homepage/statistic_piechart.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
-import 'package:mainproject_apill/utils/DateFormat.dart';
+import 'package:mainproject_apill/utils/dateFormat.dart';
+import 'package:mainproject_apill/screen/homepage/getActiveDate.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -149,9 +151,14 @@ class HomePage extends StatelessWidget {
                 children: [
                   Text("수면분석",style: Theme.of(context).textTheme.headlineLarge,
                   ),
+                  // ✨ 달력 아이콘
                   IconButton(
                     onPressed: () async {
-                    // TODO : 날짜 고르기
+                    // TODO : DB의 데이터를 받아서 데이터 있는 날짜만 활성화
+
+                      // 달력을 클릭하면 DB에 있는 날짜만 활성화
+                      List<DateTime> activeDate = await getActiveDates();
+
                       final selectedDate = await showDatePicker(
                         context: context,
                         firstDate: DateTime(2023),
@@ -160,11 +167,19 @@ class HomePage extends StatelessWidget {
                         helpText: "",
                         useRootNavigator: false,
                         initialEntryMode: DatePickerEntryMode.calendarOnly,
+                        selectableDayPredicate: (date) {
+                          return activeDate.contains(date);
+                        }
                       );
-                      print("내가 찍은 날짜 : ${selectedDate}");
+
+                      getSelectDates(selectedDate);
+
+                      // print("내가 찍은 날짜 : ${selectedDate}");
                       if (selectedDate != null) {
                         statisticCon.selectedDate.value = selectedDate;
                       }
+
+
                     },
                     icon: Icon(Icons.calendar_month_outlined),
                     color: Colors.white.withOpacity(0.6),
