@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:mainproject_apill/screen/homepage/getSelectDate.dart';
 import 'package:mainproject_apill/screen/homepage/statistic_controller.dart';
 import 'package:mainproject_apill/screen/homepage/detail_statistic_page.dart';
 import 'package:mainproject_apill/screen/homepage/statisitc_barchart.dart';
 import 'package:mainproject_apill/screen/homepage/statistic_linechart.dart';
 import 'package:mainproject_apill/screen/homepage/statistic_piechart.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
+import 'package:mainproject_apill/utils/dateFormat.dart';
+import 'package:mainproject_apill/screen/homepage/getActiveDate.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  HomePage({Key? key}) : super(key: key);
 
   final statisticCon = Get.put(StatisticCon());
 
   @override
   Widget build(BuildContext context) {
-
 
     return SingleChildScrollView(
       child: Padding(
@@ -24,32 +26,52 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               Obx(
-                () => Visibility(
-                  visible: statisticCon.appbarcheck.value,
-                  child: AppBar(
-                    // TODO : 대화하는 듯한 느낌이 들게 멘트 추가할 것
-                    // title: Text("ApilL님 \n 오늘은 숙면을 위해 캐모마일티를 마셔보는건 어떻까요?",
-                    //   style: Theme.of(context).textTheme.headlineLarge,
-                    // ),
-                    flexibleSpace: Padding(
-                      padding: const EdgeInsets.only(left: 8,right: 20),
-                      child: Text("ApilL님\n오늘은 숙면을 위해 캐모마일티를 마셔보는건 어떠신가요?",
-                        style: Theme.of(context).textTheme.headlineLarge,
-                      ),
-                    ),
-                    actions: [
-                      IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () {
-                          print(statisticCon.appbarcheck.value);
-                          statisticCon.appbarcheck.value = !statisticCon.appbarcheck.value;
-                        },
-                        color: AppColors.appColorWhite60,
-                      ),
-                    ],
-                  ),
+                () => AnimatedBuilder(
+                    animation: statisticCon.animationController!,
+                    builder: (context, child) {
+                      return SizedBox(
+                        height: statisticCon.heightAnimation?.value,
+                        // height: getTextHeight(statisticCon.goodSleep.value, Theme.of(context).textTheme.headlineLarge!, 3),
+                        child: Visibility(
+                          visible: statisticCon.appbarCheck.value,
+                          child: AppBar(
+                            flexibleSpace: Padding(
+                              padding: const EdgeInsets.only(left: 8,right: 20),
+                              child: Opacity(
+                                opacity: statisticCon.opacityAnimation?.value ?? 1.0,
+                                child: Text(
+                                  // TODO : 대화하는 듯한 느낌이 들게 멘트 추가할 것
+                                  "${statisticCon.goodSleep.value}",
+                                  style: Theme.of(context).textTheme.headlineLarge,
+
+                                ),
+                              ),
+                            ),
+
+                            actions: [
+                              Opacity(
+                                opacity: statisticCon.opacityAnimation?.value ?? 1.0,
+
+                                child: IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: () {
+                                    statisticCon.startAnimation();
+                                    // statisticCon.appbarCheck.value = !statisticCon.appbarCheck.value;
+                                  },
+                                  color: AppColors.appColorWhite60,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+
                 ),
               ),
+
+              SizedBox(height: 20),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -59,54 +81,56 @@ class HomePage extends StatelessWidget {
                     color: Colors.white.withOpacity(0.6),
                     iconSize: 40,
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            height: 220,
-                            width: 220,
-                            child: HomePieChart(),
-                          ),
-      
-                          // TODO : 파이차트 구현
-                          Container(
-                            height: 220,
-                            width: 220,
-                            child: Image.asset('assets/image/ClockBackGround2.png',
-                                fit: BoxFit.fill,
-                              color: Colors.white.withOpacity(0.6),
+                  Obx(
+                    () => Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              height: 220,
+                              width: 220,
+                              child: HomePieChart(),
                             ),
-                          ),
-      
-                          Column(
-                            children: [
-                              Text("수면시간",
-                                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                  fontSize: 18
-                                ),),
-                              // TODO : 수면시간 연동
-                              Text("8시간 00분",
-                                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                  fontSize: 26
-                                ),),
-                              // TODO : 수면시간 연동
-                              Text("23:00 - 7:00",
-                                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                  fontSize: 15
-                                ),
+
+                            // TODO : 파이차트 구현
+                            Container(
+                              height: 220,
+                              width: 220,
+                              child: Image.asset('assets/image/ClockBackGround2.png',
+                                  fit: BoxFit.fill,
+                                color: Colors.white.withOpacity(0.6),
                               ),
-                              SizedBox(height: 20),
-                              Text("12/31 (일)",
-                                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                    fontSize: 17
+                            ),
+
+                            Column(
+                              children: [
+                                Text("수면시간",
+                                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                    fontSize: 18
+                                  ),),
+                                // TODO : 수면시간 연동
+                                Text("8시간 00분",
+                                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                    fontSize: 26
+                                  ),),
+                                // TODO : 수면시간 연동
+                                Text("23:00 - 7:00",
+                                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                    fontSize: 15
+                                  ),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
+                                SizedBox(height: 20),
+                                Text("${DateFormatUtil().formattedDate(statisticCon.selectedDate.value)}",
+                                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                      fontSize: 17
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -116,7 +140,7 @@ class HomePage extends StatelessWidget {
                     color: Colors.white.withOpacity(0.6),
                     iconSize: 40,
                   ),
-      
+
                 ],
               ),
 
@@ -127,10 +151,14 @@ class HomePage extends StatelessWidget {
                 children: [
                   Text("수면분석",style: Theme.of(context).textTheme.headlineLarge,
                   ),
+                  // ✨ 달력 아이콘
                   IconButton(
                     onPressed: () async {
-                    // TODO : 날짜 고르기
-                    //   openDialog();
+                    // TODO : DB의 데이터를 받아서 데이터 있는 날짜만 활성화
+
+                      // 달력을 클릭하면 DB에 있는 날짜만 활성화
+                      List<DateTime> activeDate = await getActiveDates();
+
                       final selectedDate = await showDatePicker(
                         context: context,
                         firstDate: DateTime(2023),
@@ -139,8 +167,18 @@ class HomePage extends StatelessWidget {
                         helpText: "",
                         useRootNavigator: false,
                         initialEntryMode: DatePickerEntryMode.calendarOnly,
-
+                        selectableDayPredicate: (date) {
+                          return activeDate.contains(date);
+                        }
                       );
+
+                      getSelectDates(selectedDate);
+
+                      // print("내가 찍은 날짜 : ${selectedDate}");
+                      if (selectedDate != null) {
+                        statisticCon.selectedDate.value = selectedDate;
+                      }
+
 
                     },
                     icon: Icon(Icons.calendar_month_outlined),
@@ -199,10 +237,10 @@ class HomePage extends StatelessWidget {
                       )),
                     ],
                   ),
-      
+
                 ),
               ),
-      
+
             ],)
         ),
       ),
@@ -211,19 +249,6 @@ class HomePage extends StatelessWidget {
 
   } // 빌드 끝
 
-  // void openDialog() {
-  //   Get.dialog(
-  //     AlertDialog(
-  //       title: const Text('Dialog'),
-  //       content: const Text('This is a dialog'),
-  //       actions: [
-  //         TextButton(
-  //           child: const Text("Close"),
-  //           onPressed: () => Get.back(),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+
 
 } // 클래스 끝
