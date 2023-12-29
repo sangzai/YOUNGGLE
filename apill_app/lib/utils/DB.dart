@@ -34,9 +34,11 @@ Future<void> dbConnector(String sql) async {
 }
 
 // 페이지 임포트 후 밑에와 같이 실행 ^^
-//
-// void main() {
-//   // 다른 페이지에서 SQL 문 전달
-//   var sql = 'select * from mibandinterval';
-//   dbConnector(sql);
-// }
+
+void main() {
+  // 다른 페이지에서 SQL 문 전달
+  var sql = 'select * from mibandinterval';
+  dbConnector(sql);
+
+
+}
