@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:mainproject_apill/models/selectDateModel.dart';
 import 'package:mainproject_apill/screen/homepage/getSelectDate.dart';
 import 'package:mainproject_apill/screen/homepage/statistic_controller.dart';
 import 'package:mainproject_apill/screen/homepage/detail_statistic_page.dart';
@@ -10,6 +12,8 @@ import 'package:mainproject_apill/screen/homepage/statistic_piechart.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 import 'package:mainproject_apill/utils/dateFormat.dart';
 import 'package:mainproject_apill/screen/homepage/getActiveDate.dart';
+import 'package:mainproject_apill/utils/getTextHeight.dart';
+import 'package:mainproject_apill/widgets/mytheme.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -30,7 +34,7 @@ class HomePage extends StatelessWidget {
                     animation: statisticCon.animationController!,
                     builder: (context, child) {
                       return SizedBox(
-                        height: statisticCon.heightAnimation?.value,
+                        height: statisticCon.heightAnimation!.value,
                         // height: getTextHeight(statisticCon.goodSleep.value, Theme.of(context).textTheme.headlineLarge!, 3),
                         child: Visibility(
                           visible: statisticCon.appbarCheck.value,
@@ -43,7 +47,6 @@ class HomePage extends StatelessWidget {
                                   // TODO : 대화하는 듯한 느낌이 들게 멘트 추가할 것
                                   "${statisticCon.goodSleep.value}",
                                   style: Theme.of(context).textTheme.headlineLarge,
-
                                 ),
                               ),
                             ),
@@ -57,6 +60,8 @@ class HomePage extends StatelessWidget {
                                   onPressed: () {
                                     statisticCon.startAnimation();
                                     // statisticCon.appbarCheck.value = !statisticCon.appbarCheck.value;
+                                    print(getTextHeight(statisticCon.goodSleep.value, myTheme.textTheme.headlineLarge!, ScreenUtil().screenWidth));
+                                    print(statisticCon.heightAnimation!.value);
                                   },
                                   color: AppColors.appColorWhite60,
                                 ),
@@ -172,7 +177,10 @@ class HomePage extends StatelessWidget {
                         }
                       );
 
-                      getSelectDates(selectedDate);
+                      List<SelectDateData> selectedData = await getSelectDates(selectedDate);
+                      for (var data in selectedData) {
+                        print('SleepNum: ${data.sleepNum}, MinStartTime: ${data.minStartTime}, MaxEndTime: ${data.maxEndTime}, TotalSleepTime: ${data.totalSleepTime}');
+                      }
 
                       // print("내가 찍은 날짜 : ${selectedDate}");
                       if (selectedDate != null) {
@@ -192,18 +200,18 @@ class HomePage extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: Color.fromRGBO(238, 238, 238, 0.1)
+                    color: AppColors.ContainerBackColor
                   ),
                   width: MediaQuery.of(context).size.width,
                   height: 300,
                   // TODO 그래프 구현 2
                   child: Column(
                     children: [
-                      Expanded(flex: 4,child: Padding(
+                      Expanded(flex: 3,child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 4),
                         child: Container(color: Colors.transparent,child: HomeLineChart()),
                       )),
-                      Expanded(flex: 1,child: Padding(
+                      Expanded(child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Column(
                           children: [

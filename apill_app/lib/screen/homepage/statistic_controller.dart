@@ -19,9 +19,6 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
   // 버튼 누르면 사라지게 하는 변수
   RxBool appbarCheck = true.obs;
 
-  // 애니메이션용 높이 변수
-  RxDouble heightBegin = 100.0.obs;
-
   // 애니메이션 컨트롤러
   final Rxn<AnimationController> _animationController = Rxn<AnimationController>();
   AnimationController? get animationController => _animationController.value;
@@ -41,7 +38,7 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
     super.onInit();
 
     // 애니메이션 재생시간
-    const duration = Duration(milliseconds: 500);
+    const duration = Duration(milliseconds: 3000);
 
     _animationController.value = AnimationController(
       vsync: this, duration: duration,
@@ -49,7 +46,11 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
 
     // 버튼 눌렀을때 높이를 0으로 만들어주는 애니메이션
     // 텍스트를 감지하고 텍스트의 스타일과 몇 줄인지를 감지하고 높이를 계산함
-    _heightAnimation.value = (Tween<double>(begin: getTextHeight(goodSleep.value, myTheme.textTheme.headlineLarge!, ScreenUtil().screenWidth), end: 0)
+    _heightAnimation.value = (Tween<double>(
+        begin: getTextHeight(
+            goodSleep.value, myTheme.textTheme.headlineLarge!, 3),
+        // begin : 85,
+        end: 0)
         .chain(CurveTween(curve: Curves.ease))
         .animate(_animationController.value!));
 
