@@ -9,13 +9,13 @@ Future<List<DateTime>> getSelectDates(selectedDate) async {
   // 선택한 날짜의 오후 6시
   DateTime endDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 18, 0, 0);
 
-  String sql = '''
+  String loginsql = '''
     SELECT *
     FROM mibandtotal
     WHERE start_time >= :start AND start_time < :end
   ''';
 
-  var result = await dbConnector(sql, {
+  var result = await dbConnector(loginsql, {
    'start' : startDate,
     'end' : endDate
   });

@@ -1,23 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
+import 'package:mainproject_apill/utils/dbConnector.dart';
 
 final dio = Dio();
-
-// 성별 열거형
-// enum Gender { male, female }
-//
-// // Gender 열거형을 문자열로 변환하는 함수
-// String genderToString(Gender? gender) {
-//   switch (gender) {
-//     case Gender.male:
-//       return '남성';
-//     case Gender.female:
-//       return '여성';
-//     default:
-//       return '';
-//   }
-// }
 
 
 class JoinPage extends StatefulWidget {
@@ -28,12 +14,6 @@ class JoinPage extends StatefulWidget {
 }
 
 class _JoinPageState extends State<JoinPage> {
-
-  // 성별
-  // Gender? selectedGender;
-
-
-
   DateTime selectedDate = DateTime.now();
 
   TextEditingController input_id = TextEditingController();
@@ -44,9 +24,6 @@ class _JoinPageState extends State<JoinPage> {
   TextEditingController input_weight = TextEditingController();
   TextEditingController birth = TextEditingController();
   TextEditingController input_gender = TextEditingController();
-
-  // TextEditingController input_selectedDate = TextEditingController();
-  // TextEditingController input_gender = TextEditingController();
 
   // 달력을 표시하여 설정하도록 하는 함수
   Future<void> _selectDate(BuildContext context) async {
@@ -187,10 +164,7 @@ class _JoinPageState extends State<JoinPage> {
                                 groupValue: input_gender.text,
                                 onChanged: (value) {
                                   setState(() {
-
-                                    print("$value test ");
                                     input_gender.text = value.toString();
-                                    print('${input_gender.text} test22');
                                   });
                                 }),
                             RadioListTile(
@@ -205,7 +179,6 @@ class _JoinPageState extends State<JoinPage> {
                                 onChanged: (value) {
                                   setState(() {
                                     input_gender.text = value as String;
-                                    print('여성');
                                   });
                                 }),
                           ],
@@ -315,16 +288,6 @@ class _JoinPageState extends State<JoinPage> {
                   ElevatedButton(
                       onPressed: () {
                         // TODO : 회원가입 로직 구현
-
-                        // print(input_gender.text);
-                        // print(birth.text);
-                        // print(input_id.text);
-                        // print(input_pw.text);
-                        // print(input_name.text);
-                        // print(input_height.text);
-                        // print(input_weight.text);
-                        // print(input_age.text);
-
                         joinMember(
                             input_id.text,
                             input_pw.text,
@@ -347,13 +310,19 @@ class _JoinPageState extends State<JoinPage> {
   }
 }
 
-void joinMember(id, pw, name, birth, weight, height, gender, age, context) async {
-
+void joinMember(
+    id, pw, name, birth, weight, height, gender, age, context) async {
   try {
-    // POST 요청을 보낼 URL
-    String url = 'http://211.228.36.190:8085/members/join';
+    String sql = '''
+  INSERT INTO members (
+    member_id, member_pw, member_name, member_birth, 
+    member_weight, member_height, member_gender, member_age
+  ) VALUES (
+    :id, :pw, :name, :birth, :weight, :height, :gender, :age
+  )
+''';
 
-    // POST 요청 본문에 담을 데이터를 Map 형식으로 정의
+    // 데이터를 Map 형식으로 정의
     Map<String, dynamic> data = {
       'id': id,
       'pw': pw,
@@ -365,27 +334,12 @@ void joinMember(id, pw, name, birth, weight, height, gender, age, context) async
       'age': age,
     };
 
-    // Dio 인스턴스를 통해 POST 요청을 보냄
-    Response res = await dio.post(
-      url,
-      data: data,
-      options: Options(
-        headers: {'Content-Type': 'application/json'}, // JSON 형식으로 전송한다고 서버에 알림
-      ),
-    );
+    // 데이터베이스에 회원가입 정보 삽입
+    await dbConnector(sql, data);
 
-    print(res.realUri);
+    // 회원가입 성공 시 로그인 화면으로 이동
+    Navigator.pop(context);
 
-    if (res.statusCode == 200) {
-      if (res.data == 'success') {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('회원가입 완료')));
-        Navigator.pop(context);
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('회원가입 실패')));
-      }
-    }
   } catch (error) {
     print('Error during registration: $error');
     ScaffoldMessenger.of(context)
