@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:mainproject_apill/models/selectDateModel.dart';
-import 'package:mainproject_apill/screen/homepage/getSelectDate.dart';
-import 'package:mainproject_apill/screen/homepage/statistic_controller.dart';
-import 'package:mainproject_apill/screen/homepage/detail_statistic_page.dart';
-import 'package:mainproject_apill/screen/homepage/statisitc_barchart.dart';
-import 'package:mainproject_apill/screen/homepage/statistic_linechart.dart';
-import 'package:mainproject_apill/screen/homepage/statistic_piechart.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_utils/getSelectDate.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_controllers/statistic_controller.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_widgets/statistic_piechart.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_widgets/statistic_today_body_chart.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_widgets/statistic_today_summary.dart';
+import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 import 'package:mainproject_apill/utils/dateFormat.dart';
-import 'package:mainproject_apill/screen/homepage/getActiveDate.dart';
-import 'package:mainproject_apill/utils/getTextHeight.dart';
-import 'package:mainproject_apill/widgets/mytheme.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_utils/getActiveDate.dart';
+
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
   final statisticCon = Get.put(StatisticCon());
+  final userCon = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,6 @@ class HomePage extends StatelessWidget {
                     builder: (context, child) {
                       return SizedBox(
                         height: statisticCon.heightAnimation!.value,
-                        // height: getTextHeight(statisticCon.goodSleep.value, Theme.of(context).textTheme.headlineLarge!, 3),
                         child: Visibility(
                           visible: statisticCon.appbarCheck.value,
                           child: AppBar(
@@ -43,10 +40,17 @@ class HomePage extends StatelessWidget {
                               padding: const EdgeInsets.only(left: 8,right: 20),
                               child: Opacity(
                                 opacity: statisticCon.opacityAnimation?.value ?? 1.0,
-                                child: Text(
-                                  // TODO : 대화하는 듯한 느낌이 들게 멘트 추가할 것
-                                  "${statisticCon.goodSleep.value}",
-                                  style: Theme.of(context).textTheme.headlineLarge,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('${userCon.userName}님',
+                                      style: Theme.of(context).textTheme.headlineLarge,),
+                                    Text(
+                                      // TODO : 대화하는 듯한 느낌이 들게 멘트 추가할 것
+                                      "${statisticCon.goodSleep.value}",
+                                      style: Theme.of(context).textTheme.headlineLarge,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -60,8 +64,8 @@ class HomePage extends StatelessWidget {
                                   onPressed: () {
                                     statisticCon.startAnimation();
                                     // statisticCon.appbarCheck.value = !statisticCon.appbarCheck.value;
-                                    print(getTextHeight(statisticCon.goodSleep.value, myTheme.textTheme.headlineLarge!, ScreenUtil().screenWidth));
-                                    print(statisticCon.heightAnimation!.value);
+                                    // print(getTextHeight(statisticCon.goodSleep.value, myTheme.textTheme.headlineLarge!, ScreenUtil().screenWidth));
+                                    // print(statisticCon.heightAnimation!.value);
                                   },
                                   color: AppColors.appColorWhite60,
                                 ),
@@ -159,35 +163,7 @@ class HomePage extends StatelessWidget {
                   // ✨ 달력 아이콘
                   IconButton(
                     onPressed: () async {
-                    // TODO : DB의 데이터를 받아서 데이터 있는 날짜만 활성화
-
-                      // 달력을 클릭하면 DB에 있는 날짜만 활성화
-                      List<DateTime> activeDate = await getActiveDates();
-
-                      final selectedDate = await showDatePicker(
-                        context: context,
-                        firstDate: DateTime(2023),
-                        lastDate: DateTime.now(),
-                        locale: const Locale('ko', 'KR'),
-                        helpText: "",
-                        useRootNavigator: false,
-                        initialEntryMode: DatePickerEntryMode.calendarOnly,
-                        selectableDayPredicate: (date) {
-                          return activeDate.contains(date);
-                        }
-                      );
-
-                      List<SelectDateData> selectedData = await getSelectDates(selectedDate);
-                      for (var data in selectedData) {
-                        print('SleepNum: ${data.sleepNum}, MinStartTime: ${data.minStartTime}, MaxEndTime: ${data.maxEndTime}, TotalSleepTime: ${data.totalSleepTime}');
-                      }
-
-                      // print("내가 찍은 날짜 : ${selectedDate}");
-                      if (selectedDate != null) {
-                        statisticCon.selectedDate.value = selectedDate;
-                      }
-
-
+                      await get_statistic_data(context);
                     },
                     icon: Icon(Icons.calendar_month_outlined),
                     color: Colors.white.withOpacity(0.6),
@@ -197,57 +173,13 @@ class HomePage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8,bottom: 4),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: AppColors.ContainerBackColor
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  height: 300,
-                  // TODO 그래프 구현 2
-                  child: Column(
-                    children: [
-                      Expanded(flex: 3,child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 4),
-                        child: Container(color: Colors.transparent,child: HomeLineChart()),
-                      )),
-                      Expanded(child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(58, 4, 24, 4),
-                              child: HomeBarChart(),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(width: 10,height: 10,color: Color(0xFF5D6DBE),),
-                                    SizedBox(width: 10,),
-                                    Text('등누운자세'),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(width: 10,height: 10,color: Color(0xFF7DB249),),
-                                    SizedBox(width: 10,),
-                                    Text('옆누운자세'),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      )),
-                    ],
-                  ),
-
-                ),
+                // 따로 만들어서 뺌
+                child: TodayCharts(data: statisticCon.selectedDateData)
               ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8,bottom: 4),
+                // 따로 만들어서 뺌
+                child: TodaySummarys(userName: userCon.userName.value, data: statisticCon.selectedDateData),)
 
             ],)
         ),
@@ -257,6 +189,35 @@ class HomePage extends StatelessWidget {
 
   } // 빌드 끝
 
+  Future<void> get_statistic_data(BuildContext context) async {
+    // TODO: DB의 데이터를 받아서 데이터 있는 날짜만 활성화
+
+    // 달력을 클릭하면 DB에 있는 날짜만 활성화
+    List<DateTime> activeDate = await getActiveDates();
+
+    final selectedDate = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2023),
+      lastDate: DateTime.now(),
+      locale: const Locale('ko', 'KR'),
+      helpText: "",
+      useRootNavigator: false,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      selectableDayPredicate: (date) {
+        return activeDate.contains(date);
+      },
+    );
+
+    statisticCon.selectedDateData = await getSelectDates(selectedDate!);
+    for (var data in statisticCon.selectedDateData) {
+      print('sleepNum: ${data.sleepNum}, startTime: ${data.startTime}, endTime: ${data.endTime}, sleepDepth: ${data.sleepDepth}');
+    }
+
+    // print("내가 찍은 날짜 : ${selectedDate}");
+    if (selectedDate != null) {
+      statisticCon.selectedDate.value = selectedDate;
+    }
+  }
 
 
 } // 클래스 끝

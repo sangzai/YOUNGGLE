@@ -1,13 +1,13 @@
 class SelectDateData {
   final int sleepNum;
-  final DateTime minStartTime;
-  final DateTime maxEndTime;
-  final int totalSleepTime;
+  final DateTime startTime;
+  final DateTime endTime;
+  final int sleepDepth;
 
   SelectDateData({
     required this.sleepNum,
-    required this.minStartTime,
-    required this.maxEndTime,
-    required this.totalSleepTime,
+    required this.startTime,
+    required this.endTime,
+    required this.sleepDepth,
   });
 }

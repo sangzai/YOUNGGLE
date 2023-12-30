@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mainproject_apill/screen/alarm_page.dart';
 import 'package:mainproject_apill/screen/homepage/statistic_page.dart';
 import 'package:mainproject_apill/screen/setting_page.dart';
-import 'package:mainproject_apill/screen/sleeppage/sleep_page.dart';
+import 'package:mainproject_apill/screen/sleep_page/sleep_page.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class MyAppPage extends StatefulWidget {

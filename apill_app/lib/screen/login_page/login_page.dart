@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mainproject_apill/screen/loginpage/join_page.dart';
+import 'package:mainproject_apill/screen/login_page/join_page.dart';
 import 'package:mainproject_apill/screen/my_app_page.dart';
 
 class LoginPage extends StatefulWidget {

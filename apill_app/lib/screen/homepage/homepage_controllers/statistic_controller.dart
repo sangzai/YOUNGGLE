@@ -1,7 +1,7 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:mainproject_apill/models/selectDateModel.dart';
 import 'package:mainproject_apill/utils/getTextHeight.dart';
 import 'package:mainproject_apill/widgets/mytheme.dart';
 
@@ -13,8 +13,12 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
   // 내가 선택한 날짜를 저장하는 변수 기본값은 오늘
   Rx<DateTime> selectedDate = DateTime.now().obs;
 
+  // 데이터 저장용
+  List<SelectDateData> selectedDateData = <SelectDateData>[].obs;
+
   // 홈 화면 위에 나오는 멘트
-  RxString goodSleep = 'ApilL님\n오늘은 숙면을 위해 캐모마일티를 마셔보는건 어떠신가요?'.obs;
+  // DB를 통해 랜덤으로 가져와야함
+  RxString goodSleep = '오늘은 숙면을 위해 캐모마일티를 마셔보는건 어떠신가요?'.obs;
 
   // 버튼 누르면 사라지게 하는 변수
   RxBool appbarCheck = true.obs;
@@ -48,8 +52,7 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
     // 텍스트를 감지하고 텍스트의 스타일과 몇 줄인지를 감지하고 높이를 계산함
     _heightAnimation.value = (Tween<double>(
         begin: getTextHeight(
-            goodSleep.value, myTheme.textTheme.headlineLarge!, 3),
-        // begin : 85,
+            goodSleep.value, myTheme.textTheme.headlineLarge!, 2),
         end: 0)
         .chain(CurveTween(curve: Curves.ease))
         .animate(_animationController.value!));
@@ -72,6 +75,16 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
     _animationController.value?.dispose();
     super.onClose();
 
+  }
+
+  double calculateInitialHeight() {
+    // Access the RenderBox of the widget using the GlobalKey
+    final RenderBox renderBox = _sizedBoxKey.currentContext!.findRenderObject() as RenderBox;
+
+    // Calculate the height
+    double calculatedHeight = renderBox.size.height;
+
+    return calculatedHeight;
   }
 
 
