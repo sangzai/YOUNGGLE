@@ -48,7 +48,6 @@ dependencies:
 #  kakao_flutter_sdk: ^1.8.0
 #  google_sign_in: ^6.2.1
   firebase_core:
-  flutter_secure_storage: ^9.0.0
 
 
 dev_dependencies:
