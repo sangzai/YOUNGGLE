@@ -45,6 +45,10 @@ dependencies:
   flutter_screenutil: ^5.9.0
   flutter_localizations:
     sdk: flutter
+  dio: ^5.3.3
+#  kakao_flutter_sdk: ^1.8.0
+#  google_sign_in: ^6.2.1
+  firebase_core:
 
 
 dev_dependencies:
