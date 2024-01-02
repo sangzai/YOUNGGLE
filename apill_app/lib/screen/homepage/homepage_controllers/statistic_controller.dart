@@ -77,15 +77,5 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
 
   }
 
-  double calculateInitialHeight() {
-    // Access the RenderBox of the widget using the GlobalKey
-    final RenderBox renderBox = _sizedBoxKey.currentContext!.findRenderObject() as RenderBox;
-
-    // Calculate the height
-    double calculatedHeight = renderBox.size.height;
-
-    return calculatedHeight;
-  }
-
 
 }
