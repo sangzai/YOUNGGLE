@@ -18,7 +18,7 @@ class TodaySummarys extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: AppColors.ContainerBackColor
+        color: AppColors.containerBackColor
         ),
         width: MediaQuery.of(context).size.width,
         // TODO 그래프 구현 2

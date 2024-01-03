@@ -1,7 +1,7 @@
 import 'package:mainproject_apill/models/selectDateModel.dart';
 import 'package:mainproject_apill/utils/dbConnector.dart';
 
-Future<List<SelectDateData>> getSelectDates(DateTime selectedDate) async {
+Future<List<SelectDateData>> getSelectDateData(DateTime selectedDate) async {
   List<SelectDateData> selectDateDataList = [];
 
   String sql = '''
@@ -42,6 +42,7 @@ Future<List<SelectDateData>> getSelectDates(DateTime selectedDate) async {
 
     }
   }
+  print("겟 셀렉트 데이트 데이터 : ${selectDateDataList}");
 
   return selectDateDataList;
 }
