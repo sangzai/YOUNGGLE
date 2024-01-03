@@ -31,9 +31,8 @@ const Banner = () => {
     return (
         <div className='banner'>
             <div className='wholeLR'>
-                
-                <div className='left-grp'>
-                    <a href='#'>
+                <a href='#'>
+                    <div className='left-grp'>
                         <img className='bannerMainLogo' src={mainlogo} alt='logo' />
                         <div className='orderText'>
                             <span className='type1'>A-pill로 힐링하고 싶다면</span>
@@ -41,8 +40,9 @@ const Banner = () => {
                         </div>
 
                         <img className='arrow' src={arrow} alt='arrow' />
-                    </a>
-                </div>
+
+                    </div>
+                </a>
 
                 <div className='right-grp'>
                     <a href="https://www.apple.com/app-store/">
