@@ -106,7 +106,7 @@
 .product-main {
     width: 100%;
     height: 75%;
-    background-color: rgba(217, 217, 217, 1); 
+    background-color: rgb(255, 255, 255); 
     position: absolute;
     bottom: 0px;
     border-radius: 20px;
@@ -211,13 +211,13 @@
 .productprimaryHighlight1{
     background-color: rgb(18, 201, 120);
     color: black;
-    border-radius: 10px;
+    border-radius: 6px;
 }
 
 .productprimaryHighlight2{
     background-color: rgb(201, 200, 120);
     color: black;
-    border-radius: 10px;
+    border-radius: 6px;
 }
 
 .product-text-name {
@@ -234,6 +234,7 @@
 .product-adv4,
 .product-adv5,
 .product-adv6 {
+    
     width: 17%;
     height: 35%;
     position: absolute;
@@ -241,7 +242,7 @@
 }
 
 .product-adv1 {
-    background-color: rgba(0, 41, 130, 1); 
+    background-color: rgb(255, 255, 255); 
     bottom: 42%;
     right: 45%;
 }
