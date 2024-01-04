@@ -59,7 +59,7 @@ const Mainslide = () => {
       </div>
       </header>
       <div className='imgslide'>
-        <video ref ={videoRef} width="100%" height="auto" autoPlay loop playsInline>
+        <video ref ={videoRef} width="100%" height="auto" autoPlay muted loop playsInline>
           <source src={video} type="video/mp4"/>
         </video>
           {/* showThumbs={false} -> 밑에 같이 뜨는 사진 없애는 코드 */}
