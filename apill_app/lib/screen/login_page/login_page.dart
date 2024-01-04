@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mainproject_apill/screen/login_page/join_page.dart';
 import 'package:mainproject_apill/screen/my_app_page.dart';
-import 'package:mainproject_apill/utils/dbConnector.dart';
+import 'package:mainproject_apill/utils/db_connector.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
