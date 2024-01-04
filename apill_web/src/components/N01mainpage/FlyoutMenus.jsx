@@ -20,7 +20,7 @@ const MenuBar = [
   { name: '홈 화면', description: '메인화면 이동', to: 'main', icon: HomeIcon },
   { name: '제품 소개',  description: 'A-pill을 소개합니다',to: 'productinfo', icon: DocumentTextIcon },
   { name: "앱 소개", description: 'A-pill 어플을 소개합니다', to: 'appinfo', icon: DevicePhoneMobileIcon },
-  { name: '팀 소개', description: 'TheTech', to: '#', icon: UsersIcon },
+  { name: '찾아오시는 길', description: 'TheTech', to: '#', icon: UsersIcon },
 ]
 export default function Menu() {
     
