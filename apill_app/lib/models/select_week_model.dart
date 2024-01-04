@@ -1,11 +1,11 @@
 class SelectWeekData {
   final int sleepNum;
   final int totalSleepTime;
-  final DateTime Date;
+  final DateTime date;
 
   SelectWeekData({
     required this.sleepNum,
     required this.totalSleepTime,
-    required this.Date,
+    required this.date,
   });
 }

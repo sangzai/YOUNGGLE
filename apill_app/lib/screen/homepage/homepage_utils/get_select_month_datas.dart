@@ -1,5 +1,5 @@
-import 'package:mainproject_apill/models/selecMonthModel.dart';
-import 'package:mainproject_apill/utils/dbConnector.dart';
+import 'package:mainproject_apill/models/select_month_model.dart';
+import 'package:mainproject_apill/utils/db_connector.dart';
 
 Future<List<SelectMonthData>> getSelectMonthData(DateTime selectedDate) async {
   // 매개변수로 일요일을 받아옴
@@ -37,7 +37,7 @@ HAVING
       SelectMonthData selectData = SelectMonthData(
         sleepNum: int.parse(row.assoc()['sleep_num']!),
         totalSleepTime: int.parse(row.assoc()['total_sleep_time']!),
-        Date: DateTime.parse(row.assoc()['date']!),
+        date: DateTime.parse(row.assoc()['date']!),
       );
       selectMonthDataList.add(selectData);
 

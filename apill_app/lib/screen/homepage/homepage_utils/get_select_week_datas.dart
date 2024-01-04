@@ -1,5 +1,5 @@
-import 'package:mainproject_apill/models/selectWeekModel.dart';
-import 'package:mainproject_apill/utils/dbConnector.dart';
+import 'package:mainproject_apill/models/select_week_model.dart';
+import 'package:mainproject_apill/utils/db_connector.dart';
 
 Future<List<SelectWeekData>> getSelectWeekData(DateTime selectedDate) async {
   // 매개변수로 일요일을 받아옴
@@ -36,7 +36,7 @@ Future<List<SelectWeekData>> getSelectWeekData(DateTime selectedDate) async {
       SelectWeekData selectData = SelectWeekData(
           sleepNum: int.parse(row.assoc()['sleep_num']!),
           totalSleepTime: int.parse(row.assoc()['total_sleep_time']!),
-          Date: DateTime.parse(row.assoc()['date']!),
+          date: DateTime.parse(row.assoc()['date']!),
       );
       selectWeekDataList.add(selectData);
 

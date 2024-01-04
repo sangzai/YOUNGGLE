@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mainproject_apill/LoadingController.dart';
+import 'package:mainproject_apill/loading_controller.dart';
 import 'package:mainproject_apill/screen/my_app_page.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';

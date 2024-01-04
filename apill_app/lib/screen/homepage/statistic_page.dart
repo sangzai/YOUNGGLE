@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:mainproject_apill/LoadingController.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_utils/getSelectDateDatas.dart';
+import 'package:mainproject_apill/loading_controller.dart';
+import 'package:mainproject_apill/models/select_date_model.dart';
+import 'package:mainproject_apill/models/select_week_model.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_utils/get_select_date_datas.dart';
 import 'package:mainproject_apill/screen/homepage/homepage_controllers/statistic_controller.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_utils/getSelectWeekDatas.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_utils/setInitialDate.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_utils/get_select_week_datas.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_utils/set_initial_date.dart';
 import 'package:mainproject_apill/screen/homepage/homepage_widgets/statistic_piechart.dart';
 import 'package:mainproject_apill/screen/homepage/homepage_widgets/statistic_today_body_chart.dart';
 import 'package:mainproject_apill/screen/homepage/homepage_widgets/statistic_today_summary.dart';
 import 'package:mainproject_apill/screen/login_page/user_controller.dart';
-import 'package:mainproject_apill/widgets/appcolors.dart';
-import 'package:mainproject_apill/utils/dateFormat.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_utils/timeCalculators.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_utils/time_calculators.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -46,76 +46,82 @@ class _HomePageState extends State<HomePage> {
         child: SafeArea(
           child: Column(
             children: [
-              Obx(
-                () => AnimatedBuilder(
-                    animation: statisticCon.animationController!,
-                    builder: (context, child) {
-                      return SizedBox(
-                        height: statisticCon.heightAnimation!.value,
-                        child: Visibility(
-                          visible: statisticCon.appbarCheck.value,
-                          child: AppBar(
-                            flexibleSpace: Padding(
-                              padding: const EdgeInsets.only(left: 8,right: 20),
-                              child: Opacity(
-                                opacity: statisticCon.opacityAnimation?.value ?? 1.0,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('${userCon.userName}님',
-                                      style: Theme.of(context).textTheme.headlineLarge,),
-                                    Text(
-                                      // TODO : 대화하는 듯한 느낌이 들게 멘트 추가할 것
-                                      "${statisticCon.goodSleep.value}",
-                                      style: Theme.of(context).textTheme.headlineLarge,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+              // Obx(
+              //   () => AnimatedBuilder(
+              //       animation: statisticCon.animationController!,
+              //       builder: (context, child) {
+              //         return SizedBox(
+              //           height: statisticCon.heightAnimation!.value,
+              //           child: Visibility(
+              //             visible: statisticCon.appbarCheck.value,
+              //             child: AppBar(
+              //               flexibleSpace: Padding(
+              //                 padding: const EdgeInsets.only(left: 8,right: 20),
+              //                 child: Opacity(
+              //                   opacity: statisticCon.opacityAnimation?.value ?? 1.0,
+              //                   child: Column(
+              //                     crossAxisAlignment: CrossAxisAlignment.start,
+              //                     children: [
+              //                       Text('${userCon.userName}님',
+              //                         style: Theme.of(context).textTheme.headlineLarge,),
+              //                       Text(
+              //                         // TODO : 대화하는 듯한 느낌이 들게 멘트 추가할 것
+              //                         "${statisticCon.goodSleep.value}",
+              //                         style: Theme.of(context).textTheme.headlineLarge,
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
+              //               ),
+              //
+              //               actions: [
+              //                 Opacity(
+              //                   opacity: statisticCon.opacityAnimation?.value ?? 1.0,
+              //
+              //                   child: IconButton(
+              //                     icon: Icon(Icons.close),
+              //                     onPressed: () {
+              //                       statisticCon.startAnimation();
+              //                       // statisticCon.appbarCheck.value = !statisticCon.appbarCheck.value;
+              //                       // print(getTextHeight(statisticCon.goodSleep.value, myTheme.textTheme.headlineLarge!, ScreenUtil().screenWidth));
+              //                       // print(statisticCon.heightAnimation!.value);
+              //                     },
+              //                     color: AppColors.appColorWhite60,
+              //                   ),
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         );
+              //       },
+              //
+              //   ),
+              // ),
 
-                            actions: [
-                              Opacity(
-                                opacity: statisticCon.opacityAnimation?.value ?? 1.0,
-
-                                child: IconButton(
-                                  icon: Icon(Icons.close),
-                                  onPressed: () {
-                                    statisticCon.startAnimation();
-                                    // statisticCon.appbarCheck.value = !statisticCon.appbarCheck.value;
-                                    // print(getTextHeight(statisticCon.goodSleep.value, myTheme.textTheme.headlineLarge!, ScreenUtil().screenWidth));
-                                    // print(statisticCon.heightAnimation!.value);
-                                  },
-                                  color: AppColors.appColorWhite60,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-
-                ),
-              ),
-
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(onPressed: () async {
+                    // 로딩 화면 띄우기
                     IsLoadingController.to.isLoading = true;
 
+                    // selectedDate의 현재 인덱스 확인
                     int currentIndex = statisticCon.activeDates.indexOf(statisticCon.selectedDate.value);
+
+                    // 현재 선택된 날짜가 리스트의 첫 번째 요소가 아닌 경우
                     if (currentIndex > 0) {
-                      // 현재 선택된 날짜가 리스트의 첫 번째 요소가 아닌 경우
-                      await checkDateTime(statisticCon.activeDates[currentIndex - 1]);
+                      // selectedDate의 날짜를 변경
                       statisticCon.selectedDate.value = statisticCon.activeDates[currentIndex - 1];
+
+                      // 다음 날짜의 데이터를 가져오고
+                      await checkDateTime(statisticCon.activeDates[currentIndex - 1]);
                     }
 
                     IsLoadingController.to.isLoading = false;
 
-                  }, icon: FaIcon(FontAwesomeIcons.chevronLeft),
+                  }, icon: const FaIcon(FontAwesomeIcons.chevronLeft),
                     color: Colors.white.withOpacity(0.6),
                     iconSize: 40,
                   ),
@@ -126,14 +132,14 @@ class _HomePageState extends State<HomePage> {
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-                            Container(
+                            const SizedBox(
                               height: 220,
                               width: 220,
                               child: HomePieChart(),
                             ),
 
                             // TODO : 파이차트 구현
-                            Container(
+                            SizedBox(
                               height: 220,
                               width: 220,
                               child: Image.asset('assets/image/ClockBackGround2.png',
@@ -149,18 +155,18 @@ class _HomePageState extends State<HomePage> {
                                     fontSize: 18
                                   ),),
                                 // TODO : 수면시간 연동
-                                Text("${statisticCon.totalSleepInPieChart.value}",
+                                Text(statisticCon.totalSleepInPieChart.value,
                                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                                     fontSize: 22
                                   ),),
                                 // TODO : 수면시간 연동
-                                Text("23:00 - 7:00",
+                                Text(statisticCon.startEndTimeInPieChart.value,
                                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                                     fontSize: 12
                                   ),
                                 ),
-                                SizedBox(height: 20),
-                                Text("${DateFormatUtil().formattedDate(statisticCon.selectedDate.value)}",
+                                const SizedBox(height: 20),
+                                Text(formattedDate(statisticCon.selectedDate.value),
                                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                                       fontSize: 14
                                   ),
@@ -173,15 +179,23 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   IconButton(onPressed: () async {
+                    // 로딩 화면 띄우기
                     IsLoadingController.to.isLoading = true;
 
+                    // selectedDate의 현재 인덱스 확인
                     int currentIndex = statisticCon.activeDates.indexOf(statisticCon.selectedDate.value);
+
+                    // 현재 선택된 날짜가 리스트의 마지막 요소가 아닌 경우
+
                     if (currentIndex < statisticCon.activeDates.length - 1) {
-                      // 현재 선택된 날짜가 리스트의 마지막 요소가 아닌 경우
-                      await checkDateTime(statisticCon.activeDates[currentIndex + 1]);
+                      // selectedDate의 날짜를 변경
                       statisticCon.selectedDate.value = statisticCon.activeDates[currentIndex + 1];
+
+                      // 다음 날짜의 데이터를 가져오고
+                      await checkDateTime(statisticCon.activeDates[currentIndex + 1]);
                     }
 
+                    // 다 끝나면 로딩 화면 끄기
                     IsLoadingController.to.isLoading = false;
 
                   }, icon: FaIcon(FontAwesomeIcons.chevronRight),
@@ -230,6 +244,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> get_statistic_data(BuildContext context) async {
 
+    // 날짜를 선택
     final selectedDate = await showDatePicker(
       context: context,
       firstDate: DateTime(2023),
@@ -243,31 +258,60 @@ class _HomePageState extends State<HomePage> {
       },
     );
 
-    IsLoadingController.to.isLoading = true;
+    // IsLoadingController.to.isLoading = true;
 
-    statisticCon.selectedDateData = await getSelectDateData(selectedDate!);
-    for (var data in statisticCon.selectedDateData) {
-      print('sleepNum: ${data.sleepNum}, startTime: ${data.startTime}, endTime: ${data.endTime}, sleepDepth: ${data.sleepDepth}');
+    // statisticCon.selectedDateData = RxList<SelectDateData>.from(await getSelectDateData(selectedDate!));
+    // for (var data in statisticCon.selectedDateData) {
+    //   print('sleepNum: ${data.sleepNum}, startTime: ${data.startTime}, endTime: ${data.endTime}, sleepDepth: ${data.sleepDepth}');
+    // }
+
+    // 선택한 날짜가 현재 날짜와 다르다면 변수에 대입하고 데이터 체크
+    if(selectedDate != null) {
+      statisticCon.selectedDate.value = selectedDate;
+      await checkDateTime(selectedDate);
     }
 
-    // print("내가 찍은 날짜 : ${selectedDate}");
-    // 선택한 날짜를 변수에 대입
-    statisticCon.selectedDate.value = selectedDate;
 
-    IsLoadingController.to.isLoading = false;
+    // IsLoadingController.to.isLoading = false;
 
   }
 
 
   Future<void> checkDateTime(DateTime selectedDate) async {
     // 선택한 날짜의 데이터 받기
-    statisticCon.selectedDateData = await getSelectDateData(selectedDate);
+    statisticCon.selectedDateData = RxList<SelectDateData>.from(await getSelectDateData(selectedDate));
+
+    // 바뀐 날짜에 맞게 파이차트 그래프 수정
+    // 하루치 데이터 SleepNum으로 쪼개기
+    statisticCon.splitselectedDateData = RxList<List<SelectDateData>>.from(await splitDateData(statisticCon.selectedDateData));
+    // print('statistic_page.dart 출력중');
+    // for (var data in statisticCon.splitselectedDateData) {
+    //   for(var datas in data){
+    //     print('Sleep Number: ${datas.sleepNum}');
+    //     print('Start Time: ${datas.startTime.toLocal().toString()}');
+    //     print('End Time: ${datas.endTime.toLocal().toString()}');
+    //     print('Sleep Depth: ${datas.sleepDepth}');
+    //     print('------------------------');
+    //   }
+    // }
+
+    // 쪼갠 데이터 중 가장 수면시간이 긴 데이터의 인덱스를 구하기
+    statisticCon.pieIndex.value = await findLongestSleep(statisticCon.splitselectedDateData as List<List<SelectDateData>>);
+    // 가장 수면시간이 긴 데이터를 파이차트에 적용(총 수면시간)
+    statisticCon.totalSleepInPieChart.value = pieChartTotalSleep(statisticCon.splitselectedDateData[statisticCon.pieIndex.value]);
+    // 가장 수면시간이 긴 데이터를 파이차트에 적용(수면 시작 시간 및 수면 종료 시간)
+    statisticCon.startEndTimeInPieChart.value = pieChartTimeRange(statisticCon.splitselectedDateData[statisticCon.pieIndex.value]);
+
+    // 파이차트 데이터 테스트
+    statisticCon.pieData.assignAll(getSplitDataSleepTime(statisticCon.splitselectedDateData as List<List<SelectDateData>>, statisticCon.selectedDate.value));
+
     // 만약 선택한 날짜의 주일이 다르면
     if( TimeCalculators().findSunday(selectedDate) != statisticCon.selectedDateSunday.value ){
       // 선택한 날짜의 일주일 데이터 받기
-      statisticCon.selectedWeekData = await getSelectWeekData(selectedDate);
+      statisticCon.selectedWeekData = RxList<SelectWeekData>.from(await getSelectWeekData(TimeCalculators().findSunday(selectedDate)));
       statisticCon.selectedDateSunday.value = TimeCalculators().findSunday(selectedDate);
     }
+
     // TODO : 만약 월이 달라진다면 데이터 받기
 
   }

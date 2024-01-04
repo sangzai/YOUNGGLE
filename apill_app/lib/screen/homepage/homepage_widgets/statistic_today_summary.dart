@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mainproject_apill/models/selectDateModel.dart';
+import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class TodaySummarys extends StatelessWidget {

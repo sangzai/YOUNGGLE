@@ -1,11 +1,11 @@
 class SelectMonthData {
   final int sleepNum;
   final int totalSleepTime;
-  final DateTime Date;
+  final DateTime date;
 
   SelectMonthData({
     required this.sleepNum,
     required this.totalSleepTime,
-    required this.Date,
+    required this.date,
   });
 }

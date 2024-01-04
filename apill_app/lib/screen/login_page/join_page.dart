@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
-import 'package:mainproject_apill/utils/dbConnector.dart';
+import 'package:mainproject_apill/utils/db_connector.dart';
 
 final dio = Dio();
 
