@@ -5,10 +5,10 @@ import appmain from './img/app_main.png'
 import appalarm from './img/app_alarm.png'
 import appchart from './img/app_chart.png'
 import apptutorial from './img/app_tutorial.png'
-import appalarmdic from './img/app_alarm_dic.png'
-import appchartdic from './img/app_chart_dic.png'
-import apptutorialdic from './img/app_tutorial_dic.png'
-import appcontroldoc from './img/app_chart_dic.png'
+// import appalarmdic from './img/app_alarm_dic.png'
+// import appchartdic from './img/app_chart_dic.png'
+// import apptutorialdic from './img/app_tutorial_dic.png'
+// import appcontroldoc from './img/app_chart_dic.png'
 
 const AppInfo = () => {
   const [backgroundImageIndex, setBackgroundImageIndex] = useState(0);

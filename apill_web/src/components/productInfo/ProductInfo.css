@@ -20,7 +20,7 @@
     width: 20%; 
     height: 36%; 
     background-color: rgba(98, 114, 196, 1); 
-    border-radius: 0 0 100% 0; 
+    border-radius: 0 0 50px 0; 
     position: absolute;
     bottom: 64%; 
     left: 0px;
@@ -41,7 +41,7 @@
     width: 25%; 
     height: 45%; 
     background-color: rgba(98, 114, 196, 1); 
-    border-radius: 100% 0 0 0; 
+    border-radius: 50px 0 0 0; 
     position: absolute;
     bottom: 0px; 
     left: 80%;
@@ -85,8 +85,7 @@
 .product-main-hole2 {
     width: 10%;
     height: 4.5%;
-    border-radius: 100%;
-    background-color: red;
+    border-radius: 50px;
     position: absolute;
     bottom: 69%;
     
@@ -107,10 +106,10 @@
 .product-main {
     width: 100%;
     height: 75%;
-    background-color: rgba(217, 217, 217, 1); 
+    background-color: rgb(255, 255, 255); 
     position: absolute;
     bottom: 0px;
-    border-radius: 10%;
+    border-radius: 20px;
     z-index: 0;
     overflow: hidden;
 }
@@ -119,7 +118,7 @@
     width: 50%;
     height: 15%;
     background-color: rgba(0, 41, 130, 1); 
-    border-radius: 0 0 15% 0 ;
+    border-radius: 0 0 20px 0 ;
     position: absolute;
     bottom: 85%;
     left: 0;
@@ -129,7 +128,7 @@
     width: 35%;
     height: 10%;
     background-color: rgba(0, 24, 77, 1); 
-    border-radius: 0 0 15% 0 ;
+    border-radius: 0 0 20px 0 ;
     position: absolute;
     bottom: 90%;
     left: 50%;
@@ -139,7 +138,7 @@
     width: 40%;
     height: 5%;
     background-color: rgba(0, 41, 130, 1); 
-    border-radius: 20% 0 0 20% ;
+    border-radius: 20px 0 0 20px ;
     position: absolute;
     bottom: 10%;
     left: 60%;
@@ -149,7 +148,7 @@
     width: 20%;
     height: 5%;
     background-color: rgba(0, 24, 77, 1); 
-    border-radius: 20% 20% 20% 20% ;
+    border-radius: 20px 20px 20px 20px ;
     position: absolute;
     bottom: 2%;
     left: 45%;
@@ -167,7 +166,7 @@
     bottom: 52%;
     left: 25%;
     font-size: 4vw;
-    border-radius: 30%;
+    border-radius: 20px;
 }
 
 .producthighlight{
@@ -178,7 +177,7 @@
 .productprimaryHighlight{
     background-color: rgb(129, 120, 201);
     color: black;
-    border-radius: 10%;
+    border-radius: 10px;
 }
 
 .product-text-box {
@@ -212,13 +211,13 @@
 .productprimaryHighlight1{
     background-color: rgb(18, 201, 120);
     color: black;
-    border-radius: 10%;
+    border-radius: 6px;
 }
 
 .productprimaryHighlight2{
     background-color: rgb(201, 200, 120);
     color: black;
-    border-radius: 10%;
+    border-radius: 6px;
 }
 
 .product-text-name {
@@ -226,7 +225,7 @@
     bottom: -50%;
     left: 60%;
     font-size: 5.5vw;
-    border-radius: 30%;
+    border-radius: 20px;
 }
 
 .product-adv1,
@@ -235,44 +234,54 @@
 .product-adv4,
 .product-adv5,
 .product-adv6 {
+    
     width: 17%;
     height: 35%;
     position: absolute;
-    border-radius: 10%;
+    border-radius: 10px;
 }
 
 .product-adv1 {
-    background-color: rgba(0, 41, 130, 1); 
+    background-image: url(./img/func1.png);
+    background-size: contain;
     bottom: 42%;
     right: 45%;
 }
 
 .product-adv2 {
-    background-color: rgba(217, 217, 217, 1);
+    background-image: url(./img/func2.png);
+    background-size: contain;
     bottom: 42%;
     right: 25%;
 }
 
 .product-adv3 {
-    background-color: rgba(0, 24, 77, 1); 
+    background-image: url(./img/func3.png);
+    background-size: contain;
     bottom: 42%;
     right: 5%;
 }
 
 .product-adv4 {
-    background-color: rgba(0, 24, 77, 1); 
+    /* background-color: rgba(0, 24, 77, 1);  */
+    background-image: url(./img/func4.png);
+    background-size: contain;
     bottom: 2%;
     right: 45%;
 }
 
 .product-adv5 {
-    background-color: rgba(0, 41, 130, 1); 
+    /* background-color: rgba(0, 41, 130, 1);  */
+    background-image: url(./img/func5.png);
+    background-size: contain;
     bottom: 2%;
     right: 25%;
 }
 
 .product-adv6 {
-    background-color: rgba(217, 217, 217, 1);
+    /* background-color: rgba(217, 217, 217, 1); */
+    background-image: url(./img/func6.png);
+    background-size: contain;
     bottom: 2%;
     right: 5%;
 }

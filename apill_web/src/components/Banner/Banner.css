@@ -15,6 +15,7 @@
 
     }
   }
+
 a:active,
 a:focus,
 a{
@@ -22,36 +23,39 @@ a{
 }
 
 .banner.visible{
-    opacity: 1;
+    opacity: 0.95;
+    transform: translateY(0);
 }
 
-.banner.hidden{
-    opacity: 0;
-    pointer-events: none;
-}
 .banner{
-    
-    opacity: 0.95;
-    transition: all 1s ease-in-out;
+
     padding: 13px;
-    transition: all 1s;
     position: fixed;
     bottom: 0;
     width: 100%;
     height: 60px;
     top:auto;
     background-color: rgb(18, 18, 18);
-    opacity: 0.95;
     color: #1e1c1c;
-    text-align: justify;
+    /* text-align: justify; */
     z-index: 100;
     padding-bottom:27px;
     padding-top: 12px;
+
+    display: flex;
+
+
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .wholeLR{
     display: flex;
+    position: absolute;
     align-items: center;
     justify-content: space-evenly;
+    width: 100vw;
+    cursor: pointer;
     /* gap: 10px; */
 }
 
@@ -100,7 +104,7 @@ a{
 .arrow{
     width: 40px;
     height: 40px;
-    animation: horizontal-scroll 1.5s infinite linear;;
+    animation: horizontal-scroll 1.5s infinite linear;
 }
 
 .img{
@@ -109,3 +113,205 @@ a{
     
 }
 
+.chatbot-button {
+    background-color: white;
+    border-radius: 20px;
+    position: absolute;
+    bottom: 120px;
+    left: 20px;
+    cursor: pointer;
+}
+
+.chatbotmodal {
+    position: absolute;
+    left: -110px;
+    bottom: 200px;
+    background-image: url('./img/phone.png');
+    background-size: contain;
+    width: 500px;
+    height: 500px;
+}
+
+.chatbotmodal-bot {
+    width: 217px;
+    height: 405px;
+    overflow-y: scroll;
+}
+
+.chatbotmodal-user {
+    width: 217px;
+    height: 40px;
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chatbotmodal-chat {
+    width: 130px;
+    height: 30px;
+
+    background-color: #fff;
+    border: 1px solid #bcbcbc;
+    resize: none;
+    color: #000;
+    font-size: 14px;
+    line-height: 18px;
+    border-radius: 8px;
+}
+
+.chatbotmodal-user button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    margin: 2px;
+    border: 0px;
+    cursor: pointer;
+}
+
+.chatbotmodal-home {
+    background-image: url('./img/home-icon.png');
+    background-size: cover;
+}
+
+.chatbotmodal-send {
+    background-image: url('./img/send-icon.png');
+    background-size: cover;
+}
+
+.chatbotmodal-content {
+    position: absolute;
+    width: 217px;
+    height: 445px;
+    left: 28.2%;
+    top: 6%;
+    background-color: white;
+    /* overflow: hidden; */
+}
+
+.chatbotmodal-request-bot {
+    display: grid;
+    grid-template-columns: 1fr 5.5fr;
+    margin-top: 10px;
+}
+
+.chatbotmodal-request-bot-image {
+    height: 30px;
+    background-image: url('../../img/MainLogo.png');
+    background-size: cover;
+}
+  
+/* 말풍선 스타일 */
+.chatbotmodal-request-bot-answer {
+    margin-left: 12px;
+    margin-right: 12px;
+    display: inline-block;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    padding: 10px;
+    position: relative;
+  }
+  
+  /* 말풍선 가상 요소(삼각형) */
+  .chatbotmodal-request-bot-answer::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: -10px;
+    border-width: 8px;
+    border-style: solid;
+    border-color: #f2f2f2 transparent transparent transparent;
+  }
+
+.ordermodal {
+    position: absolute;
+    left: 350px;
+    bottom: 120px;
+    background-color: aquamarine;
+    border-radius: 10px;
+    width: 400px;
+    height: 515px;
+}
+
+
+.StyledDiv {
+    margin: 10px 0;
+}
+
+.StyledH2 {
+    color: #fff;
+    background-color: rgb(35, 243, 174);
+    padding: 10px;
+    text-align: center;
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+}
+
+.StyledForm {
+    max-width: 340px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.StyledLabel {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.StyledInput {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.StyledButton{
+    width: 50%;
+    padding: 10px;
+    background-color: rgb(35, 243, 174);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: bolder;
+    display: block;
+    margin: 0 auto;
+    &:hover {
+      background-color: #2ecc71;
+    }
+}
+
+.StyledSelect {
+    border: none; 
+    outline: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    padding: 3px;
+    margin-left: 3px;   
+}
+
+.ordermodal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white;
+    text-align: center;
+    text-justify: center;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    &:hover {
+        background-color: #2ecc71;
+        color: white;
+    }
+}
