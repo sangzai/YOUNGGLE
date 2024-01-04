@@ -6,17 +6,19 @@ import arrow from '../../img/arrow.png'
 import './Banner.css'
 
 const Banner = () => {
-    const [isVisible, setIsVisible]=useState(false);
 
     useEffect(()=>{
         const handleScroll=()=>{
+            const advElements = document.querySelectorAll('.banner')[0];
             const scrollPosition =window.scrollY;
-            const triggerPosition=200;
+            const triggerPosition=150;
 
             if(scrollPosition>triggerPosition){
-                setIsVisible(true);
+                advElements.style.transitionDelay = '0.2s';
+                advElements.classList.add('visible');
             }else{
-                setIsVisible(false);
+                advElements.style.transitionDelay = '0.2s';
+                advElements.classList.remove('visible');
             }
 
         };
@@ -27,7 +29,7 @@ const Banner = () => {
         };
     },[]);
     return (
-        <div className={`banner ${isVisible?'visible': 'hidden'}`}>
+        <div className='banner'>
             <div className='wholeLR'>
                 <a href='#'>
                     <div className='left-grp'>

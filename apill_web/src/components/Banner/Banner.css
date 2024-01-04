@@ -23,32 +23,28 @@ a{
 }
 
 .banner.visible{
-    animation: horizontal-scroll;
     opacity: 0.95;
+    transform: translateY(0);
 }
 
-.banner.hidden{
-    opacity: 0;
-    pointer-events: none;
-}
 .banner{
-    
-    opacity: 0.95;
-    transition: all 1s ease-in-out;
+
     padding: 13px;
-    transition: all 1s;
     position: fixed;
     bottom: 0;
     width: 100%;
     height: 60px;
     top:auto;
     background-color: rgb(18, 18, 18);
-    opacity: 0.95;
     color: #1e1c1c;
     text-align: justify;
     z-index: 100;
     padding-bottom:27px;
     padding-top: 12px;
+
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .wholeLR{
     display: flex;
@@ -102,7 +98,7 @@ a{
 .arrow{
     width: 40px;
     height: 40px;
-    animation: horizontal-scroll 1.5s infinite linear;;
+    animation: horizontal-scroll 1.5s infinite linear;
 }
 
 .img{
