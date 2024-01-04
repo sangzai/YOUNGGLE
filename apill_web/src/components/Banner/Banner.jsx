@@ -36,6 +36,13 @@ const Banner = () => {
         setUserInput(''); // 입력창 비우기
     };
 
+    const handleKeyPress = (e) => {
+        // 엔터 키가 눌렸을 때
+        if (e.key === 'Enter') {
+            handleSubmit(); // 또는 원하는 함수 호출
+        }
+    };
+
     const chatmodalOnOff = () => {
         if (isChatModalOpen) {
             setIsChatModalOpen(false);
@@ -92,21 +99,23 @@ const Banner = () => {
                 <div className='chatbotmodal'>
                     <div className='chatbotmodal-content'>
                         <div className='chatbotmodal-bot'>
-                            {/* 모달 내용 */}
-                            <p>모달 내용</p>
                             {isModalOpen && (
                                 <div className='chatbotmodal-request'>
-                                    <div className='chatbotmodal-request-content'>
-                                        {modalContent.map((content, index) => (
-                                            <p key={index}>{content}</p>
-                                        ))}
-                                    </div>
+                                    {modalContent.map((content, index) => (
+                                        <div className='chatbotmodal-request-bot' key={index}>
+                                            <div className='chatbotmodal-request-bot-image' />
+                                            <div className='chatbotmodal-request-bot-answer'>
+                                                {content}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             )}
                         </div>
                         <div className='chatbotmodal-user'>
-                            <input type="text" value={userInput} onChange={handleInputChange} />
-                            <button onClick={handleSubmit}>질문하기</button>
+                            <button className='chatbotmodal-home' />
+                            <input className='chatbotmodal-chat' type="text" value={userInput} onChange={handleInputChange} onKeyPress={handleKeyPress} />
+                            <button className='chatbotmodal-send' onClick={handleSubmit} />
                         </div>
                     </div>
                 </div>

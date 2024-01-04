@@ -37,7 +37,7 @@ a{
     top:auto;
     background-color: rgb(18, 18, 18);
     color: #1e1c1c;
-    text-align: justify;
+    /* text-align: justify; */
     z-index: 100;
     padding-bottom:27px;
     padding-top: 12px;
@@ -122,17 +122,61 @@ a{
     cursor: pointer;
 }
 
-
-
 .chatbotmodal {
     position: absolute;
     left: -110px;
     bottom: 200px;
-    color: red;
     background-image: url('./img/phone.png');
     background-size: contain;
     width: 500px;
     height: 500px;
+}
+
+.chatbotmodal-bot {
+    width: 217px;
+    height: 405px;
+    overflow-y: scroll;
+}
+
+.chatbotmodal-user {
+    width: 217px;
+    height: 40px;
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chatbotmodal-chat {
+    width: 130px;
+    height: 30px;
+
+    background-color: #fff;
+    border: 1px solid #bcbcbc;
+    resize: none;
+    color: #000;
+    font-size: 14px;
+    line-height: 18px;
+    border-radius: 8px;
+}
+
+.chatbotmodal-user button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    margin: 2px;
+    border: 0px;
+    cursor: pointer;
+}
+
+.chatbotmodal-home {
+    background-image: url('./img/home-icon.png');
+    background-size: cover;
+}
+
+.chatbotmodal-send {
+    background-image: url('./img/send-icon.png');
+    background-size: cover;
 }
 
 .chatbotmodal-content {
@@ -143,19 +187,41 @@ a{
     top: 6%;
     background-color: white;
     /* overflow: hidden; */
-    
 }
 
-.chatbotmodal-bot {
-    width: 217px;
-    height: 400px;
-    overflow-y: scroll;
+.chatbotmodal-request-bot {
+    display: grid;
+    grid-template-columns: 1fr 5.5fr;
+    margin-top: 10px;
 }
 
-.chatbotmodal-user {
-    width: 217px;
-    height: 45px;
+.chatbotmodal-request-bot-image {
+    height: 30px;
+    background-image: url('../../img/MainLogo.png');
+    background-size: cover;
 }
+  
+/* 말풍선 스타일 */
+.chatbotmodal-request-bot-answer {
+    margin-left: 12px;
+    margin-right: 12px;
+    display: inline-block;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    padding: 10px;
+    position: relative;
+  }
+  
+  /* 말풍선 가상 요소(삼각형) */
+  .chatbotmodal-request-bot-answer::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: -10px;
+    border-width: 8px;
+    border-style: solid;
+    border-color: #f2f2f2 transparent transparent transparent;
+  }
 
 .ordermodal {
     position: absolute;
