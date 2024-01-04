@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:mainproject_apill/loading_controller.dart';
 import 'package:mainproject_apill/screen/alarm_page.dart';
 import 'package:mainproject_apill/screen/homepage/statistic_page.dart';
 import 'package:mainproject_apill/screen/setting_page.dart';
@@ -42,7 +45,28 @@ class _MyAppPageState extends State<MyAppPage> {
       // Scaffold 의 배경화면을 투명하게
       backgroundColor: Colors.transparent,
       // 네비게이션 리스트에 있는 화면의 요소를 가지고 온다
-      body: _navIndex.elementAt(_selectedIndex),
+      body: Stack(
+          children: [
+            _navIndex.elementAt(_selectedIndex),
+
+            Obx(//isLoading(obs)가 변경되면 다시 그림.
+                  () => Offstage(
+                    offstage: !IsLoadingController.to.isLoading, // isLoading이 false면 감춰~
+                    child: Stack(children: <Widget>[
+                      Opacity(//뿌옇게~
+                        opacity: 0.5,//0.5만큼~
+                        child: ModalBarrier(dismissible: false, color: Colors.black),//클릭 못하게~
+                      ),
+                      Center(
+                        child: SpinKitFadingCube(
+                          color: AppColors.appColorBlue,
+                        )
+                      ),
+                    ]),
+                  ),
+            ),
+          ],
+        ),
       //
       bottomNavigationBar: SizedBox(
         height: 65,

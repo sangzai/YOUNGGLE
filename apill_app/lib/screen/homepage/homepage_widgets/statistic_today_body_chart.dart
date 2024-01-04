@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mainproject_apill/models/selectDateModel.dart';
+import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/screen/homepage/homepage_widgets/statisitc_barchart.dart';
 import 'package:mainproject_apill/screen/homepage/homepage_widgets/statistic_linechart.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
@@ -17,7 +17,7 @@ class TodayCharts extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: AppColors.ContainerBackColor
+          color: AppColors.containerBackColor
       ),
       width: MediaQuery.of(context).size.width,
       height: 300,

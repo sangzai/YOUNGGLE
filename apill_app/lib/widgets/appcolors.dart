@@ -27,7 +27,7 @@ class AppColors {
 
   static const Color appColorGreen = Color(0xFF7DB249);
 
-  static const Color ContainerBackColor = Color.fromRGBO(238, 238, 238, 0.1);
+  static const Color containerBackColor = Color.fromRGBO(238, 238, 238, 0.1);
 }
 
 extension ColorExtension on Color {

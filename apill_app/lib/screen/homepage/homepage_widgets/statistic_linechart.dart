@@ -1,12 +1,28 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mainproject_apill/models/select_date_model.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_controllers/statistic_controller.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
-class HomeLineChart extends StatelessWidget {
+class HomeLineChart extends StatefulWidget {
   const HomeLineChart({super.key});
 
   @override
+  State<HomeLineChart> createState() => _HomeLineChartState();
+}
+
+class _HomeLineChartState extends State<HomeLineChart> {
+  final statisticCon = Get.put(StatisticCon());
+
+  @override
   Widget build(BuildContext context) {
+
+    List<SelectDateData> chartdata = statisticCon.selectedDateData;
+
+    
+
+
 
     return LineChart(
       LineChartData(
@@ -22,13 +38,14 @@ class HomeLineChart extends StatelessWidget {
         lineBarsData: lineBarsData1,
         minX: 0,
         maxX: 14,
-        maxY: 4,
-        minY: 0.8,
+        maxY: 9,
+        minY: 3,
 
       ),
 
     );
-  }// 빌더 끝
+  }
+// 빌더 끝
   LineTouchData get lineTouchData => LineTouchData(
     // 터치시 나오는 수직 라인 지우기
     getTouchLineEnd: (barData, spotIndex) => 0,
@@ -97,15 +114,17 @@ class HomeLineChart extends StatelessWidget {
     );
     String text;
     switch (value.toInt()) {
-      case 1:
+      case 4:
         text = '깊은\n수면';
         break;
-      case 2:
+      case 5:
         text = '얕은\n수면';
         break;
-      case 3:
+      case 7:
         text = ' 램\n수면';
         break;
+      case 8:
+        text = '기상';
       default:
         return Container();
     }
@@ -136,5 +155,4 @@ class HomeLineChart extends StatelessWidget {
     FlSpot(13, 1.8),
     ],
   );
-
 }// 클래스 끝

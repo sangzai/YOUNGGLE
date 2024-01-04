@@ -242,37 +242,46 @@
 }
 
 .product-adv1 {
-    background-color: rgb(255, 255, 255); 
+    background-image: url(./img/func1.png);
+    background-size: contain;
     bottom: 42%;
     right: 45%;
 }
 
 .product-adv2 {
-    background-color: rgba(217, 217, 217, 1);
+    background-image: url(./img/func2.png);
+    background-size: contain;
     bottom: 42%;
     right: 25%;
 }
 
 .product-adv3 {
-    background-color: rgba(0, 24, 77, 1); 
+    background-image: url(./img/func3.png);
+    background-size: contain;
     bottom: 42%;
     right: 5%;
 }
 
 .product-adv4 {
-    background-color: rgba(0, 24, 77, 1); 
+    /* background-color: rgba(0, 24, 77, 1);  */
+    background-image: url(./img/func4.png);
+    background-size: contain;
     bottom: 2%;
     right: 45%;
 }
 
 .product-adv5 {
-    background-color: rgba(0, 41, 130, 1); 
+    /* background-color: rgba(0, 41, 130, 1);  */
+    background-image: url(./img/func5.png);
+    background-size: contain;
     bottom: 2%;
     right: 25%;
 }
 
 .product-adv6 {
-    background-color: rgba(217, 217, 217, 1);
+    /* background-color: rgba(217, 217, 217, 1); */
+    background-image: url(./img/func6.png);
+    background-size: contain;
     bottom: 2%;
     right: 5%;
 }

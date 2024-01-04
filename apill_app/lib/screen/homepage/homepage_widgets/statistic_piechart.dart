@@ -1,53 +1,78 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
-class HomePieChart extends StatelessWidget {
+import 'package:get/get.dart';
+import 'package:mainproject_apill/screen/homepage/homepage_controllers/statistic_controller.dart';
+import 'package:mainproject_apill/models/select_date_model.dart';
+import 'package:mainproject_apill/widgets/appcolors.dart';
+class HomePieChart extends StatefulWidget {
   const HomePieChart({super.key});
 
-  // 파이 차트 두께
   static const radius = 9.0;
 
-  // TODO : 데이터에 맞춰서 PieChartSectionData 만들어야함
+  @override
+  State<HomePieChart> createState() => _HomePieChartState();
+}
+
+class _HomePieChartState extends State<HomePieChart> {
+  final statisticCon = Get.put(StatisticCon());
+
+  @override
+  void initState() {
+    super.initState();
+    _animateChart();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PieChart(
-      PieChartData(
-        // 파이 그래프 간의 거리
-        sectionsSpace: 0,
-        // 테두리 설정
-        borderData: FlBorderData(
-          show: false,
-        ),
-        centerSpaceRadius: 112,
-        sections: [
-          PieChartSectionData(
-            showTitle: false,
-            color: Color(0xFF2196F3),
-            value: 40,
-            radius: radius,
-          ),
-          PieChartSectionData(
-            showTitle: false,
-            color: Color(0xFFFFC300),
-            value: 30,
-            radius: radius,
-          ),
-          PieChartSectionData(
-            showTitle: false,
-            color: Color(0xFF6E1BFF),
-            value: 15,
-            radius: radius,
-          ),
-          PieChartSectionData(
-            showTitle: false,
-            color: Color(0xFF3BFF49),
-            value: 15,
-            radius: radius,
-          ),
+    return Obx(
+          () {
+        List<dynamic> data = statisticCon.pieData;
 
+        List<PieChartSectionData> sections = [];
 
-        ]
-      )
+        for (var i = 0; i < data.length; i++) {
+          int value = data[i][0];
+          DateTime startTime = data[i][1];
+          DateTime endTime = data[i][2];
+
+          int timeDifferenceInMinutes = endTime.difference(startTime).inMinutes;
+
+          // sleepNum에 따라 색 변화
+          Color color = (value == -1) ? AppColors.appColorWhite80 : AppColors.appColorBlue80;
+
+          sections.add(
+            PieChartSectionData(
+              showTitle: false,
+              color: color,
+              value: timeDifferenceInMinutes.toDouble(),
+              radius: HomePieChart.radius,
+            ),
+          );
+        }
+
+        return PieChart(
+          PieChartData(
+            startDegreeOffset: 180,
+            // 파이 그래프 간의 거리
+            sectionsSpace: 0,
+            // 테두리 설정
+            borderData: FlBorderData(
+              show: false,
+            ),
+            centerSpaceRadius: 112,
+            sections: sections,
+          ),
+        );
+      },
     );
   }
+
+  Future<void> _animateChart() async {
+    // Simulate a 3-second delay
+    await Future.delayed(Duration(seconds: 10));
+
+    // Set chartAnimated to true to trigger the chart animation
+    statisticCon.pieAnimted.value = true;
+  }
+
 }
