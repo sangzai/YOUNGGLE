@@ -39,10 +39,20 @@ const Banner = () => {
         // 사용자 입력을 답변 목록에 추가합니다.
         newModalContent.push(['client', userInput])
         if (userInput.includes('제품')) {
-            newModalContent.push(['bot', '제품에 대한 정보입니다.']);
-        } else if (userInput.includes('서비스')) {
-            newModalContent.push(['bot', '서비스 정보입니다.']);
-        } else {
+            newModalContent.push(['bot', '다음은 A-pill 설명입니다.']);
+            newModalContent.push(['bot', [
+                <div >
+                    &nbsp;<b> A-pill</b>은 스마트베개로 음성인터페이스를 통한 노래 재생, 날씨 알림, 알람 설정 등 다양한 기능을 장착해 편의를 제공합니다.  <br /> &nbsp; 주목할 것은 수면 모니터링을 통해 세심한 베개 높이 조정을 하여 사용자 맞춤형 최적높이를 제공한다는 점입니다. <br /> &nbsp; 이는 TheTech 유일무이한 기술로 여러분의 편안한 숙면을 책임지는 데 큰 역할을 할 것입니다.
+                </div>]
+            ]);
+        } else if (userInput.includes('서비스') ||userInput.includes('기능')){
+            newModalContent.push(['bot', 'A-pill이 제공하는 서비스 정보입니다.']);
+            newModalContent.push('function');
+        } else if (userInput.includes('질문')) {
+            newModalContent.push(['bot', '아래에 있는 질문인가요?']);
+            newModalContent.push('question');
+        } 
+        else {
             newModalContent.push(['bot', '죄송합니다. 이에 대한 답변을 찾을 수 없습니다.']);
         }
 
@@ -62,56 +72,67 @@ const Banner = () => {
             newModalContent.push(['client', buttonText])
             newModalContent.push(['bot', [
                 <div >
-                    &nbsp; A-pill은 스마트베개로 음성인터페이스를 통한 노래 재생, 날씨 알림, 알람 설정 등 다양한 기능을 장착해 편의를 제공합니다.  <br /> &nbsp; 주목할 것은 수면 모니터링을 통해 세심한 베개 높이 조정을 하여 사용자 맞춤형 최적높이를 제공한다는 점입니다. <br /> &nbsp; 이는 TheTech 유일무이한 기술로 여러분의 편안한 숙면을 책임지는 데 큰 역할을 할 것입니다.
+                    &nbsp; <b>A-pill</b>은 스마트베개로 음성인터페이스를 통한 노래 재생, 날씨 알림, 알람 설정 등 다양한 기능을 장착해 편의를 제공합니다.  <br /> &nbsp; 주목할 것은 수면 모니터링을 통해 세심한 베개 높이 조정을 하여 사용자 맞춤형 최적높이를 제공한다는 점입니다. <br /> &nbsp; 이는 TheTech 유일무이한 기술로 여러분의 편안한 숙면을 책임지는 데 큰 역할을 할 것입니다.
                 </div>]
             ]);
         } else if (buttonText === "제품 기능") {
             newModalContent.push(['client', buttonText])
             newModalContent.push("function");
-        } else if (buttonText === "찾아오는 길") {
-            newModalContent.push(['client', buttonText])
-            newModalContent.push(['bot', '주소: 광주광역시 동구 예술길 31-15 4층 스마트인재개발원 ']);
-            // 사진도 넣어야 함
-            // 기능 
+        } else if (buttonText === "자주하는 질문") {
+            newModalContent.push(['client', buttonText]) 
+            newModalContent.push("question");     
         } else if (buttonText === "높이 설정") {
             newModalContent.push(['client', buttonText])
-            // newModalContent.push(['bot', '높이 설정은 음성과 어플을 통해 가능합니다. ']);
             newModalContent.push(['bot', [
                 <div >
-                    높이 설정은 음성과 어플을 통해 가능합니다. 자동으로 사용자 체형을 분석해 알맞은 베개 높이를 제공하며 추가로 수동 조정도 가능합니다.
-
+                    <b>높이 설정</b>은 음성과 어플을 통해 가능합니다. 자동으로 사용자 체형을 분석해 알맞은 베개 높이를 제공하며 추가로 수동 조정도 가능합니다.
                 </div>]
             ]);
         } else if (buttonText === "알람 설정") {
             newModalContent.push(['client', buttonText])
-            newModalContent.push(['bot', '알람 설정 설명']);
+            newModalContent.push(['bot', [
+                <div >
+                    <b>알람 설정</b>은 기본적으로 어플을 통해 설정 및 수정이 가능합니다. 또 음성을 통한 알람 설정 및 타이머 설정이 가능해 편리성을 높였습니다.
+                </div>]
+            ]);
         } else if (buttonText === "음성 서비스") {
             newModalContent.push(['client', buttonText])
-            newModalContent.push(['bot', '음성 서비스 설명']);
+            newModalContent.push(['bot', [
+                <div >
+                    <b>음성 서비스</b>를 통해 노래 재생, 알람 설정이 가능하며 기상 후에 자동으로 날씨를 브리핑해주는 편리함을 제공합니다. 높이 설정 또한 음성 명령으로 가능하니 어플없이도 사용가능합니다.
+                </div>]
+            ]);
+        } else if (buttonText === "추천 대상") {
+            newModalContent.push(['client', buttonText])
+            newModalContent.push(['bot', [
+                <div >
+                    이런 분들에게 추천합니다.<br/><br/>
+                    ● 평소 베개가 <b>본인 체형에 맞지 않아 불편함</b>을 느꼈왔던 사람<br/>
+                    ●  <b>자세에 따른 베개 높이 조절</b>이 되지 않는 기존 제품에 불만이 있는 사람 <br/>
+                    ● <b>잠자리가 불편해</b> 피로가 누적되고 있는 사람<br/>
+                </div>]
+            ]);
+        }else if (buttonText === "앱 설치 가능 기종") {
+            newModalContent.push(['client', buttonText])
+            newModalContent.push(['bot', [
+                <div >
+                    현재 ios는 개발 중으로 안드로이드 운영체재의 경우 설치 가능합니다.
+                </div>
+              ]
+            ]);
+        }else if (buttonText === "세탁 가능 여부") {
+            newModalContent.push(['client', buttonText])
+            newModalContent.push(['bot', [
+                <div >
+                    베개 자체를 세탁하기에는 어려움이 있으나 베개 커버는 세탁 가능합니다.
+                </div>]
+            ]);
         }
 
         // setClientContent(newClientContent);
         setModalContent(newModalContent);
         console.log(modalContent);
     }
-
-
-    // const functionHandleButton=(e)=>{
-    //     let buttonText = e.target.innerText;
-
-    //     if (buttonText === "높이 설정") {
-    //         newModalContent.push(['client', buttonText])
-    //         newModalContent.push(['bot', '높이 설정 설명']);
-    //     } else if (buttonText === "알람 설정") {
-    //         newModalContent.push(['client', buttonText])
-    //         newModalContent.push(['bot', '알람 설정 설명']);
-    //     } else if (buttonText === "음성 서비스") {
-    //         newModalContent.push(['client', buttonText])
-    //         newModalContent.push(['bot', '음성 서비스 설명']);
-    //     }
-
-    //     setModalContent(newModalContent);
-    // }
 
 
     const handleKeyPress = (e) => {
@@ -145,13 +166,15 @@ const Banner = () => {
 
     }
 
-    // useEffect(() => {
-    //     if (!isChatModalOpen) {
-    //         defaultContent();
-    //     }
-    // }
-    //     , []);
+    useEffect(() => {
+        const chatContainer = document.querySelector('.chatbotmodal-bot');
 
+        // chatContainer가 존재하고 scrollHeight가 정의되어 있는지 확인
+        if (chatContainer && chatContainer.scrollHeight !== undefined) {
+            // 스크롤을 최하단으로 이동
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }, [modalContent]);
 
 
     useEffect(() => {
@@ -267,7 +290,7 @@ const Banner = () => {
                                                         어떤 정보를 원하시나요?
                                                         <button className='chatbot-btn btn1' onClick={handleButtonClick}>제품 설명</button> <br />
                                                         <button className='chatbot-btn' onClick={handleButtonClick}>제품 기능</button> <br />
-                                                        <button className='chatbot-btn' onClick={handleButtonClick}>찾아오는 길</button>
+                                                        <button className='chatbot-btn' onClick={handleButtonClick}>자주하는 질문</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -288,7 +311,22 @@ const Banner = () => {
                                             </div>
 
                                         )
-                                    } else if (content[0] === 'client') {
+                                    } else if (content==="question"){
+                                        return (
+                                            <div className='chatbotmodal-request-bot' key={index}>
+                                                <div className='chatbotmodal-request-bot-image' />
+                                                <div className='chatbotmodal-request-bot-answer'>
+                                                    <div >
+                                                        다음은 자주 문의하시는 <br />질문입니다.
+                                                        <button className='chatbot-btn btn1' onClick={handleButtonClick}>추천 대상</button><br />
+                                                        <button className='chatbot-btn' onClick={handleButtonClick}>앱 설치 가능 기종</button><br />
+                                                        <button className='chatbot-btn' onClick={handleButtonClick}>세탁 가능 여부</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        )
+                                    }else if (content[0] === 'client') {
                                         console.log('client')
                                         return (
                                             <div className='chatbotmodal-request-user' key={index}>
