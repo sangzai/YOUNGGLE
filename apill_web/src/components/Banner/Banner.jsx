@@ -7,38 +7,45 @@ import './Banner.css'
 
 
 const Banner = () => {
-
     const [isChatModalOpen, setIsChatModalOpen] = useState(false);
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
     const [userInput, setUserInput] = useState('');
     let [modalContent, setModalContent] = useState([]);
     let [clientContent, setClientContent] = useState([]);
+    let newModalContent = [...modalContent];
     // const [isModalOpen, setIsModalOpen] = useState(true);
 
-    const YourChatComponent = ({ content }) => {
-        const chatContainerRef = useRef();
-
-        useEffect(() => {
-            // 스크롤을 최하단으로 이동
-            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-        }, [content]); // messages가 업데이트될 때마다 useEffect 실행
-
-    }
+    // const YourChatComponent = ({ modalContent }) => {
+    //     const chatContainerRef = useRef(null);
+    //     if (modalContent){
+    //     useEffect(() => {
+    //         // chatContainerRef가 존재하고 scrollHeight가 정의되어 있는지 확인
+    //         if (chatContainerRef.current && chatContainerRef.current.scrollHeight !== undefined) {
+    //             // 스크롤을 최하단으로 이동
+    //             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    //         }
+    //     }, [modalContent])}; // content가 업데이트될 때마다 useEffect 실행
+    //     return (
+    //         <div className='chatbotmodal-request' ref={chatContainerRef}>
+    //             {/* content를 여기에 렌더링하는 로직이 있어야 함 */}
+    //         </div>
+    //     );
+    // };
     const handleInputChange = (e) => {
         setUserInput(e.target.value);
     };
 
     const handleSubmit = () => {
-        let newModalContent = [...modalContent];
 
         // 사용자 입력을 답변 목록에 추가합니다.
-        if (userInput.toLowerCase().includes('제품')) {
-            newModalContent.push('제품에 대한 정보입니다.');
-        } else if (userInput.toLowerCase().includes('서비스')) {
-            newModalContent.push('서비스 정보입니다.');
+        newModalContent.push(['client', userInput])
+        if (userInput.includes('제품')) {
+            newModalContent.push(['bot','제품에 대한 정보입니다.']);
+        } else if (userInput.includes('서비스')) {
+            newModalContent.push(['bot','서비스 정보입니다.']);
         } else {
-            newModalContent.push('죄송합니다. 이에 대한 답변을 찾을 수 없습니다.');
+            newModalContent.push(['bot','죄송합니다. 이에 대한 답변을 찾을 수 없습니다.']);
         }
 
         setModalContent(newModalContent);
@@ -46,44 +53,49 @@ const Banner = () => {
         setUserInput(''); // 입력창 비우기
     };
 
+
     const handleButtonClick = (event) => {
-        let newClientContent = [...clientContent];
-        let newModalContent = [...modalContent];
-        // console.log(event);
         console.log(event.target.innerText);
 
         let buttonText = event.target.innerText;
         if (buttonText === "제품 설명") {
-            newClientContent.push({ buttonText })
-            newModalContent.push('A-pill은 스마트베개로 음성인터페이스를 통한 노래 재생, 날씨 알림, 알람 설정 등 다양한 기능을 장착해 편의를 제공합니다. 주목할 것은 수면 모니터링을 통해 세심한 베개 높이 조정을 하여 사용자 맞춤형 최적높이를 제공한다는 점으로, 이는 TheTech 유일무이한 기술로 여러분의 편안한 숙면을 책임지는 데 큰 역할을 할 것입니다.');
+            newModalContent.push(['client', buttonText])
+            newModalContent.push(['bot', [
+                <div >
+                    &nbsp; A-pill은 스마트베개로 음성인터페이스를 통한 노래 재생, 날씨 알림, 알람 설정 등 다양한 기능을 장착해 편의를 제공합니다.  <br /> &nbsp; 주목할 것은 수면 모니터링을 통해 세심한 베개 높이 조정을 하여 사용자 맞춤형 최적높이를 제공한다는 점입니다. <br /> &nbsp; 이는 TheTech 유일무이한 기술로 여러분의 편안한 숙면을 책임지는 데 큰 역할을 할 것입니다.
+                </div>]
+            ]);
         } else if (buttonText === "제품 기능") {
-            newClientContent.push({ buttonText })
-            newModalContent.push([
+            newModalContent.push(['client', buttonText])
+            newModalContent.push(['bot', [
                 <div >
                     제품 기능을 소개합니다. <br />원하는 세부 기능을 눌러주세요!
                     <button className='chatbot-btn btn1' onClick={handleButtonClick}>높이 설정</button><br />
                     <button className='chatbot-btn' onClick={handleButtonClick}>알람 설정</button><br />
                     <button className='chatbot-btn' onClick={handleButtonClick}>음성 서비스</button>
                 </div>
+            ]
             ]);
         } else if (buttonText === "찾아오는 길") {
-            newClientContent.push({ buttonText })
-            newModalContent.push('주소: 광주광역시 동구 예술길 31-15 4층 스마트인재개발원 ');
+            newModalContent.push(['client', buttonText])
+            newModalContent.push(['bot', '주소: 광주광역시 동구 예술길 31-15 4층 스마트인재개발원 ']);
             // 사진도 넣어야 함
             // 기능 
         } else if (buttonText === "높이 설정") {
-            newClientContent.push({ buttonText })
-            newModalContent.push('높이 설정 설명');
+            console.log('here');
+            newModalContent.push(['client', buttonText])
+            newModalContent.push(['bot', '높이 설정 설명']);
         } else if (buttonText === "알람 설정") {
-            newClientContent.push({ buttonText })
-            newModalContent.push('알람 설정 설명');
+            newModalContent.push(['client', buttonText])
+            newModalContent.push(['bot', '알람 설정 설명']);
         } else if (buttonText === "음성 서비스") {
-            newClientContent.push({ buttonText })
-            newModalContent.push('음성 서비스 설명');
+            newModalContent.push(['client', buttonText])
+            newModalContent.push(['bot', '음성 서비스 설명']);
         }
 
-        setClientContent(newClientContent);
+        // setClientContent(newClientContent);
         setModalContent(newModalContent);
+        console.log(modalContent);
     }
     const handleKeyPress = (e) => {
         // 엔터 키가 눌렸을 때
@@ -96,6 +108,7 @@ const Banner = () => {
         if (isChatModalOpen) {
             setIsChatModalOpen(false);
         } else {
+            defaultContent();
             setIsChatModalOpen(true);
         }
     }
@@ -105,6 +118,7 @@ const Banner = () => {
             setIsOrderModalOpen(false);
         } else {
             setIsOrderModalOpen(true);
+
         }
     }
 
@@ -115,25 +129,19 @@ const Banner = () => {
     }
 
     const defaultContent = () => {
-        let newClientContent = [];
-        let newModalContent = [];
-        setModalContent([
-            <div>
-                안녕하세요! <br />TheTech의 A-pill입니다.<br /> 원하는 정보를 눌러주세요!
-                <button className='chatbot-btn btn1' onClick={handleButtonClick}>제품 설명</button> <br />
-                <button className='chatbot-btn' onClick={handleButtonClick}>제품 기능</button> <br />
-                <button className='chatbot-btn' onClick={handleButtonClick}>찾아오는 길</button>
-            </div>
-        ]);
+        // let newClientContent = [];
+        // let newModalContent = [];
+        newModalContent.push("default")
+        setModalContent(newModalContent);
 
     }
 
-    useEffect(() => {
-        if (!isChatModalOpen) {
-            defaultContent();
-        }
-    }
-        , [isOrderModalOpen]);
+    // useEffect(() => {
+    //     if (!isChatModalOpen) {
+    //         defaultContent();
+    //     }
+    // }
+    //     , []);
 
 
 
@@ -178,22 +186,38 @@ const Banner = () => {
 
                             {/* </div> */}
                             <div className='chatbotmodal-request'>
-                                {clientContent.map((content, index) => (
+                                {/* {clientContent.map((content, index) => (
                                     <div className='chatbotmodal-request-bot' key={index}>
-                                        {/* <div className='chatbotmodal-request-bot-image' /> */}
+                                        <div className='chatbotmodal-request-bot-image' />
                                         <div className='client'>
                                             {content.buttonText}
                                         </div>
                                     </div>
-                                ))}
+                                ))} */}
+                                {/* modalcontent = ["default", "제품설명", "설명"]
+                                modalcontent = ["default", [client, "제품설명"], [bot, "설명"]]*/}
                                 {modalContent.map((content, index) => {
+                                    if (content == "default") {
+                                        return (
+                                            <div className='chatbotmodal-request-bot' key={index}>
+                                                <div className='chatbotmodal-request-bot-image' />
+                                                <div className='chatbotmodal-request-bot-answer'>
+                                                    <div key={index}>
+                                                        안녕하세요! <br />TheTech의 A-pill입니다.<br /> 원하는 정보를 눌러주세요!
+                                                        <button className='chatbot-btn btn1' onClick={handleButtonClick}>제품 설명</button> <br />
+                                                        <button className='chatbot-btn' onClick={handleButtonClick}>제품 기능</button> <br />
+                                                        <button className='chatbot-btn' onClick={handleButtonClick}>찾아오는 길</button>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                    if (index % 2 == 0) {
+                                        )
+                                    } else if (content[0] == 'client') {
                                         return (
                                             <div className='chatbotmodal-request-user' key={index}>
                                                 {/* <div className='chatbotmodal-request-bot-image' /> */}
                                                 <div className='client'>
-                                                    {content}
+                                                    {content[1]}
                                                 </div>
                                             </div>
                                         );
@@ -202,7 +226,7 @@ const Banner = () => {
                                             <div className='chatbotmodal-request-bot' key={index}>
                                                 <div className='chatbotmodal-request-bot-image' />
                                                 <div className='chatbotmodal-request-bot-answer'>
-                                                    {content}
+                                                    {content[1]}
                                                 </div>
                                             </div>
                                         );
