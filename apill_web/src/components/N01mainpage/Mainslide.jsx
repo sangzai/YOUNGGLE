@@ -28,12 +28,12 @@ const Mainslide = () => {
   // const toggleMenu=()=>{
   //   setIsMenuOpen(!isMenuOpen);
   // }
-  const videoRef=useRef(null);
+  const videoRef = useRef(null);
   useEffect(() => {
-  const video =videoRef.current;
+    const video = videoRef.current;
 
     // 비디오가 끝나면 다시 시작하도록 이벤트 리스너 추가
-    
+
     if (video) {
       const handleVideoEnd = () => {
         video.currentTime = 0;
@@ -52,17 +52,19 @@ const Mainslide = () => {
     <div id='main' className='MainDash'>
       <header class="header">
         <h2 classname="logo">
-          <img className='logoimg' src={Logo_Apill} alt='Logo'/>
+          <a href="#main">
+            <img className='logoimg' src={Logo_Apill} alt='Logo' />
+          </a>
         </h2>
         <div class="Menu">
-          <Menu/>
-      </div>
+          <Menu />
+        </div>
       </header>
       <div className='imgslide'>
-        <video ref ={videoRef} width="100%" height="auto" autoPlay muted loop playsInline>
-          <source src={video} type="video/mp4"/>
+        <video ref={videoRef} width="100%" height="auto" autoPlay muted loop playsInline>
+          <source src={video} type="video/mp4" />
         </video>
-          {/* showThumbs={false} -> 밑에 같이 뜨는 사진 없애는 코드 */}
+        {/* showThumbs={false} -> 밑에 같이 뜨는 사진 없애는 코드 */}
         {/* <Carousel showThumbs={false} selectedItem={currentSlide} onChange={(nextSlide) => setCurrentSlide(nextSlide)}
         transitionTime={2000}
         // 슬라이드 상태 표시줄을 숨김
@@ -82,8 +84,8 @@ const Mainslide = () => {
         </Carousel> */}
 
 
-        
-          
+
+
       </div>
     </div>
   );

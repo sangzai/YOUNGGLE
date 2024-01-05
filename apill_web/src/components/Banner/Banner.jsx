@@ -145,6 +145,7 @@ const Banner = () => {
 
     const chatmodalOnOff = () => {
         if (isChatModalOpen) {
+            setModalContent([]);
             setIsChatModalOpen(false);
         } else {
             newModalContent.push(['bot', [
@@ -160,8 +161,6 @@ const Banner = () => {
     }
 
     const defaultContent = () => {
-        // let newClientContent = [];
-        // let newModalContent = [];
         newModalContent.push("default")
         setModalContent(newModalContent);
 
