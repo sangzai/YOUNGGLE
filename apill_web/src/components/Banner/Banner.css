@@ -114,16 +114,21 @@ a{
 }
 
 .chatbot-button {
+    width: 90px;
     opacity: 1;
-    padding: 15px;
     font-size: 20px;
-    background-color: rgb(255, 255, 255);
     border-radius: 30px;
     position: absolute;
     bottom: 110px;
     left: 40px;
     cursor: pointer;
     /* border: 3px solid #6961dd; */
+}
+.x{
+    width: 70px;
+}
+.chat{
+    width: 90px;
 }
 
 .chatbotmodal {

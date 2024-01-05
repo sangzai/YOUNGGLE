@@ -4,7 +4,8 @@ import googleplay from '../../img/googleplay.png'
 import mainlogo from '../../img/MainLogo.png'
 import arrow from '../../img/arrow.png'
 import './Banner.css'
-
+import xmark from '../../img/xmark.png'
+import chatIcon from '../../img/chatbotIcon.png'
 
 const Banner = () => {
     const [isChatModalOpen, setIsChatModalOpen] = useState(false);
@@ -45,13 +46,13 @@ const Banner = () => {
                     &nbsp;<b> A-pill</b>은 스마트베개로 음성인터페이스를 통한 노래 재생, 날씨 알림, 알람 설정 등 다양한 기능을 장착해 편의를 제공합니다.  <br /> &nbsp; 주목할 것은 수면 모니터링을 통해 세심한 베개 높이 조정을 하여 사용자 맞춤형 최적높이를 제공한다는 점입니다. <br /> &nbsp; 이는 TheTech 유일무이한 기술로 여러분의 편안한 숙면을 책임지는 데 큰 역할을 할 것입니다.
                 </div>]
             ]);
-        } else if (userInput.includes('서비스') ||userInput.includes('기능')){
+        } else if (userInput.includes('서비스') || userInput.includes('기능')) {
             newModalContent.push(['bot', 'A-pill이 제공하는 서비스 정보입니다.']);
             newModalContent.push('function');
         } else if (userInput.includes('질문')) {
             newModalContent.push(['bot', '아래에 있는 질문인가요?']);
             newModalContent.push('question');
-        } 
+        }
         else {
             newModalContent.push(['bot', '죄송합니다. 이에 대한 답변을 찾을 수 없습니다.']);
         }
@@ -79,8 +80,8 @@ const Banner = () => {
             newModalContent.push(['client', buttonText])
             newModalContent.push("function");
         } else if (buttonText === "자주하는 질문") {
-            newModalContent.push(['client', buttonText]) 
-            newModalContent.push("question");     
+            newModalContent.push(['client', buttonText])
+            newModalContent.push("question");
         } else if (buttonText === "높이 설정") {
             newModalContent.push(['client', buttonText])
             newModalContent.push(['bot', [
@@ -106,21 +107,21 @@ const Banner = () => {
             newModalContent.push(['client', buttonText])
             newModalContent.push(['bot', [
                 <div >
-                    이런 분들에게 추천합니다.<br/><br/>
-                    ● 평소 베개가 <b>본인 체형에 맞지 않아 불편함</b>을 느꼈왔던 사람<br/>
-                    ●  <b>자세에 따른 베개 높이 조절</b>이 되지 않는 기존 제품에 불만이 있는 사람 <br/>
-                    ● <b>잠자리가 불편해</b> 피로가 누적되고 있는 사람<br/>
+                    이런 분들에게 추천합니다.<br /><br />
+                    ● 평소 베개가 <b>본인 체형에 맞지 않아 불편함</b>을 느꼈왔던 사람<br />
+                    ●  <b>자세에 따른 베개 높이 조절</b>이 되지 않는 기존 제품에 불만이 있는 사람 <br />
+                    ● <b>잠자리가 불편해</b> 피로가 누적되고 있는 사람<br />
                 </div>]
             ]);
-        }else if (buttonText === "앱 설치 가능 기종") {
+        } else if (buttonText === "앱 설치 가능 기종") {
             newModalContent.push(['client', buttonText])
             newModalContent.push(['bot', [
                 <div >
                     현재 ios는 개발 중으로 안드로이드 운영체재의 경우 설치 가능합니다.
                 </div>
-              ]
+            ]
             ]);
-        }else if (buttonText === "세탁 가능 여부") {
+        } else if (buttonText === "세탁 가능 여부") {
             newModalContent.push(['client', buttonText])
             newModalContent.push(['bot', [
                 <div >
@@ -254,12 +255,9 @@ const Banner = () => {
     return (
         <div className='banner'>
 
-            <div
-                type='button' className='chatbot-button' onClick={chatmodalOnOff}
-                style={{ paddingInline: isChatModalOpen ? '25px' : '10px' }}
-            >
-                <b>{isChatModalOpen ? 'X' : '구매 상담'}</b>
-            </div>
+            <img onClick={chatmodalOnOff}
+               className= {isChatModalOpen ? 'chatbot-button x' : 'chatbot-button chat'} src={isChatModalOpen ? xmark : chatIcon}></img>
+
 
             {isChatModalOpen && (
                 <div className='chatbotmodal'>
@@ -311,7 +309,7 @@ const Banner = () => {
                                             </div>
 
                                         )
-                                    } else if (content==="question"){
+                                    } else if (content === "question") {
                                         return (
                                             <div className='chatbotmodal-request-bot' key={index}>
                                                 <div className='chatbotmodal-request-bot-image' />
@@ -326,7 +324,7 @@ const Banner = () => {
                                             </div>
 
                                         )
-                                    }else if (content[0] === 'client') {
+                                    } else if (content[0] === 'client') {
                                         console.log('client')
                                         return (
                                             <div className='chatbotmodal-request-user' key={index}>
