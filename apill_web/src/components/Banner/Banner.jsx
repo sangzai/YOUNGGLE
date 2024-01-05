@@ -185,7 +185,7 @@ const Banner = () => {
             setIsOrderModalOpen(false);
         } else {
             alert('주문이 완료되었습니다!');
-            setIsOrderModalOpen(false);
+            // setIsOrderModalOpen(false);
         }
 
     }
@@ -204,7 +204,15 @@ const Banner = () => {
     //     }
     // }
     //     , []);
+    useEffect(() => {
+        const chatContainer = document.querySelector('.chatbotmodal-bot');
 
+        // chatContainer가 존재하고 scrollHeight가 정의되어 있는지 확인
+        if (chatContainer && chatContainer.scrollHeight !== undefined) {
+            // 스크롤을 최하단으로 이동
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }, [modalContent]);
 
 
     useEffect(() => {
