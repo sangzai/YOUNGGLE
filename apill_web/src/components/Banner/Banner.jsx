@@ -108,10 +108,45 @@ const Banner = () => {
         }
     }
 
+    const [name, setName] = useState('');
+    const [nameCheck, setNameCheck] = useState(false);
+    const [address, setAddress] = useState('');
+    const [addressCheck, setAddressCheck] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phoneNumberCheck, setPhoneNumberCheck] = useState(false);
+    const [mount, setMount] = useState('');
+    const [mountCheck, setMountCheck] = useState(false);
+    const [messageForm, setMessageForm] = useState('');
+    const [isValidForm, setIsValidForm] = useState(true);
+
+    useEffect(() => {
+        if (name == '') {
+            setMessageForm('이름을 입력해주세요.')
+            setIsValidForm(true);
+        } else if (address == '') {
+            setMessageForm('주소를 입력해주세요.')
+            setIsValidForm(true);
+        } else if (phoneNumber == '') {
+            setMessageForm('핸드폰 번호를 입력해주세요.')
+            setIsValidForm(true);
+        } else if (mount == '' || mount == '선택') {
+            setMessageForm('수량을 선택해주세요.')
+            setIsValidForm(true);
+        } else {
+            setMessageForm('항목을 다 채웠습니다. 회원가입이 가능합니다.')
+            setIsValidForm(false);
+        }
+    })
+
     const orderCompletedAlert = () => {
-        // 주문 완료 알림창을 띄웁니다.
-        alert('주문이 완료되었습니다!');
-        setIsOrderModalOpen(false);
+        if (isValidForm) {
+            alert('항목을 다 채워주세요!');
+            setIsOrderModalOpen(false);
+        } else {
+            alert('주문이 완료되었습니다!');
+            setIsOrderModalOpen(false);
+        }
+
     }
 
     const defaultContent = () => {
@@ -208,9 +243,6 @@ const Banner = () => {
                                         );
                                     }
                                 })}
-
-
-
                             </div>
                             {/* )} */}
                         </div>
@@ -240,6 +272,7 @@ const Banner = () => {
                                 // type=''
                                 // value={}
                                 placeholder='이름을 입력하세요'
+                                onChange={(e) => setName(e.target.value)}
                             />
                         </div>
                         <div className='StyledDiv'>
@@ -249,6 +282,7 @@ const Banner = () => {
                                 // type=''
                                 // value={}
                                 placeholder='주소를 입력하세요'
+                                onChange={(e) => setAddress(e.target.value)}
                             />
                         </div>
                         <div className='StyledDiv'>
@@ -258,16 +292,18 @@ const Banner = () => {
                                 // type=''
                                 // value={}
                                 placeholder='번호를 입력하세요'
+                                onChange={(e) => setPhoneNumber(e.target.value)}
                             />
                         </div>
                         <div className='StyledDiv'>
                             <label className='StyledLabel'>상품 갯수</label>
                             <select
                                 className='StyledSelect'
-                            // type=''
-                            // value={}
+                                // type=''
+                                // value={}
+                                onChange={(e) => setMount(e.target.value)}
                             >
-                                <option value="선택" disabled>선택</option>
+                                <option value="선택">선택</option>
                                 <option value="1">1개</option>
                                 <option value="2">2개</option>
                                 <option value="3">3개</option>
@@ -279,6 +315,9 @@ const Banner = () => {
                                 <option value="9">9개</option>
                                 <option value="10">10개</option>
                             </select>
+                        </div>
+                        <div className='StyledP' style={{ color: isValidForm ? 'red' : 'green' }}>
+                            {messageForm}
                         </div>
                         <button type='submit' className='StyledButton' onClick={orderCompletedAlert}>상품주문!!</button>
                     </form>
