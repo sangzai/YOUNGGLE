@@ -253,7 +253,7 @@ const Banner = () => {
 
     return (
         <div className='banner'>
-            <div className={isChatModalOpen ? 'chatbot-btn-not' : 'chatbot-btn'}>
+            <div className={isChatModalOpen ? 'chatbot-btn-not' : 'chatbot-btnn'}>
                 <img
                     onClick={chatmodalOnOff}
                     className={isChatModalOpen ? 'chatbot-button x' : 'chatbot-button chat'}
