@@ -186,14 +186,29 @@ const Banner = () => {
                                         </div>
                                     </div>
                                 ))}
-                                {modalContent.map((content, index) => (
-                                    <div className='chatbotmodal-request-bot' key={index}>
-                                        <div className='chatbotmodal-request-bot-image' />
-                                        <div className='chatbotmodal-request-bot-answer'>
-                                            {content}
-                                        </div>
-                                    </div>
-                                ))}
+                                {modalContent.map((content, index) => {
+
+                                    if (index % 2 == 0) {
+                                        return (
+                                            <div className='chatbotmodal-request-user' key={index}>
+                                                {/* <div className='chatbotmodal-request-bot-image' /> */}
+                                                <div className='client'>
+                                                    {content}
+                                                </div>
+                                            </div>
+                                        );
+                                    } else {
+                                        return (
+                                            <div className='chatbotmodal-request-bot' key={index}>
+                                                <div className='chatbotmodal-request-bot-image' />
+                                                <div className='chatbotmodal-request-bot-answer'>
+                                                    {content}
+                                                </div>
+                                            </div>
+                                        );
+                                    }
+                                })}
+
 
 
                             </div>
