@@ -39,11 +39,11 @@ const Banner = () => {
         // 사용자 입력을 답변 목록에 추가합니다.
         newModalContent.push(['client', userInput])
         if (userInput.includes('제품')) {
-            newModalContent.push(['bot','제품에 대한 정보입니다.']);
+            newModalContent.push(['bot', '제품에 대한 정보입니다.']);
         } else if (userInput.includes('서비스')) {
-            newModalContent.push(['bot','서비스 정보입니다.']);
+            newModalContent.push(['bot', '서비스 정보입니다.']);
         } else {
-            newModalContent.push(['bot','죄송합니다. 이에 대한 답변을 찾을 수 없습니다.']);
+            newModalContent.push(['bot', '죄송합니다. 이에 대한 답변을 찾을 수 없습니다.']);
         }
 
         setModalContent(newModalContent);
@@ -54,7 +54,7 @@ const Banner = () => {
 
     const handleButtonClick = (e) => {
 
-        
+
         let buttonText = e.target.innerText;
         console.log('내가 누른 버튼', buttonText)
 
@@ -67,15 +67,7 @@ const Banner = () => {
             ]);
         } else if (buttonText === "제품 기능") {
             newModalContent.push(['client', buttonText])
-            newModalContent.push(['bot', [
-                <div >
-                    제품 기능을 소개합니다. <br />원하는 세부 기능을 눌러주세요!
-                    <button className='chatbot-btn btn1' onClick={handleButtonClick}>높이 설정</button><br />
-                    <button className='chatbot-btn' onClick={handleButtonClick}>알람 설정</button><br />
-                    <button className='chatbot-btn' onClick={handleButtonClick}>음성 서비스</button>
-                </div>
-            ]
-            ]);
+            newModalContent.push("function");
         } else if (buttonText === "찾아오는 길") {
             newModalContent.push(['client', buttonText])
             newModalContent.push(['bot', '주소: 광주광역시 동구 예술길 31-15 4층 스마트인재개발원 ']);
@@ -83,8 +75,13 @@ const Banner = () => {
             // 기능 
         } else if (buttonText === "높이 설정") {
             newModalContent.push(['client', buttonText])
-            newModalContent.push(['bot', '높이 설정 설명']);
+            // newModalContent.push(['bot', '높이 설정은 음성과 어플을 통해 가능합니다. ']);
+            newModalContent.push(['bot', [
+                <div >
+                    높이 설정은 음성과 어플을 통해 가능합니다. 자동으로 사용자 체형을 분석해 알맞은 베개 높이를 제공하며 추가로 수동 조정도 가능합니다.
 
+                </div>]
+            ]);
         } else if (buttonText === "알람 설정") {
             newModalContent.push(['client', buttonText])
             newModalContent.push(['bot', '알람 설정 설명']);
@@ -130,64 +127,14 @@ const Banner = () => {
         } else {
             newModalContent.push(['bot', [
                 <div >
-                    안녕하세요, 고객님!<br/>
+                    안녕하세요, 고객님!<br />
                     TheTech에 오신걸 환영합니다!
                 </div>
-                ]
+            ]
             ]);
             defaultContent();
             setIsChatModalOpen(true);
         }
-    }
-
-    const ordermodalOnOff = () => {
-        if (isOrderModalOpen) {
-            setIsOrderModalOpen(false);
-        } else {
-            setIsOrderModalOpen(true);
-
-        }
-    }
-
-    const [name, setName] = useState('');
-    const [nameCheck, setNameCheck] = useState(false);
-    const [address, setAddress] = useState('');
-    const [addressCheck, setAddressCheck] = useState(false);
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [phoneNumberCheck, setPhoneNumberCheck] = useState(false);
-    const [mount, setMount] = useState('');
-    const [mountCheck, setMountCheck] = useState(false);
-    const [messageForm, setMessageForm] = useState('');
-    const [isValidForm, setIsValidForm] = useState(true);
-
-    useEffect(() => {
-        if (name == '') {
-            setMessageForm('이름을 입력해주세요.')
-            setIsValidForm(true);
-        } else if (address == '') {
-            setMessageForm('주소를 입력해주세요.')
-            setIsValidForm(true);
-        } else if (phoneNumber == '') {
-            setMessageForm('핸드폰 번호를 입력해주세요.')
-            setIsValidForm(true);
-        } else if (mount == '' || mount == '선택') {
-            setMessageForm('수량을 선택해주세요.')
-            setIsValidForm(true);
-        } else {
-            setMessageForm('항목을 다 채웠습니다. 회원가입이 가능합니다.')
-            setIsValidForm(false);
-        }
-    })
-
-    const orderCompletedAlert = () => {
-        if (isValidForm) {
-            alert('항목을 다 채워주세요!');
-            setIsOrderModalOpen(false);
-        } else {
-            alert('주문이 완료되었습니다!');
-            setIsOrderModalOpen(false);
-        }
-
     }
 
     const defaultContent = () => {
@@ -229,6 +176,58 @@ const Banner = () => {
             window.removeEventListener('scroll', handleScroll)
         };
     }, []);
+
+    const ordermodalOnOff = () => {
+        if (isOrderModalOpen) {
+            setIsOrderModalOpen(false);
+        } else {
+            setIsOrderModalOpen(true);
+
+        }
+    }
+
+    const [name, setName] = useState('');
+    const [nameCheck, setNameCheck] = useState(false);
+    const [address, setAddress] = useState('');
+    const [addressCheck, setAddressCheck] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phoneNumberCheck, setPhoneNumberCheck] = useState(false);
+    const [mount, setMount] = useState('');
+    const [mountCheck, setMountCheck] = useState(false);
+    const [messageForm, setMessageForm] = useState('');
+    const [isValidForm, setIsValidForm] = useState(true);
+
+    useEffect(() => {
+        if (name == '') {
+            setMessageForm('이름을 입력해주세요.')
+            setIsValidForm(true);
+        } else if (address === '') {
+            setMessageForm('주소를 입력해주세요.')
+            setIsValidForm(true);
+        } else if (phoneNumber === '') {
+            setMessageForm('핸드폰 번호를 입력해주세요.')
+            setIsValidForm(true);
+        } else if (mount === '' || mount === '선택') {
+            setMessageForm('수량을 선택해주세요.')
+            setIsValidForm(true);
+        } else {
+            setMessageForm('항목을 다 채웠습니다. 회원가입이 가능합니다.')
+            setIsValidForm(false);
+        }
+    })
+
+    const orderCompletedAlert = () => {
+        if (isValidForm) {
+            alert('항목을 다 채워주세요!');
+            setIsOrderModalOpen(false);
+        } else {
+            alert('주문이 완료되었습니다!');
+            // setIsOrderModalOpen(false);
+        }
+
+    }
+
+
     return (
         <div className='banner'>
 
@@ -269,6 +268,21 @@ const Banner = () => {
                                                         <button className='chatbot-btn btn1' onClick={handleButtonClick}>제품 설명</button> <br />
                                                         <button className='chatbot-btn' onClick={handleButtonClick}>제품 기능</button> <br />
                                                         <button className='chatbot-btn' onClick={handleButtonClick}>찾아오는 길</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        )
+                                    } else if (content === "function") {
+                                        return (
+                                            <div className='chatbotmodal-request-bot' key={index}>
+                                                <div className='chatbotmodal-request-bot-image' />
+                                                <div className='chatbotmodal-request-bot-answer'>
+                                                    <div >
+                                                        제품 기능을 소개합니다. <br />원하는 세부 기능을 눌러주세요!
+                                                        <button className='chatbot-btn btn1' onClick={handleButtonClick}>높이 설정</button><br />
+                                                        <button className='chatbot-btn' onClick={handleButtonClick}>알람 설정</button><br />
+                                                        <button className='chatbot-btn' onClick={handleButtonClick}>음성 서비스</button>
                                                     </div>
                                                 </div>
                                             </div>
