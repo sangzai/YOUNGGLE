@@ -1,7 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/screen/homepage/homepage_controllers/statistic_controller.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
@@ -14,39 +13,42 @@ class HomeLineChart extends StatefulWidget {
 
 class _HomeLineChartState extends State<HomeLineChart> {
   final statisticCon = Get.put(StatisticCon());
-
   @override
   Widget build(BuildContext context) {
+    return Obx(
+      () {
+        // print(MediaQuery.of(context).size.width);
+        List<FlSpot> spots = (statisticCon.lineData).cast<FlSpot>().toList();
+          return LineChart(
 
-    List<SelectDateData> chartdata = statisticCon.selectedDateData;
+            // 애니메이션 시간
+            duration: Duration(seconds: 1),
 
-    
+            LineChartData(
+              // 선 클릭시 설정
+              lineTouchData: lineTouchData,
+              // 차트 내부 격자선 데이터 설정
+              gridData: gridData,
+              // 차트 바깥 축에 대한 정보 설정
+              titlesData: titlesData,
 
+              borderData: FlBorderData(show: false),
+              // TODO : 차트 전체 길이 조정
+              lineBarsData: [lineChartBarData.copyWith(spots: spots)],
+              // lineBarsData: lineBarsData,
+              minX: 0,
+              maxX: 26,
+              maxY: 9,
+              minY: 3,
 
+            ),
 
-    return LineChart(
-      LineChartData(
-        // 선 클릭시 설정
-        lineTouchData: lineTouchData,
-        // 차트 내부 격자선 데이터 설정
-        gridData: gridData,
-        // 차트 바깥 축에 대한 정보 설정
-        titlesData: titlesData1,
-
-        borderData: FlBorderData(show: false),
-        // TODO : 차트 전체 길이 조정
-        lineBarsData: lineBarsData1,
-        minX: 0,
-        maxX: 14,
-        maxY: 9,
-        minY: 3,
-
-      ),
-
-    );
+          );
+        });
   }
 // 빌더 끝
   LineTouchData get lineTouchData => LineTouchData(
+    enabled: false,
     // 터치시 나오는 수직 라인 지우기
     getTouchLineEnd: (barData, spotIndex) => 0,
     getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
@@ -81,9 +83,9 @@ class _HomeLineChartState extends State<HomeLineChart> {
     // TODO : 라인차트 수평선 간격 정하기
   );
 
-  FlTitlesData get titlesData1 => FlTitlesData(
-    bottomTitles: const AxisTitles(
-      sideTitles: SideTitles(showTitles: false),
+  FlTitlesData get titlesData => FlTitlesData(
+    bottomTitles: AxisTitles(
+      sideTitles: bottomTitles(),
     ),
     rightTitles: const AxisTitles(
       sideTitles: SideTitles(showTitles: false),
@@ -110,7 +112,7 @@ class _HomeLineChartState extends State<HomeLineChart> {
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
-      fontSize: 14,
+      fontSize: 9,
     );
     String text;
     switch (value.toInt()) {
@@ -132,12 +134,45 @@ class _HomeLineChartState extends State<HomeLineChart> {
     return Text(text, style: style, textAlign: TextAlign.center);
   }
 
-  List<LineChartBarData> get lineBarsData1 => [
-    lineChartBarData1_1,
 
+  SideTitles bottomTitles() => SideTitles(
+    getTitlesWidget: bottomitleWidgets,
+    showTitles: true,
+    // 제목간 간격
+    interval: 1,
+    // 제목과 차트 간격
+    reservedSize: 2,
+  );
+
+  Widget bottomitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      fontSize: 6,
+    );
+    Widget text;
+    switch (value.toInt()) {
+      case 1.0:
+        text = Text(statisticCon.lineBottomTitle.first);
+        break;
+      case 24.0:
+        text = Text(statisticCon.lineBottomTitle.last);
+        break;
+      default:
+        text = const Text('');
+        break;
+    }
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 10,
+      child: text,
+    );
+  }
+
+  List<LineChartBarData> get lineBarsData => [
+    lineChartBarData,
   ];
 
-  LineChartBarData get lineChartBarData1_1 => LineChartBarData(
+  LineChartBarData get lineChartBarData => LineChartBarData(
     isCurved: false,
     color: AppColors.appColorWhite,
     barWidth: 3,
@@ -145,14 +180,7 @@ class _HomeLineChartState extends State<HomeLineChart> {
     dotData: const FlDotData(show: false),
     belowBarData: BarAreaData(show: false),
     // TODO : 데이터 넣기
-    spots: const [
-    FlSpot(1, 1),
-    FlSpot(3, 1.5),
-    FlSpot(5, 1.4),
-    FlSpot(7, 3.4),
-    FlSpot(10, 2),
-    FlSpot(12, 2.2),
-    FlSpot(13, 1.8),
-    ],
+    spots: []
   );
+
 }// 클래스 끝

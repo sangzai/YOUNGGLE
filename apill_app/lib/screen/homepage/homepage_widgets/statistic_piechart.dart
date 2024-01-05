@@ -2,7 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/screen/homepage/homepage_controllers/statistic_controller.dart';
-import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 class HomePieChart extends StatefulWidget {
   const HomePieChart({super.key});
@@ -17,15 +16,11 @@ class _HomePieChartState extends State<HomePieChart> {
   final statisticCon = Get.put(StatisticCon());
 
   @override
-  void initState() {
-    super.initState();
-    _animateChart();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Obx(
           () {
+            // statisticCon.pieTouchIndex.value
+            // statisticCon.pieIndex.value
         List<dynamic> data = statisticCon.pieData;
 
         List<PieChartSectionData> sections = [];
@@ -50,8 +45,18 @@ class _HomePieChartState extends State<HomePieChart> {
           );
         }
 
+
+
         return PieChart(
+          swapAnimationDuration: Duration(seconds: 1),
           PieChartData(
+            pieTouchData: PieTouchData(
+              enabled: true,
+              touchCallback: (FlTouchEvent, pieTouchResponse) {
+                print("터치 발생중");
+              },
+            ),
+
             startDegreeOffset: 180,
             // 파이 그래프 간의 거리
             sectionsSpace: 0,
@@ -67,12 +72,6 @@ class _HomePieChartState extends State<HomePieChart> {
     );
   }
 
-  Future<void> _animateChart() async {
-    // Simulate a 3-second delay
-    await Future.delayed(Duration(seconds: 10));
 
-    // Set chartAnimated to true to trigger the chart animation
-    statisticCon.pieAnimted.value = true;
-  }
 
 }

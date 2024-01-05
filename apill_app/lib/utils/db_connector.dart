@@ -1,7 +1,7 @@
 import 'package:mysql_client/mysql_client.dart';
 
 Future<Iterable<ResultSetRow>?> dbConnector(String sql, [Map<String, dynamic>? params]) async {
-  print("sql접속중");
+  // print("sql접속중");
 
   // MySQL 접속 설정
   final conn = await MySQLConnection.createConnection(
@@ -14,7 +14,7 @@ Future<Iterable<ResultSetRow>?> dbConnector(String sql, [Map<String, dynamic>? p
 
   await conn.connect();
 
-  print("Connected");
+  // print("Connected");
 
   try {
     // 전달받은 SQL 쿼리 실행

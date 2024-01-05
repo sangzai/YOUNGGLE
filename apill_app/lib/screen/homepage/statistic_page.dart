@@ -13,6 +13,7 @@ import 'package:mainproject_apill/screen/homepage/homepage_widgets/statistic_tod
 import 'package:mainproject_apill/screen/homepage/homepage_widgets/statistic_today_summary.dart';
 import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/screen/homepage/homepage_utils/time_calculators.dart';
+import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -46,57 +47,59 @@ class _HomePageState extends State<HomePage> {
         child: SafeArea(
           child: Column(
             children: [
-              // Obx(
-              //   () => AnimatedBuilder(
-              //       animation: statisticCon.animationController!,
-              //       builder: (context, child) {
-              //         return SizedBox(
-              //           height: statisticCon.heightAnimation!.value,
-              //           child: Visibility(
-              //             visible: statisticCon.appbarCheck.value,
-              //             child: AppBar(
-              //               flexibleSpace: Padding(
-              //                 padding: const EdgeInsets.only(left: 8,right: 20),
-              //                 child: Opacity(
-              //                   opacity: statisticCon.opacityAnimation?.value ?? 1.0,
-              //                   child: Column(
-              //                     crossAxisAlignment: CrossAxisAlignment.start,
-              //                     children: [
-              //                       Text('${userCon.userName}님',
-              //                         style: Theme.of(context).textTheme.headlineLarge,),
-              //                       Text(
-              //                         // TODO : 대화하는 듯한 느낌이 들게 멘트 추가할 것
-              //                         "${statisticCon.goodSleep.value}",
-              //                         style: Theme.of(context).textTheme.headlineLarge,
-              //                       ),
-              //                     ],
-              //                   ),
-              //                 ),
-              //               ),
-              //
-              //               actions: [
-              //                 Opacity(
-              //                   opacity: statisticCon.opacityAnimation?.value ?? 1.0,
-              //
-              //                   child: IconButton(
-              //                     icon: Icon(Icons.close),
-              //                     onPressed: () {
-              //                       statisticCon.startAnimation();
-              //                       // statisticCon.appbarCheck.value = !statisticCon.appbarCheck.value;
-              //                       // print(getTextHeight(statisticCon.goodSleep.value, myTheme.textTheme.headlineLarge!, ScreenUtil().screenWidth));
-              //                       // print(statisticCon.heightAnimation!.value);
-              //                     },
-              //                     color: AppColors.appColorWhite60,
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //         );
-              //       },
-              //
-              //   ),
-              // ),
+              Obx(
+                () => AnimatedBuilder(
+                    animation: statisticCon.animationController!,
+                    builder: (context, child) {
+                      return Visibility(
+                        visible: statisticCon.appbarCheck.value,
+                        child: SizedBox(
+                          height: statisticCon.heightAnimation!.value,
+                          child: AppBar(
+                            flexibleSpace: Padding(
+                              padding: const EdgeInsets.only(left: 8,right: 20),
+                              child: Opacity(
+                                opacity: statisticCon.opacityAnimation?.value ?? 1.0,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('${userCon.userName}님',
+                                        style: Theme.of(context).textTheme.headlineLarge,),
+                                      Text(
+                                        // TODO : 대화하는 듯한 느낌이 들게 멘트 추가할 것
+                                        "${statisticCon.goodSleep.value}",
+                                        style: Theme.of(context).textTheme.headlineLarge,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          
+                            actions: [
+                              Opacity(
+                                opacity: statisticCon.opacityAnimation?.value ?? 1.0,
+                          
+                                child: IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: () {
+                                    statisticCon.startAnimation();
+                                    // statisticCon.appbarCheck.value = !statisticCon.appbarCheck.value;
+                                    // print(getTextHeight(statisticCon.goodSleep.value, myTheme.textTheme.headlineLarge!, ScreenUtil().screenWidth));
+                                    // print(statisticCon.heightAnimation!.value);
+                                  },
+                                  color: AppColors.appColorWhite60,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+
+                ),
+              ),
 
               const SizedBox(height: 20),
 
@@ -302,8 +305,13 @@ class _HomePageState extends State<HomePage> {
     // 가장 수면시간이 긴 데이터를 파이차트에 적용(수면 시작 시간 및 수면 종료 시간)
     statisticCon.startEndTimeInPieChart.value = pieChartTimeRange(statisticCon.splitselectedDateData[statisticCon.pieIndex.value]);
 
-    // 파이차트 데이터 테스트
-    statisticCon.pieData.assignAll(getSplitDataSleepTime(statisticCon.splitselectedDateData as List<List<SelectDateData>>, statisticCon.selectedDate.value));
+    // 파이차트 데이터 넣기
+    statisticCon.pieData.assignAll(getPieData(statisticCon.splitselectedDateData as List<List<SelectDateData>>, statisticCon.selectedDate.value));
+
+    // 라인차트 데이터넣기
+    statisticCon.lineData.assignAll(getLineData(statisticCon.splitselectedDateData[statisticCon.pieIndex.value]));
+    statisticCon.lineBottomTitle.assignAll(getLineBottomTitle(statisticCon.splitselectedDateData[statisticCon.pieIndex.value]));
+
 
     // 만약 선택한 날짜의 주일이 다르면
     if( TimeCalculators().findSunday(selectedDate) != statisticCon.selectedDateSunday.value ){

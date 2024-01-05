@@ -1,11 +1,11 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/models/select_week_model.dart';
 import 'package:mainproject_apill/models/select_month_model.dart';
-import 'package:mainproject_apill/utils/get_text_height.dart';
-import 'package:mainproject_apill/widgets/mytheme.dart';
 
 class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin {
 
@@ -43,12 +43,17 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
   // 파이 그래프 내가 볼 수면 정보 인덱스
   RxInt pieIndex = 0.obs;
 
+  // 파이 차트 내가 터치한 인덱스
+  RxInt pieTouchIndex = (-1).obs;
+
   // 파이 그래프용 데이터
   RxList<dynamic> pieData = [].obs;
 
-  // 파이 애니메이션
-  RxBool pieAnimted = false.obs;
+  // 라인 그래프용 데이터
+  RxList lineData = [].obs;
 
+  // 라인 그래프 하단 제목
+  RxList lineBottomTitle = ["00:00","00:00"].obs;
 
   // 애니메이션
   // 버튼 누르면 사라지게 하는 변수
@@ -73,7 +78,7 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
     super.onInit();
 
     // 애니메이션 재생시간
-    const duration = Duration(milliseconds: 3000);
+    const duration = Duration(seconds: 2,);
 
     _animationController.value = AnimationController(
       vsync: this, duration: duration,
@@ -81,11 +86,8 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
 
     // 버튼 눌렀을때 높이를 0으로 만들어주는 애니메이션
     // 텍스트를 감지하고 텍스트의 스타일과 몇 줄인지를 감지하고 높이를 계산함
-    _heightAnimation.value = (Tween<double>(
-        begin: getTextHeight(
-            goodSleep.value, myTheme.textTheme.headlineLarge!, 2),
-        end: 1)
-        .chain(CurveTween(curve: Curves.ease))
+    _heightAnimation.value = (Tween<double>(begin: 300.h, end: 0)
+        .chain(CurveTween(curve: Curves.easeInOut))
         .animate(_animationController.value!));
 
     // 투명도 애니메이션

@@ -29,7 +29,7 @@ class TodayCharts extends StatelessWidget {
           children: [
             Expanded(flex: 3,child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 4),
-              child: Container(color: Colors.transparent,child: HomeLineChart()),
+              child: HomeLineChart(),
             )),
             Expanded(child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),

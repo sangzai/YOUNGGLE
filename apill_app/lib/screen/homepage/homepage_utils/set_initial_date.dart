@@ -75,25 +75,47 @@ class setInitialDate {
   // 초기 데이터 받아서 적용
   Future<void> setInitialDateData() async {
     // 하루치 데이터 받아오기
-    statisticCon.selectedDateData = RxList<SelectDateData>.from(await getSelectDateData(statisticCon.selectedDate.value));
+    statisticCon.selectedDateData = RxList<SelectDateData>.from(
+        await getSelectDateData(statisticCon.selectedDate.value)
+    );
     // 하루치 데이터 SleepNum으로 쪼개기
-    statisticCon.splitselectedDateData = RxList<List<SelectDateData>>.from(await splitDateData(statisticCon.selectedDateData));
+    statisticCon.splitselectedDateData = RxList<List<SelectDateData>>.from(
+        await splitDateData(statisticCon.selectedDateData)
+    );
     // 쪼갠 데이터 중 가장 수면시간이 긴 데이터의 인덱스를 구하기
-    statisticCon.pieIndex.value = await findLongestSleep(statisticCon.splitselectedDateData as List<List<SelectDateData>>);
+    statisticCon.pieIndex.value = await findLongestSleep(
+        statisticCon.splitselectedDateData as List<List<SelectDateData>>
+    );
     // 가장 수면시간이 긴 데이터를 파이차트 안쪽 텍스트에 적용(총 수면시간)
-    statisticCon.totalSleepInPieChart.value = pieChartTotalSleep(statisticCon.splitselectedDateData[statisticCon.pieIndex.value]);
+    statisticCon.totalSleepInPieChart.value = pieChartTotalSleep(
+        statisticCon.splitselectedDateData[statisticCon.pieIndex.value]
+    );
     // 가장 수면시간이 긴 데이터를 파이차트 안쪽 텍스트에 적용(수면 시작 시간 및 수면 종료 시간)
-    statisticCon.startEndTimeInPieChart.value = pieChartTimeRange(statisticCon.splitselectedDateData[statisticCon.pieIndex.value]);
+    statisticCon.startEndTimeInPieChart.value = pieChartTimeRange(
+        statisticCon.splitselectedDateData[statisticCon.pieIndex.value]
+    );
 
-    // 파이차트 테스트
-    statisticCon.pieData.assignAll(getSplitDataSleepTime(statisticCon.splitselectedDateData as List<List<SelectDateData>>, statisticCon.selectedDate.value));
+    // 파이차트 데이터넣기
+    statisticCon.pieData.assignAll(
+        getPieData(
+            statisticCon.splitselectedDateData as List<List<SelectDateData>>,
+            statisticCon.selectedDate.value)
+    );
 
-
+    // 라인차트 데이터넣기
+    statisticCon.lineData.assignAll(
+        getLineData(statisticCon.splitselectedDateData[statisticCon.pieIndex.value])
+    );
+    statisticCon.lineBottomTitle.assignAll(
+        getLineBottomTitle(statisticCon.splitselectedDateData[statisticCon.pieIndex.value])
+    );
   }
 
   // 초기 데이터 받아서 주간 데이터 적용
   Future<void> setInitialWeekData() async {
-    statisticCon.selectedWeekData = RxList<SelectWeekData>.from(await getSelectWeekData(statisticCon.selectedDateSunday.value));
+    statisticCon.selectedWeekData = RxList<SelectWeekData>.from(
+        await getSelectWeekData(statisticCon.selectedDateSunday.value)
+    );
   }
 
 
