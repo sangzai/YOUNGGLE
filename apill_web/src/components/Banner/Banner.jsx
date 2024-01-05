@@ -179,7 +179,7 @@ const Banner = () => {
                             {/* </div> */}
                             <div className='chatbotmodal-request'>
                                 {clientContent.map((content, index) => (
-                                    <div className='chatbotmodal-request-user' key={index}>
+                                    <div className='chatbotmodal-request-bot' key={index}>
                                         {/* <div className='chatbotmodal-request-bot-image' /> */}
                                         <div className='client'>
                                             {content.buttonText}
