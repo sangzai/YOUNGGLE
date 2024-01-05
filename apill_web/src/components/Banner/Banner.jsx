@@ -253,9 +253,15 @@ const Banner = () => {
 
     return (
         <div className='banner'>
-
-            <img onClick={chatmodalOnOff}
-               className= {isChatModalOpen ? 'chatbot-button x' : 'chatbot-button chat'} src={isChatModalOpen ? xmark : chatIcon}></img>
+            <div className={isChatModalOpen ? 'chatbot-btn-not' : 'chatbot-btn'}>
+                <img
+                    onClick={chatmodalOnOff}
+                    className={isChatModalOpen ? 'chatbot-button x' : 'chatbot-button chat'}
+                    src={isChatModalOpen ? xmark : chatIcon}
+                >
+                </img>
+                <p className='chatbot-button-name'>상품 문의&nbsp;</p>
+            </div>
 
 
             {isChatModalOpen && (
