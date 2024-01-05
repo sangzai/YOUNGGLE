@@ -120,45 +120,47 @@ a{
     background-color: white;
     border-radius: 10px;
     position: absolute;
-    bottom: 120px;
-    left: 20px;
+    bottom: 110px;
+    left: 40px;
     cursor: pointer;
 }
 
 .chatbotmodal {
     position: absolute;
-    left: -110px;
-    bottom: 200px;
+    left: -100px;
+    bottom: 180px;
     background-image: url('./img/phone.png');
     background-size: contain;
-    width: 500px;
-    height: 500px;
+    width: 650px;
+    height: 650px;
 }
 
 .chatbotmodal-bot {
-    width: 217px;
-    height: 405px;
+    width: 283px;
+    height: 532px;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .chatbotmodal-user {
-    width: 217px;
-    height: 40px;
+    width: 283px;
+    height: 45px;
     background-color: whitesmoke;
     display: flex;
     justify-content: center;
     align-items: center;
+    justify-content: space-evenly;
 }
 
 .chatbotmodal-chat {
-    width: 130px;
+    width: 170px;
     height: 30px;
 
     background-color: #fff;
     border: 1px solid #bcbcbc;
     resize: none;
     color: #000;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 18px;
     border-radius: 8px;
 }
@@ -184,8 +186,8 @@ a{
 
 .chatbotmodal-content {
     position: absolute;
-    width: 217px;
-    height: 445px;
+    width: 267px;
+    height: 532px;
     left: 28.2%;
     top: 6%;
     background-color: white;
@@ -195,13 +197,19 @@ a{
 .chatbotmodal-request-bot {
     padding: 3px 5px;
     display: grid;
-    font-size: 13px;
+    font-size: 14.5px;
     grid-template-columns: 1fr 5.5fr;
     margin-top: 10px;
 }
-
+.chatbotmodal-client{
+    padding: 3px 5px;
+    display: grid;
+    font-size: 14.5px;
+    grid-template-columns: 1fr;
+    margin-top: 10px;
+}
 .chatbotmodal-request-bot-image {
-    height: 30px;
+    height: 40px;
     background-image: url('../../img/MainLogo.png');
     background-size: cover;
 }
@@ -227,10 +235,34 @@ a{
     border-style: solid;
     border-color: #f2f2f2 transparent transparent transparent;
   }
+.chatbotmodal-client{
+    width: 100%;
+}
+  /* 말풍선 스타일 */
+.client {
+    width: 80px;
+    margin-left: 140px;
+    display: inline-block;
+    background-color: #eae2fa;
+    border-radius: 8px;
+    padding: 10px;
+    position: relative;
+  }
+  
+  /* 말풍선 가상 요소(삼각형) */
+  .client::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: -9px;
+    border-width: 8px;
+    border-style: solid;
+    border-color: #eae2fa transparent transparent transparent;
+  }
 
 .ordermodal {
     position: absolute;
-    left: 350px;
+    left: 18%;
     bottom: 120px;
     background-color: aquamarine;
     border-radius: 10px;
@@ -321,8 +353,22 @@ a{
     }
 }
 
-/* .bt1,
-.btn2,
-.btn3{
-    margin-bottom: 10%;
-} */
+.chatbot-btn{
+    
+    margin-bottom: 6px;
+    background-color: transparent;
+    border: 1.5px solid #000000;
+    border-radius: 15px;
+    font-weight: 600;
+    padding: 4px;
+    padding-inline: 7px;
+    text-align: center;
+    width: 100%;
+
+
+
+}
+
+.btn1{
+    margin-top: 8px;    
+}
