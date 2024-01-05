@@ -19,29 +19,36 @@
 
 
 
-.right{
-    transform: translateX(30%) scale(0.85);
-    /* z-index: 2; */
-}
 
-.target0 {
-    z-index: 5;
+
+/* .target0 {
+    z-index: 9;
 }
 
 .target1 {
-    z-index: 4;
+    z-index: 8;
 }
 
 .target2 {
-    z-index: 3;
+    z-index: 7;
 }
 
 .target3 {
-    z-index: 2;
+    z-index: 6;
 }
 
 .target4 {
-    z-index: 1;
+    z-index: 5;
+} */
+
+.left1{
+    transform: translateX(-30%) scale(0.85);
+    z-index: 4;
+}
+
+.left2{
+    transform: translateX(-30%) scale(0.85);
+    z-index: 3;
 }
 
 .center{
@@ -49,10 +56,14 @@
     z-index: 10;
 }
 
-.left{
-    transform: translateX(-30%) scale(0.85);
-    z-index: 9;
+.right1{
+    transform: translateX(30%) scale(0.85);
+    z-index: 2;
+}
 
+.right2{
+    transform: translateX(30%) scale(0.85);
+    z-index: 1;
 }
 
 .target-wrap{

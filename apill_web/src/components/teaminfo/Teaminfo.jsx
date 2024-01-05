@@ -3,7 +3,7 @@ import "./Teaminfo.css"
 
 const Teaminfo = () => {
   return (
-    <div>
+    <div id='teaminfo'>
       <div className='teaminfo'>
         <div className='teaminfo-box'>
           <div className='team-who' style={{ lineHeight: '1.5' }}>
