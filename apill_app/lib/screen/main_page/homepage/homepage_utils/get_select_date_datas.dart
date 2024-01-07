@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/utils/db_connector.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_utils/time_calculators.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_calculators.dart';
 
 // DB 통신해서 데이터 받아오는 함수
 Future<List<SelectDateData>> getSelectDateData(DateTime selectedDate) async {

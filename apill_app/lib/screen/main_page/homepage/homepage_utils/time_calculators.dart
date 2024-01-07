@@ -1,7 +1,6 @@
-
 import 'package:get/get.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_controllers/statistic_controller.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
 
 class TimeCalculators {
   final statisticCon = Get.put(StatisticCon());

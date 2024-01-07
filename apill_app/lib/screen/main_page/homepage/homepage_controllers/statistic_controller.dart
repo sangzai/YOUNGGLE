@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,7 +21,7 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
   RxList<SelectDateData> selectedDateData = <SelectDateData>[].obs;
 
   // 하루데이터를 쪼개놓은 리스트
-  RxList splitselectedDateData = [].obs;
+  RxList splitSelectedDateData = [].obs;
 
   // 일주일데이터 저장용
   RxList<SelectWeekData> selectedWeekData = <SelectWeekData>[].obs;
@@ -54,6 +53,9 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
 
   // 라인 그래프 하단 제목
   RxList lineBottomTitle = ["00:00","00:00"].obs;
+
+  // 수평 누적 그래프 데이터
+  RxList stackBarChartData = [1,1].obs;
 
   // 애니메이션
   // 버튼 누르면 사라지게 하는 변수

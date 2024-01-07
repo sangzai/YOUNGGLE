@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mainproject_apill/loading_controller.dart';
-import 'package:mainproject_apill/screen/my_app_page.dart';
+import 'package:mainproject_apill/route.dart';
+import 'package:mainproject_apill/screen/login_page/join_page.dart';
+import 'package:mainproject_apill/screen/login_page/login_page.dart';
+import 'package:mainproject_apill/screen/main_page/alarm_page.dart';
+import 'package:mainproject_apill/screen/main_page/bottom_navi_page.dart';
 import 'package:get/get.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/statistic_page.dart';
+import 'package:mainproject_apill/screen/main_page/setting_page.dart';
+import 'package:mainproject_apill/screen/main_page/sleep_page/sleep_page.dart';
+import 'package:mainproject_apill/screen/tutorial_page.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 import 'package:mainproject_apill/widgets/mytheme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -47,19 +54,51 @@ class MyApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate
           ],
+
           supportedLocales: [
             Locale('ko'),
             Locale('en'),
           ],
 
+          getPages: [
+            GetPage(name: '/route', page: () => RoutePage(),),
+
+            GetPage(name: '/login', page: () => LoginPage(),
+                transition: Transition.fadeIn,
+                transitionDuration: const Duration(seconds: 3)),
+            GetPage(name: '/join', page: () => JoinPage(),
+                transition: Transition.rightToLeft,
+                transitionDuration: const Duration(seconds: 1)),
+
+            GetPage(name: '/tutorial', page: () => TutorialPage(),),
+
+            GetPage(name: '/navi', page: () => BottomNaviPage(selectedIndex: 0,),),
+
+            GetPage(name: '/statistic', page: () => BottomNaviPage(selectedIndex: 0,),),
+            GetPage(name: '/sleep', page: () => BottomNaviPage(selectedIndex: 1,),),
+            GetPage(name: '/alarm', page: () => BottomNaviPage(selectedIndex: 2,),),
+            GetPage(name: '/setting', page: () => BottomNaviPage(selectedIndex: 3,),),
+
+          ],
+
 
           title: "ApilL",
           theme: myTheme,
+
           home: BackGroundImageContainer(
-              child: MyAppPage()
+              child: RoutePage()
           ),
         );
       },
     );
   }
 }
+
+// GetMaterialApp의 getPages 속성에 GetPage를 사용하여 페이지를 등록한다.
+// Get.toNamed("/first");
+// Get.toNamed()는 기본적으로 페이지 이동을 할 때 사용하는 메소드이다.
+// Get.offNamed("/second");
+// Get.offNamed()는 현재 페이지를 지우고 새로운 페이지로 이동할 때 사용하는 메소드이다.
+// Get.offAllNamed("/");
+// Get.offAllNamed()는 기존의 모든 페이지를 지우고 새로운 페이지로 이동할 때 사용하는 메소드이다.
+// 홈으로 이동할 때 사용한다.

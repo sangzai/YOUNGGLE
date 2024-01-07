@@ -3,12 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:mainproject_apill/loading_controller.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/models/select_week_model.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_controllers/statistic_controller.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_utils/time_calculators.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_calculators.dart';
 import 'package:mainproject_apill/utils/db_connector.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_utils/get_select_date_datas.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_utils/get_select_week_datas.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_widgets/statistic_piechart.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_date_datas.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_week_datas.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_piechart.dart';
 class setInitialDate {
 
   final statisticCon = Get.put(StatisticCon());
@@ -79,35 +79,35 @@ class setInitialDate {
         await getSelectDateData(statisticCon.selectedDate.value)
     );
     // 하루치 데이터 SleepNum으로 쪼개기
-    statisticCon.splitselectedDateData = RxList<List<SelectDateData>>.from(
+    statisticCon.splitSelectedDateData = RxList<List<SelectDateData>>.from(
         await splitDateData(statisticCon.selectedDateData)
     );
     // 쪼갠 데이터 중 가장 수면시간이 긴 데이터의 인덱스를 구하기
     statisticCon.pieIndex.value = await findLongestSleep(
-        statisticCon.splitselectedDateData as List<List<SelectDateData>>
+        statisticCon.splitSelectedDateData as List<List<SelectDateData>>
     );
     // 가장 수면시간이 긴 데이터를 파이차트 안쪽 텍스트에 적용(총 수면시간)
     statisticCon.totalSleepInPieChart.value = pieChartTotalSleep(
-        statisticCon.splitselectedDateData[statisticCon.pieIndex.value]
+        statisticCon.splitSelectedDateData[statisticCon.pieIndex.value]
     );
     // 가장 수면시간이 긴 데이터를 파이차트 안쪽 텍스트에 적용(수면 시작 시간 및 수면 종료 시간)
     statisticCon.startEndTimeInPieChart.value = pieChartTimeRange(
-        statisticCon.splitselectedDateData[statisticCon.pieIndex.value]
+        statisticCon.splitSelectedDateData[statisticCon.pieIndex.value]
     );
 
     // 파이차트 데이터넣기
     statisticCon.pieData.assignAll(
         getPieData(
-            statisticCon.splitselectedDateData as List<List<SelectDateData>>,
+            statisticCon.splitSelectedDateData as List<List<SelectDateData>>,
             statisticCon.selectedDate.value)
     );
 
     // 라인차트 데이터넣기
     statisticCon.lineData.assignAll(
-        getLineData(statisticCon.splitselectedDateData[statisticCon.pieIndex.value])
+        getLineData(statisticCon.splitSelectedDateData[statisticCon.pieIndex.value])
     );
     statisticCon.lineBottomTitle.assignAll(
-        getLineBottomTitle(statisticCon.splitselectedDateData[statisticCon.pieIndex.value])
+        getLineBottomTitle(statisticCon.splitSelectedDateData[statisticCon.pieIndex.value])
     );
   }
 

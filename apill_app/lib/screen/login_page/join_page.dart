@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 import 'package:mainproject_apill/utils/db_connector.dart';
 
@@ -30,17 +31,52 @@ class _JoinPageState extends State<JoinPage> {
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(1900),
+      firstDate: DateTime(1903),
       lastDate: DateTime.now(),
       locale: Locale('ko', 'KO'), // 한글 버전
+      helpText: "",
+      useRootNavigator: false,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
     );
 
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
         birth.text = '${picked.year}-${picked.month}-${picked.day}';
+        calculateAge();
       });
     }
+  }
+
+  void calculateAge() {
+    DateTime now = DateTime.now();
+    int age = now.year - selectedDate.year;
+
+    // 만 나이를 계산합니다.
+    // 올해 생일이 아직 도래하지 않았으면 나이를 1 줄입니다.
+    if (now.month < selectedDate.month ||
+        (now.month == selectedDate.month && now.day < selectedDate.day)) {
+      age--;
+    }
+
+    // 표시된 날짜와 나이를 업데이트합니다.
+    setState(() {
+      selectedDate = selectedDate;
+      input_age.text = age.toString();
+    });
+  }
+  // void initState() {
+  //   super.initState();
+  //
+  //   // 비동기로 flutter secure storage 정보를 불러오는 작업
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     _asyncMethod();
+  //   });
+  // }
+  @override
+  void initState(){
+    super.initState();
+    calculateAge();
   }
 
   @override
@@ -160,7 +196,7 @@ class _JoinPageState extends State<JoinPage> {
                                       color: Colors.white.withOpacity(0.7),
                                       fontWeight: FontWeight.bold),
                                 ),
-                                value: '남성',
+                                value: 'male',
                                 groupValue: input_gender.text,
                                 onChanged: (value) {
                                   setState(() {
@@ -174,7 +210,7 @@ class _JoinPageState extends State<JoinPage> {
                                       color: Colors.white.withOpacity(0.7),
                                       fontWeight: FontWeight.bold),
                                 ),
-                                value: '여성',
+                                value: 'female',
                                 groupValue: input_gender.text,
                                 onChanged: (value) {
                                   setState(() {
@@ -194,7 +230,7 @@ class _JoinPageState extends State<JoinPage> {
                           child: TextField(
                             decoration: InputDecoration(
                                 label: Text(
-                                  "나이 입력",
+                                  "나이",
                                   style: TextStyle(
                                       color: Colors.white.withOpacity(0.7),
                                       fontWeight: FontWeight.bold),
@@ -209,6 +245,8 @@ class _JoinPageState extends State<JoinPage> {
                             ),
                             keyboardType: TextInputType.number,
                             controller: input_age,
+                            readOnly: true,
+                            enabled: false,
                           ),
                         ),
                         Expanded(
@@ -338,11 +376,27 @@ void joinMember(
     await dbConnector(sql, data);
 
     // 회원가입 성공 시 로그인 화면으로 이동
-    Navigator.pop(context);
+    // ScaffoldMessenger.of(context)
+    //     .showSnackBar(SnackBar(content: Text('회원가입이 완료되었습니다!')));
+    Get.defaultDialog(
+      title: '알림',
+      content: Text('회원가입이 완료되었습니다!'),
+    );
+
+
+    // Navigator.pop(context);
+    Get.back();
+
 
   } catch (error) {
     print('Error during registration: $error');
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('회원가입 중 오류 발생')));
+
+    // ScaffoldMessenger.of(context)
+    //     .showSnackBar(SnackBar(content: Text('회원가입 중 오류 발생')));
+    Get.defaultDialog(
+      title: '알림',
+      content: Text('회원가입 중 오류 발생'),
+    );
+
   }
 }

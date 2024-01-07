@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_widgets/statisitc_barchart.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_widgets/statistic_linechart.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statisitc_barchart.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_linechart.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class TodayCharts extends StatelessWidget {
@@ -20,7 +20,7 @@ class TodayCharts extends StatelessWidget {
           color: AppColors.containerBackColor
       ),
       width: MediaQuery.of(context).size.width,
-      height: 300,
+      height: 330,
       // TODO 그래프 구현 2
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -28,15 +28,16 @@ class TodayCharts extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(flex: 3,child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 4),
+              padding: const EdgeInsets.fromLTRB(4, 12, 4, 4),
+              // padding: const EdgeInsets.symmetric(vertical: 12,horizontal: 4),
               child: HomeLineChart(),
             )),
             Expanded(child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.only(bottom: 4),
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(58, 4, 24, 4),
+                    padding: const EdgeInsets.fromLTRB(48, 4, 28, 4),
                     child: HomeBarChart(),
                   ),
                   Row(
@@ -45,7 +46,7 @@ class TodayCharts extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(width: 10,height: 10,color: Color(0xFF5D6DBE),),
+                          Container(width: 10,height: 10,color: AppColors.appColorBlue70,),
                           SizedBox(width: 10,),
                           Text('등누운자세'),
                         ],
@@ -53,7 +54,7 @@ class TodayCharts extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(width: 10,height: 10,color: Color(0xFF7DB249),),
+                          Container(width: 10,height: 10,color: AppColors.appColorGreen70,),
                           SizedBox(width: 10,),
                           Text('옆누운자세'),
                         ],

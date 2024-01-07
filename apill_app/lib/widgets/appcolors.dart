@@ -25,7 +25,8 @@ class AppColors {
   static const Color appColorWhite20 = Color.fromRGBO(255, 255, 255, 0.2);
   static const Color appColorWhite10 = Color.fromRGBO(255, 255, 255, 0.1);
 
-  static const Color appColorGreen = Color(0xFF7DB249);
+  static const Color appColorGreen = Color(0xB37DB249);
+  static const Color appColorGreen70 = Color.fromRGBO(125, 178, 73, 0.7);
 
   static const Color containerBackColor = Color.fromRGBO(238, 238, 238, 0.1);
 }

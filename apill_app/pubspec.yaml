@@ -47,6 +47,8 @@ dependencies:
     sdk: flutter
   dio: ^5.3.3
   flutter_spinkit: ^5.2.0
+  introduction_screen: ^3.1.12
+  flutter_secure_storage: ^9.0.0
 #  kakao_flutter_sdk: ^1.8.0
 #  google_sign_in: ^6.2.1
 

@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_controllers/statistic_controller.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class HomeLineChart extends StatefulWidget {
@@ -38,8 +38,8 @@ class _HomeLineChartState extends State<HomeLineChart> {
               // lineBarsData: lineBarsData,
               minX: 0,
               maxX: 26,
-              maxY: 9,
-              minY: 3,
+              maxY: 8,
+              minY: 3.7,
 
             ),
 
@@ -136,30 +136,33 @@ class _HomeLineChartState extends State<HomeLineChart> {
 
 
   SideTitles bottomTitles() => SideTitles(
-    getTitlesWidget: bottomitleWidgets,
+    getTitlesWidget: bottomTitleWidgets,
     showTitles: true,
     // 제목간 간격
     interval: 1,
     // 제목과 차트 간격
-    reservedSize: 2,
+    reservedSize: 30,
   );
 
-  Widget bottomitleWidgets(double value, TitleMeta meta) {
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       fontSize: 6,
     );
     Widget text;
+    String first = statisticCon.lineBottomTitle[0];
+    String last = statisticCon.lineBottomTitle[1];
     switch (value.toInt()) {
-      case 1.0:
-        text = Text(statisticCon.lineBottomTitle.first);
+      case 1:
+        text = Text(first);
         break;
-      case 24.0:
-        text = Text(statisticCon.lineBottomTitle.last);
+      case 24:
+        text = Text(last);
         break;
       default:
         text = const Text('');
         break;
     }
+    // print("Value: $value, Text: $text");
 
     return SideTitleWidget(
       axisSide: meta.axisSide,

@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mainproject_apill/screen/homepage/homepage_controllers/statistic_controller.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 class HomePieChart extends StatefulWidget {
   const HomePieChart({super.key});
