@@ -145,9 +145,9 @@ class _HomeLineChartState extends State<HomeLineChart> {
   );
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      fontSize: 6,
-    );
+    // const style = TextStyle(
+    //   fontSize: 6,
+    // );
     Widget text;
     String first = statisticCon.lineBottomTitle[0];
     String last = statisticCon.lineBottomTitle[1];
@@ -156,7 +156,7 @@ class _HomeLineChartState extends State<HomeLineChart> {
         text = Text(first);
         break;
       case 24:
-        text = Text(last);
+        text = Text(last,);
         break;
       default:
         text = const Text('');

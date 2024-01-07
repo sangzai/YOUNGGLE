@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mainproject_apill/screen/login_page/join_page.dart';
-import 'package:mainproject_apill/screen/main_page/bottom_navi_page.dart';
 import 'package:mainproject_apill/utils/db_connector.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';

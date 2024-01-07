@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:mainproject_apill/screen/main_page/bottom_navi_page.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 
 class TutorialPage extends StatefulWidget {

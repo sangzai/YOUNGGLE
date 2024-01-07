@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:mainproject_apill/loading_controller.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/models/select_week_model.dart';
@@ -8,7 +7,6 @@ import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_
 import 'package:mainproject_apill/utils/db_connector.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_date_datas.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_week_datas.dart';
-import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_piechart.dart';
 class setInitialDate {
 
   final statisticCon = Get.put(StatisticCon());
