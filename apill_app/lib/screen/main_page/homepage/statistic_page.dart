@@ -34,8 +34,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     // 여기서 함수 호출
-    // TODO: 날짜 초기화 함수 나중에 위치 바꿔줘야함
-    setInitialDate().initializeData();
   }
 
   @override

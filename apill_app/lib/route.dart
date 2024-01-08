@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/screen/login_page/user_controller.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/set_initial_date.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 
@@ -28,6 +29,19 @@ class _RoutePageState extends State<RoutePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
   _asyncMethod() async {
@@ -35,7 +49,7 @@ class _RoutePageState extends State<RoutePage> {
     // 데이터가 없을때는 null을 반환
     try {
       userId = await storage.read(key: 'userId');
-      tutorial = await storage.read(key: 'tutorial');
+      tutorial = await storage.read(key: '$userId tutorial');
     } catch (e) {
       print('Error reading data: $e');
     }
@@ -52,6 +66,11 @@ class _RoutePageState extends State<RoutePage> {
 
     // 만약 튜토리얼을 봤다면
     if ( tutorial == 'true' ) {
+
+      // TODO: 날짜 초기화 함수 나중에 위치 바꿔줘야함
+      // 날짜 및 그래프 초기화
+      await SetInitialDate().initializeData();
+
       // 메인 화면으로 보내기
       await Get.offAllNamed('/navi');
     } else {
@@ -59,9 +78,7 @@ class _RoutePageState extends State<RoutePage> {
       await Get.offAllNamed('/tutorial');
     }
 
-
   }
-
 
   @override
   Widget build(BuildContext context) {

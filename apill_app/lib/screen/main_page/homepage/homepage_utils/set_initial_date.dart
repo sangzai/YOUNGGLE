@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:mainproject_apill/loading_controller.dart';
+import 'package:mainproject_apill/models/active_date_model.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/models/select_week_model.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
@@ -7,13 +8,16 @@ import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_
 import 'package:mainproject_apill/utils/db_connector.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_date_datas.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_week_datas.dart';
-class setInitialDate {
+import 'package:mainproject_apill/utils/mqtt_test.dart';
+class SetInitialDate {
 
   final statisticCon = Get.put(StatisticCon());
 
   // 오늘 날짜를 DB 데이터가 있는 마지막 날짜로 바꿔주기
   Future<void> initializeData() async {
-    IsLoadingController.to.isLoading = true;
+    // 로딩 켜
+    // IsLoadingController.to.isLoading = true;
+
     // DB에 있는 데이터를 받아오는 함수
     await getActiveDates();
     // 오늘 날짜를 활성화된 날짜의 마지막 날로 바꿔주기
@@ -24,19 +28,16 @@ class setInitialDate {
     // 선택한 날짜의 데이터 받기
     await setInitialDateData();
 
-
-
     // 선택한 날짜의 일주일 데이터 받기
     await setInitialWeekData();
     // TODO : 선택한 날짜의 월간 데이터 받기
 
-
-    IsLoadingController.to.isLoading = false;
-
+    // 로딩 화면 꺼
+    // IsLoadingController.to.isLoading = false;
   }
 
   Future<void> getActiveDates() async {
-    List<DateTime> dateList = [];
+    // sql 문 정의
     String sql = '''
       SELECT distinct
         CASE WHEN HOUR(start_time) >= 18 THEN DATE_ADD(DATE(start_time), INTERVAL 1 DAY) ELSE DATE(start_time) END AS date
@@ -48,16 +49,33 @@ class setInitialDate {
             group by
               sleep_num) AS grouptime;
       ''';
-    var result = await dbConnector(sql);
+    // var result = await dbConnector(sql);
 
-    if (result != null) {
-      for (final row in result) {
-        // print(row.assoc());
-        dateList.add(DateTime.parse(row.assoc()['date']!));
+    // 구독 토픽
+    String subTopic = 'Dart/Mqtt_client/flutter/sql/return';
 
-      }
-      statisticCon.activeDates.addAll(dateList);
-    }
+    // 게시 토픽
+    String pubTopic = 'Dart/Mqtt_client/flutter/sql';
+
+    // 구독 후 게시 해서 답변 받기
+    String response = await connectAndPublish(subTopic, pubTopic, sql);
+
+    print('set_initial_date.dart 파일의 getActiveDates함수');
+    print(response);
+
+    // JSON 응답을 MemberModel 리스트로 변환
+    List<ActiveDateModel> activeList = activeDateModelFromJson(response);
+
+    // 각 MemberModel에서 DateTime 객체를 추출하여 dateList로 만듦
+    List<DateTime> dateList = activeList.map((member) => member.date).toList();
+    // if (response != null) {
+    //   for (final row in response) {
+    //     print(row.assoc());
+    //     // dateList.add(DateTime.parse(row.assoc()['date']!));
+    //
+    //   }
+    statisticCon.activeDates.addAll(dateList);
+    // }
   }
 
   // 내가 선택한 날짜 초기값을 활성화된 날짜 마지막날로
@@ -115,10 +133,5 @@ class setInitialDate {
         await getSelectWeekData(statisticCon.selectedDateSunday.value)
     );
   }
-
-
-
-
-
 }
 

@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 
 class SettingPage extends StatelessWidget {
-  const SettingPage({super.key});
+  SettingPage({super.key});
+
+  final storage = FlutterSecureStorage();
+
+  final userCon = Get.put(UserController());
+
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Text('설정페이지',style: TextStyle(fontSize: 48,fontWeight: FontWeight.bold)),
+        child: ElevatedButton(
+          child: Text('로그아웃'),
+          onPressed: () async {
+            await storage.delete(key: 'userId');
+          }
+        )
       );
 
   }

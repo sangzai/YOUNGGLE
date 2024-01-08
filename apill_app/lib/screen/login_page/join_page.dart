@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 import 'package:mainproject_apill/utils/db_connector.dart';
@@ -17,8 +18,11 @@ class JoinPage extends StatefulWidget {
 class _JoinPageState extends State<JoinPage> {
   DateTime selectedDate = DateTime.now();
 
+  final storage = FlutterSecureStorage();
+
   TextEditingController input_id = TextEditingController();
   TextEditingController input_pw = TextEditingController();
+  TextEditingController input_pw_check = TextEditingController();
   TextEditingController input_age = TextEditingController();
   TextEditingController input_name = TextEditingController();
   TextEditingController input_height = TextEditingController();
@@ -93,9 +97,10 @@ class _JoinPageState extends State<JoinPage> {
               margin: EdgeInsets.all(16),
               padding: EdgeInsets.all(16),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   SizedBox(
-                    height: 80,
+                    height: 30,
                   ),
                   Image.asset(
                     'assets/image/OnlyMoon.png',
@@ -131,6 +136,15 @@ class _JoinPageState extends State<JoinPage> {
                     ),
                   ),
                   Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: ElevatedButton(
+                        onPressed: (){
+                          // checkId(input_id.text);
+                        },
+                        child: Text('중복 검사'),
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       decoration: InputDecoration(
@@ -161,6 +175,35 @@ class _JoinPageState extends State<JoinPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                          label: Row(
+                            children: [
+                              Icon(Icons.key,
+                                  color: Colors.white.withOpacity(0.7)),
+                              Text(
+                                "비밀번호 확인",
+                                style: TextStyle(
+                                    color: Colors.white.withOpacity(0.7),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.2),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          )),
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.7),
+                      ),
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                      controller: input_pw_check,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
                       children: [
                         Expanded(
@@ -323,21 +366,32 @@ class _JoinPageState extends State<JoinPage> {
                       ],
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        // TODO : 회원가입 로직 구현
-                        joinMember(
-                            input_id.text,
-                            input_pw.text,
-                            input_name.text,
-                            birth.text,
-                            input_weight.text,
-                            input_height.text,
-                            input_gender.text,
-                            input_age.text,
-                            context);
-                      },
-                      child: Text('회원 가입'))
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          // TODO : 회원가입 로직 구현
+                          if (input_pw.text == input_pw_check.text) {
+                            joinMember(
+                                input_id.text,
+                                input_pw.text,
+                                input_name.text,
+                                birth.text,
+                                input_weight.text,
+                                input_height.text,
+                                input_gender.text,
+                                input_age.text,
+                                context);
+                          } else {
+                            Get.defaultDialog(
+                              title: '알람',
+                              content: Text('비밀번호가 일치하지 않습니다.'),
+                              titleStyle: TextStyle(color: Colors.black),
+                            );
+                          }
+                        },
+                        child: Text('회원 가입')),
+                  )
                 ],
               ),
             ),
@@ -347,6 +401,35 @@ class _JoinPageState extends State<JoinPage> {
     );
   }
 }
+
+// void checkId(id) async {
+//   try {
+//     String sql = '''
+//     select count(member_id) from members where member_id = :id;
+//     ''';
+//
+//     Map<String, dynamic> data = {
+//       'id': id
+//     };
+//
+//     var result = await dbConnector(sql, data);
+//
+//     if (result != null && result.isNotEmpty) {
+//
+//       if (count > 0) {
+//         Get.snackbar('알림', '이미 사용 중인 아이디입니다.');
+//       } else {
+//         Get.snackbar('알림', '아이디를 사용하실 수 있습니다.');
+//       }
+//     } else {
+//       Get.snackbar('알림', '아이디 중복 확인 중 오류발생');
+//     }
+//   } catch (error) {
+//     print('Error during registration: $error');
+//
+//     Get.snackbar('알림', '아이디 중복 확인 중 오류발생');
+//   }
+// }
 
 void joinMember(
     id, pw, name, birth, weight, height, gender, age, context) async {

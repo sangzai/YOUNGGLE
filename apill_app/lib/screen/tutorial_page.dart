@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 
 class TutorialPage extends StatefulWidget {
@@ -15,6 +16,8 @@ class TutorialPage extends StatefulWidget {
 class _TutorialPageState extends State<TutorialPage> {
 
   static final storage = FlutterSecureStorage();
+
+  final userCon = Get.put(UserController());
 
   // bool isPillowConnected = false; // IoT 기기 연결상태
   // 1. Define a `GlobalKey` as part of the parent widget's state
@@ -322,9 +325,10 @@ class _TutorialPageState extends State<TutorialPage> {
             //     MaterialPageRoute(builder: (context)=>BottomNaviPage())
             // );
             // TODO : 튜토리얼에 true를 저장하면 튜토리얼 다시 안보게 됨
+
             await storage.write(
-              key: 'tutorial',
-              value : 'false'
+              key: '${userCon.userName.value} tutorial',
+              value : 'true'
             );
             Get.offAllNamed('/navi');
       
