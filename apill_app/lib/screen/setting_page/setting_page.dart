@@ -14,7 +14,7 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   // final String id; Todo: 이름 받아오기
-  final userCon = Get.put(UserController());
+  final userCon = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {

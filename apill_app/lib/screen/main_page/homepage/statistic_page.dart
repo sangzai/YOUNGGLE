@@ -13,6 +13,7 @@ import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/sta
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_today_summary.dart';
 import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_calculators.dart';
+import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,10 +24,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final mqttHandler = Get.find<MqttHandler>();
 
-  final statisticCon = Get.put(StatisticCon());
+  final statisticCon = Get.find<StatisticCon>();
 
-  final userCon = Get.put(UserController());
+  final userCon = Get.find<UserController>();
 
   final loading = Get.put(IsLoadingController());
 
@@ -34,8 +36,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     // 여기서 함수 호출
-    // TODO: 날짜 초기화 함수 나중에 위치 바꿔줘야함
-    setInitialDate().initializeData();
   }
 
   @override
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                       statisticCon.selectedDate.value = statisticCon.activeDates[currentIndex - 1];
 
                       // 다음 날짜의 데이터를 가져오고
-                      await checkDateTime(statisticCon.activeDates[currentIndex - 1]);
+                      await checkDateTime(statisticCon.activeDates[currentIndex - 1], mqttHandler);
                     }
 
                     IsLoadingController.to.isLoading = false;
@@ -195,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                       statisticCon.selectedDate.value = statisticCon.activeDates[currentIndex + 1];
 
                       // 다음 날짜의 데이터를 가져오고
-                      await checkDateTime(statisticCon.activeDates[currentIndex + 1]);
+                      await checkDateTime(statisticCon.activeDates[currentIndex + 1], mqttHandler);
                     }
 
                     // 다 끝나면 로딩 화면 끄기
@@ -272,7 +272,7 @@ class _HomePageState extends State<HomePage> {
     // 선택한 날짜가 현재 날짜와 다르다면 변수에 대입하고 데이터 체크
     if(selectedDate != null) {
       statisticCon.selectedDate.value = selectedDate;
-      await checkDateTime(selectedDate);
+      await checkDateTime(selectedDate, mqttHandler);
     }
 
 
@@ -281,9 +281,9 @@ class _HomePageState extends State<HomePage> {
   }
 
 
-  Future<void> checkDateTime(DateTime selectedDate) async {
+  Future<void> checkDateTime(DateTime selectedDate, MqttHandler mqttHandler) async {
     // 선택한 날짜의 데이터 받기
-    statisticCon.selectedDateData = RxList<SelectDateData>.from(await getSelectDateData(selectedDate));
+    statisticCon.selectedDateData = RxList<SelectDateData>.from(await getSelectDateData(selectedDate, mqttHandler));
 
     // 바뀐 날짜에 맞게 파이차트 그래프 수정
     // 하루치 데이터 SleepNum으로 쪼개기
@@ -317,7 +317,9 @@ class _HomePageState extends State<HomePage> {
     // 만약 선택한 날짜의 주일이 다르면
     if( TimeCalculators().findSunday(selectedDate) != statisticCon.selectedDateSunday.value ){
       // 선택한 날짜의 일주일 데이터 받기
-      statisticCon.selectedWeekData = RxList<SelectWeekData>.from(await getSelectWeekData(TimeCalculators().findSunday(selectedDate)));
+      statisticCon.selectedWeekData = RxList<SelectWeekData>.from(
+          await getSelectWeekData(TimeCalculators().findSunday(selectedDate), mqttHandler)
+      );
       statisticCon.selectedDateSunday.value = TimeCalculators().findSunday(selectedDate);
     }
 

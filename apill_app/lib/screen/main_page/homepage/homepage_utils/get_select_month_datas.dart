@@ -1,5 +1,4 @@
 import 'package:mainproject_apill/models/select_month_model.dart';
-import 'package:mainproject_apill/utils/db_connector.dart';
 
 Future<List<SelectMonthData>> getSelectMonthData(DateTime selectedDate) async {
   // 매개변수로 일요일을 받아옴
@@ -25,24 +24,6 @@ HAVING
     Between :startdate and :enddate;
       );
   ''';
-
-  var result = await dbConnector(sql, {
-    'startdate' : startDate,
-    'enddate' : endDate
-  });
-
-  if (result != null) {
-    for (final row in result) {
-      // print((row.assoc()));
-      SelectMonthData selectData = SelectMonthData(
-        sleepNum: int.parse(row.assoc()['sleep_num']!),
-        totalSleepTime: int.parse(row.assoc()['total_sleep_time']!),
-        date: DateTime.parse(row.assoc()['date']!),
-      );
-      selectMonthDataList.add(selectData);
-
-    }
-  }
 
   return selectMonthDataList;
 }

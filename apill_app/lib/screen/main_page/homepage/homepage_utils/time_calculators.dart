@@ -3,7 +3,7 @@ import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
 
 class TimeCalculators {
-  final statisticCon = Get.put(StatisticCon());
+  final statisticCon = Get.find<StatisticCon>();
 
   // 수면시간 반환
   Duration getTotalSleep(List<SelectDateData> sleepData) {

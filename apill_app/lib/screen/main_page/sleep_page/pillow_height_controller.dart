@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class PillowHeight extends GetxController {
+class PillowHeightController extends GetxController {
 
   // 현재 베개 높이
   RxDouble pillowHeight = 5.0.obs;

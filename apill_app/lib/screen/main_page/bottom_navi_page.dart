@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -26,11 +27,16 @@ class BottomNaviPage extends StatefulWidget {
 class _BottomNaviPageState extends State<BottomNaviPage> {
   // 바텀 네비게이션 바 인덱스
   int _selectedIndex = 0;
+  static final storage = FlutterSecureStorage();
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.selectedIndex;
+
+    // TODO: 디버깅용 스토리지 관리
+    storage.deleteAll();
+
   }
 
   // 보여줄 화면 리스트
@@ -81,7 +87,7 @@ class _BottomNaviPageState extends State<BottomNaviPage> {
               ),
             ],
           ),
-        //
+
         bottomNavigationBar: SizedBox(
           height: 65,
           child: Theme(

@@ -13,7 +13,7 @@ class HomePieChart extends StatefulWidget {
 }
 
 class _HomePieChartState extends State<HomePieChart> {
-  final statisticCon = Get.put(StatisticCon());
+  final statisticCon = Get.find<StatisticCon>();
 
   @override
   Widget build(BuildContext context) {

@@ -12,7 +12,7 @@ class HomeLineChart extends StatefulWidget {
 }
 
 class _HomeLineChartState extends State<HomeLineChart> {
-  final statisticCon = Get.put(StatisticCon());
+  final statisticCon = Get.find<StatisticCon>();
   @override
   Widget build(BuildContext context) {
     return Obx(

@@ -27,7 +27,7 @@ class _ProfileState extends State<Profile> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
-  final userCon = Get.put(UserController()); // userCon.userName.value 가 유저의 id가 담겨있는 String 변수
+  final userCon = Get.find<UserController>(); // userCon.userName.value 가 유저의 id가 담겨있는 String 변수
 
 
   @override

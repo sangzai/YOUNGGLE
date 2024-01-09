@@ -15,7 +15,7 @@ class SleepPage extends StatelessWidget {
 
 
   // 베개 설정용 컨트롤러
-  final pillowHeightCon = Get.put(PillowHeight());
+  final pillowHeightCon = Get.put(PillowHeightController());
 
   @override
   Widget build(BuildContext context) {
@@ -55,16 +55,16 @@ class SleepPage extends StatelessWidget {
                       child: Text('현재높이',style: Theme.of(context).textTheme.bodyLarge)
                   ),
                   // // TODO : 나중에 지워야할 스위치
-                  // Positioned(
-                  //   bottom: 0,
-                  //   child: Obx(() => Switch(
-                  //       value: pillowHeightCon.sleepPosition.value,
-                  //       onChanged: (value) {
-                  //         pillowHeightCon.sleepPosition.value = value;
-                  //       },
-                  //   )
-                  //   ),
-                  // )
+                  Positioned(
+                    bottom: 0,
+                    child: Obx(() => Switch(
+                        value: pillowHeightCon.sleepPosition.value,
+                        onChanged: (value) {
+                          pillowHeightCon.sleepPosition.value = value;
+                        },
+                    )
+                    ),
+                  )
 
                 ],
               ),
@@ -75,7 +75,7 @@ class SleepPage extends StatelessWidget {
             Obx(
                 () {
                   return Visibility(
-                    visible: pillowHeightCon.sleepPosition.value,
+                    visible: !pillowHeightCon.sleepPosition.value,
                     child: Column(
                       children: [
                         Text("등누운자세 높이",style: Theme.of(context).textTheme.headlineLarge),

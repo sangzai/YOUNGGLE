@@ -1,19 +1,25 @@
 import 'package:get/get.dart';
 import 'package:mainproject_apill/loading_controller.dart';
+import 'package:mainproject_apill/models/active_date_model.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/models/select_week_model.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_calculators.dart';
-import 'package:mainproject_apill/utils/db_connector.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_date_datas.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_week_datas.dart';
-class setInitialDate {
+import 'package:mainproject_apill/utils/mqtt_handler.dart';
+class SetInitialDate {
 
-  final statisticCon = Get.put(StatisticCon());
+  final mqttHandler = Get.find<MqttHandler>();
+  // MqttHandler mqttHandler
+
+  final statisticCon = Get.find<StatisticCon>();
 
   // 오늘 날짜를 DB 데이터가 있는 마지막 날짜로 바꿔주기
   Future<void> initializeData() async {
-    IsLoadingController.to.isLoading = true;
+    // 로딩 켜
+    // IsLoadingController.to.isLoading = true;
+
     // DB에 있는 데이터를 받아오는 함수
     await getActiveDates();
     // 오늘 날짜를 활성화된 날짜의 마지막 날로 바꿔주기
@@ -24,19 +30,16 @@ class setInitialDate {
     // 선택한 날짜의 데이터 받기
     await setInitialDateData();
 
-
-
     // 선택한 날짜의 일주일 데이터 받기
     await setInitialWeekData();
     // TODO : 선택한 날짜의 월간 데이터 받기
 
-
-    IsLoadingController.to.isLoading = false;
-
+    // 로딩 화면 꺼
+    // IsLoadingController.to.isLoading = false;
   }
 
   Future<void> getActiveDates() async {
-    List<DateTime> dateList = [];
+    // sql 문 정의
     String sql = '''
       SELECT distinct
         CASE WHEN HOUR(start_time) >= 18 THEN DATE_ADD(DATE(start_time), INTERVAL 1 DAY) ELSE DATE(start_time) END AS date
@@ -48,16 +51,19 @@ class setInitialDate {
             group by
               sleep_num) AS grouptime;
       ''';
-    var result = await dbConnector(sql);
 
-    if (result != null) {
-      for (final row in result) {
-        // print(row.assoc());
-        dateList.add(DateTime.parse(row.assoc()['date']!));
+    String response = await mqttHandler.pubSqlWaitResponse(sql);
 
-      }
-      statisticCon.activeDates.addAll(dateList);
-    }
+    // print('✨set_initial_date.dart 파일의 getActiveDates함수');
+    // print(response);
+
+    // JSON 응답을 MemberModel 리스트로 변환
+    List<ActiveDateModel> activeList = activeDateModelFromJson(response);
+
+    // 각 MemberModel에서 DateTime 객체를 추출하여 dateList로 만듦
+    List<DateTime> dateList = activeList.map((member) => member.date).toList();
+
+    statisticCon.activeDates.addAll(dateList);
   }
 
   // 내가 선택한 날짜 초기값을 활성화된 날짜 마지막날로
@@ -74,7 +80,7 @@ class setInitialDate {
   Future<void> setInitialDateData() async {
     // 하루치 데이터 받아오기
     statisticCon.selectedDateData = RxList<SelectDateData>.from(
-        await getSelectDateData(statisticCon.selectedDate.value)
+        await getSelectDateData(statisticCon.selectedDate.value, mqttHandler)
     );
     // 하루치 데이터 SleepNum으로 쪼개기
     statisticCon.splitSelectedDateData = RxList<List<SelectDateData>>.from(
@@ -112,13 +118,8 @@ class setInitialDate {
   // 초기 데이터 받아서 주간 데이터 적용
   Future<void> setInitialWeekData() async {
     statisticCon.selectedWeekData = RxList<SelectWeekData>.from(
-        await getSelectWeekData(statisticCon.selectedDateSunday.value)
+        await getSelectWeekData(statisticCon.selectedDateSunday.value, mqttHandler)
     );
   }
-
-
-
-
-
 }
 
