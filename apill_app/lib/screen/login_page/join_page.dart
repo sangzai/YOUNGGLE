@@ -2,11 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
-import 'package:mainproject_apill/utils/db_connector.dart';
-
-final dio = Dio();
-
 
 class JoinPage extends StatefulWidget {
   const JoinPage({super.key});
@@ -19,6 +16,8 @@ class _JoinPageState extends State<JoinPage> {
   DateTime selectedDate = DateTime.now();
 
   final storage = FlutterSecureStorage();
+
+  final mqttHandler = Get.find<MqttHandler>();
 
   TextEditingController input_id = TextEditingController();
   TextEditingController input_pw = TextEditingController();
@@ -69,14 +68,7 @@ class _JoinPageState extends State<JoinPage> {
       input_age.text = age.toString();
     });
   }
-  // void initState() {
-  //   super.initState();
-  //
-  //   // 비동기로 flutter secure storage 정보를 불러오는 작업
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     _asyncMethod();
-  //   });
-  // }
+
   @override
   void initState(){
     super.initState();
@@ -102,11 +94,11 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: 30,
                   ),
-                  Image.asset(
-                    'assets/image/OnlyMoon.png',
-                    width: 200,
-                    height: 200,
-                  ),
+                  // Image.asset(
+                  //   'assets/image/OnlyMoon.png',
+                  //   width: 200,
+                  //   height: 200,
+                  // ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
@@ -381,12 +373,12 @@ class _JoinPageState extends State<JoinPage> {
                                 input_height.text,
                                 input_gender.text,
                                 input_age.text,
+                                mqttHandler,
                                 context);
                           } else {
-                            Get.defaultDialog(
-                              title: '알람',
-                              content: Text('비밀번호가 일치하지 않습니다.'),
-                              titleStyle: TextStyle(color: Colors.black),
+                            Get.snackbar(
+                              '알람',
+                              '비밀번호가 일치하지 않습니다.'
                             );
                           }
                         },
@@ -432,43 +424,34 @@ class _JoinPageState extends State<JoinPage> {
 // }
 
 void joinMember(
-    id, pw, name, birth, weight, height, gender, age, context) async {
+    id, pw, name, birth, weight, height, gender, age,
+    MqttHandler mqttHandler,
+    context) async {
   try {
     String sql = '''
-  INSERT INTO members (
-    member_id, member_pw, member_name, member_birth, 
-    member_weight, member_height, member_gender, member_age
-  ) VALUES (
-    :id, :pw, :name, :birth, :weight, :height, :gender, :age
-  )
-''';
+      INSERT INTO members (
+        member_id, member_pw, member_name, member_birth, 
+        member_weight, member_height, member_gender, member_age
+      ) VALUES (
+        "id", "pw", "name", "birth", "weight", "height", "gender", "age"
+      )
+    ''';
 
-    // 데이터를 Map 형식으로 정의
-    Map<String, dynamic> data = {
-      'id': id,
-      'pw': pw,
-      'name': name,
-      'birth': birth,
-      'weight': weight,
-      'height': height,
-      'gender': gender,
-      'age': age,
-    };
+    String response = await mqttHandler.pubSqlWaitResponse(sql);
 
-    // 데이터베이스에 회원가입 정보 삽입
-    await dbConnector(sql, data);
+    print(response);
 
     // 회원가입 성공 시 로그인 화면으로 이동
     // ScaffoldMessenger.of(context)
     //     .showSnackBar(SnackBar(content: Text('회원가입이 완료되었습니다!')));
-    Get.defaultDialog(
-      title: '알림',
-      content: Text('회원가입이 완료되었습니다!'),
-    );
-
-
-    // Navigator.pop(context);
-    Get.back();
+    // Get.snackbar(
+    //   '알림',
+    //   '회원가입이 완료되었습니다!'
+    // );
+    //
+    //
+    // // Navigator.pop(context);
+    // Get.back();
 
 
   } catch (error) {
@@ -476,9 +459,9 @@ void joinMember(
 
     // ScaffoldMessenger.of(context)
     //     .showSnackBar(SnackBar(content: Text('회원가입 중 오류 발생')));
-    Get.defaultDialog(
-      title: '알림',
-      content: Text('회원가입 중 오류 발생'),
+    Get.snackbar(
+      '알림',
+      '회원가입 중 오류 발생'
     );
 
   }

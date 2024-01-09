@@ -8,8 +8,8 @@ import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class TodaySummary extends StatelessWidget {
   TodaySummary({super.key});
-  final statisticCon = Get.put(StatisticCon());
-  final userCon = Get.put(UserController());
+  final statisticCon = Get.find<StatisticCon>();
+  final userCon = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {

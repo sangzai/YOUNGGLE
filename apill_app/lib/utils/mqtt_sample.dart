@@ -18,7 +18,7 @@ Future<int> main() async {
   /// 여기에서 API 문서를 자세히 읽으세요. 대부분의 브로커는 대부분의 경우 클라이언트 기본 목록을 지원하므로 이를 무시할 수 있습니다.
 
   /// 필요한 경우 로깅을 설정합니다. 기본값은 off입니다.
-  client.logging(on: true);
+  // client.logging(on: true);
 
   /// Mosquitto에 대한 올바른 MQTT 프로토콜을 설정합니다.
   client.setProtocolV311();

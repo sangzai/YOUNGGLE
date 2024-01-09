@@ -8,7 +8,7 @@ class SettingPage extends StatelessWidget {
 
   final storage = FlutterSecureStorage();
 
-  final userCon = Get.put(UserController());
+  final userCon = Get.find<UserController>();
 
 
   @override
@@ -17,7 +17,7 @@ class SettingPage extends StatelessWidget {
         child: ElevatedButton(
           child: Text('로그아웃'),
           onPressed: () async {
-            await storage.delete(key: 'userId');
+            await storage.deleteAll();
           }
         )
       );

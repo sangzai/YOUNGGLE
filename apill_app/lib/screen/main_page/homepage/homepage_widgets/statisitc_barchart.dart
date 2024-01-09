@@ -5,7 +5,7 @@ import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class HomeBarChart extends StatelessWidget {
   HomeBarChart({Key? key}) : super(key: key);
-  final statisticCon = Get.put(StatisticCon());
+  final statisticCon = Get.find<StatisticCon>();
 
   @override
   Widget build(BuildContext context) {

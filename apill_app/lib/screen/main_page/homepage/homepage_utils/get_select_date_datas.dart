@@ -1,13 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
-import 'package:mainproject_apill/utils/db_connector.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_calculators.dart';
+import 'package:mainproject_apill/utils/mqtt_handler.dart';
+
 
 // DB 통신해서 데이터 받아오는 함수
-Future<List<SelectDateData>> getSelectDateData(DateTime selectedDate) async {
-  List<SelectDateData> selectDateDataList = [];
-
+Future<List<SelectDateData>> getSelectDateData(DateTime selectedDate, MqttHandler mqttHandler) async {
   String sql = '''
   SELECT
     *
@@ -25,27 +24,14 @@ Future<List<SelectDateData>> getSelectDateData(DateTime selectedDate) async {
               CASE WHEN HOUR(MIN(start_time)) >= 18 
                    THEN DATE_ADD(DATE(MIN(start_time)), INTERVAL 1 DAY) 
                    ELSE DATE(MIN(start_time)) 
-              END = :selectedDate
+              END = "$selectedDate"
       );
   ''';
+  String response = await mqttHandler.pubSqlWaitResponse(sql);
 
-  var result = await dbConnector(sql, {
-   'selectedDate' : selectedDate
-  });
+  print(response);
 
-  if (result != null) {
-    for (final row in result) {
-      // print((row.assoc()));
-      SelectDateData selectData = SelectDateData(
-          sleepNum: int.parse(row.assoc()['sleep_num']!),
-          startTime: DateTime.parse(row.assoc()['start_time']!),
-          endTime: DateTime.parse(row.assoc()['end_time']!),
-          sleepDepth: int.parse(row.assoc()['sleep_depth']!)
-      );
-      selectDateDataList.add(selectData);
-
-    }
-  }
+  List<SelectDateData> selectDateDataList = selectDateDataFromJson(response);
 
   return selectDateDataList;
 }
@@ -212,8 +198,7 @@ List<FlSpot> getLineData(List<SelectDateData> lineData) {
   }
   // print(spots.length.toDouble());
   // print(SizeX);
-  print("겟 셀렉트 데이트 데이터스");
-  print(spots);
+  print("✨get_select_date_datas.dart: $spots");
 
   return spots;
 }

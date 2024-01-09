@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:mainproject_apill/screen/login_page/user_controller.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/set_initial_date.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 
 class TutorialPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _TutorialPageState extends State<TutorialPage> {
 
   static final storage = FlutterSecureStorage();
 
-  final userCon = Get.put(UserController());
+  final userCon = Get.find<UserController>();
 
   // bool isPillowConnected = false; // IoT 기기 연결상태
   // 1. Define a `GlobalKey` as part of the parent widget's state
@@ -166,14 +167,12 @@ class _TutorialPageState extends State<TutorialPage> {
                   title: Text(''),
                   content: Text('ApiL에서 자동베개높이 측정을 통해 사용자의 수면 데이터를 분석하여 수면 그래프와 주무시는데 최적의 베개높이를 제공해드립니다.', style: TextStyle(fontSize: 20, color: Colors.black),),
                   actions: [
-                    ElevatedButton(onPressed: (){
+                    ElevatedButton(onPressed: () async {
                       Get.back(); // 다이얼로그 닫기
                       // Navigator.of(context).pushReplacement(
                       //     MaterialPageRoute(builder: (context)=>BottomNaviPage()));
-                      // TODO : 라우팅 관리
-                      Get.offAllNamed('/navi');
 
-
+                      initalizeDataBeforeNavi();
                     }, child: Text('확인')),
 
                   ],
@@ -326,15 +325,23 @@ class _TutorialPageState extends State<TutorialPage> {
             // );
             // TODO : 튜토리얼에 true를 저장하면 튜토리얼 다시 안보게 됨
 
-            await storage.write(
-              key: '${userCon.userName.value} tutorial',
-              value : 'true'
-            );
-            Get.offAllNamed('/navi');
-      
+
+            initalizeDataBeforeNavi();
           },
         ),
       ),
     );
   }
+
+  Future<void> initalizeDataBeforeNavi() async{
+    await storage.write(
+        key: '${userCon.userId.value} tutorial',
+        value : 'true'
+    );
+    await SetInitialDate().initializeData();
+    Get.offAllNamed('/navi');
+  }
+
 }
+
+

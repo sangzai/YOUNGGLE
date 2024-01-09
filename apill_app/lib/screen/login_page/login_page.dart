@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mainproject_apill/utils/db_connector.dart';
+import 'package:mainproject_apill/models/select_member_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,6 +13,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  final mqttHandler = Get.find<MqttHandler>();
 
   TextEditingController idCon = TextEditingController();
   TextEditingController pwCon = TextEditingController();
@@ -142,9 +145,9 @@ class _LoginPageState extends State<LoginPage> {
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Color.fromRGBO(6, 27, 57, 1)),
-                              onPressed: () {
+                              onPressed: () async {
                                 // TODO : 로그인
-                                loginMember(idCon.text, pwCon.text, context);
+                                loginMember(idCon.text, pwCon.text, mqttHandler, context );
                               },
                               child: Text(
                                 '로그인',
@@ -187,26 +190,22 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-void loginMember(id, pw, context) async {
+void loginMember(id, pw, MqttHandler mqttHandler, context) async {
   // FlutterSecureStorage 불러오기
   final storage = FlutterSecureStorage();
 
   try {
-    String loginsql = '''
-      SELECT * FROM members WHERE member_id = :id AND member_pw = :pw
+    String sql = '''
+      SELECT * FROM members WHERE member_id = "$id" AND member_pw = "$pw"
     ''';
 
-    // 데이터를 Map 형식으로 정의
-    Map<String, dynamic> data = {
-      'id': id,
-      'pw': pw,
-    };
+    String response = await mqttHandler.pubSqlWaitResponse(sql);
 
-    var result = await dbConnector(loginsql, data);
-
+    // print("✨로그인 답변 : $response");
 
     // 로그인 결과가 있고, 결과가 빈 리스트가 아닌 경우에만 로그인 성공으로 간주
-    if (result != null && result.isNotEmpty) {
+    if (response.isNotEmpty) {
+      List<MemberModel> memberList = memberModelFromJson(response);
       // 로그인 성공 처리를 여기에 추가
       // 예: 로그인 성공 메시지를 출력하거나, 다음 화면으로 이동하는 등의 동작 수행
       print('로그인 성공!');
@@ -214,15 +213,14 @@ void loginMember(id, pw, context) async {
       //TODO : 스토리지 저장
       await storage.write(
         key: 'userId',
-        value: id
+        value: memberList[0].memberId
       );
 
-      // 다음 화면으로 이동
-      // Navigator.pushAndRemoveUntil(
-      //   context,
-      //   MaterialPageRoute(builder: (_) => BottomNaviPage()),
-      //       (route) => false,
-      // );
+      await storage.write(
+        key: 'userName',
+        value: memberList[0].memberName,
+      );
+
       Get.offAllNamed('/route');
 
     } else {
