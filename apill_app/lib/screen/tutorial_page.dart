@@ -28,12 +28,13 @@ class _TutorialPageState extends State<TutorialPage> {
 
   }
 
+  // 등누운자세 다이어로그 알림창으로 시간 세기
   void _startCountdownTimer() {
     _countdownTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       if (countdownRx.value > 0) {
         countdownRx(countdownRx.value - 1); // Rx 변수 업데이트
       } else {
-        _onCountdownComplete();
+        _onCountdownComplete(); //
         _stopCountdownTimer(); // 타이머 종료
         countdownRx.value = 30;
       }
@@ -61,7 +62,7 @@ class _TutorialPageState extends State<TutorialPage> {
   }
 
 
-  // 카운트다운 알림창을 열기 위한 함수
+  // 카운트다운 알림창을 열기 위한 함수(등누운자세)
   void _showCountdownDialog() {
     Get.dialog(
       AlertDialog(
@@ -94,7 +95,7 @@ class _TutorialPageState extends State<TutorialPage> {
     );
   }
 
-  // 카운트다운 알림창을 열기 위한 함수2
+  // 카운트다운 알림창을 열기 위한 함수(옆누운자세)
   void _showCountdownDialogTwo() {
     Get.dialog(
       AlertDialog(
@@ -128,7 +129,7 @@ class _TutorialPageState extends State<TutorialPage> {
   }
 
 
-  // 카운트다운이 완료되면 호출되는 메소드
+  // 카운트다운이 완료되면 호출되는 메소드(등누운자세)
   void _onCountdownComplete() {
     Get.dialog(
       AlertDialog(
@@ -138,8 +139,7 @@ class _TutorialPageState extends State<TutorialPage> {
           ElevatedButton(
             onPressed: () {
               Get.back(); // 다이얼로그 닫기
-              // Navigator.of(context).pop(); // 주석 처리하면 다이얼로그창(알림)이 나중에 닫기를 눌러야 해서 두 번 닫아야함..
-              // 주석처리 안하면 일정시간이 안지나고 알림창을 닫으면 오류가 뜸..
+              Get.back();
               _introKey.currentState?.next(); // 온보딩의 다음 페이지로 이동
             },
             child: Text('확인'),
@@ -149,7 +149,7 @@ class _TutorialPageState extends State<TutorialPage> {
     );
   }
 
-  // 카운트다운이 완료되면 호출되는 메소드2
+  // 카운트다운이 완료되면 호출되는 메소드(옆누운자세)
   void _onCountdownCompleteTwo(){
     Get.dialog(
       AlertDialog(
@@ -215,6 +215,7 @@ class _TutorialPageState extends State<TutorialPage> {
               ),
               image: Center(
                   child: Container(
+                    // 튜토리얼 시작 그림
                     child: Image.asset('assets/image/MoonBG.png',), width: MediaQuery.of(context).size.width,) // 이미지가 반드시 있어야 작동
               ),
               decoration: PageDecoration(
@@ -251,7 +252,8 @@ class _TutorialPageState extends State<TutorialPage> {
                   ],
                 ),
                 image: Container(
-                    child: Image.asset('assets/image/pillow.png', width: MediaQuery.of(context).size.width,)
+                  // 베개 그림
+                    child: Image.asset('assets/image/switch.png', width: MediaQuery.of(context).size.width,)
                 ),
                 decoration: PageDecoration(
                     contentMargin:EdgeInsets.all(20),
@@ -275,7 +277,8 @@ class _TutorialPageState extends State<TutorialPage> {
                   ],
                 ),
                 image: Container(
-                    child: Image.network('https://thumb.mt.co.kr/06/2020/04/2020040312451812893_3.jpg/dims/optimize/', width: MediaQuery.of(context).size.width,)
+                  // 등누운자세 그림
+                    child: Image.asset('assets/image/direct_pose.png', width: MediaQuery.of(context).size.width)
                 ),
                 decoration: PageDecoration(
                     contentMargin:EdgeInsets.all(20),
@@ -297,7 +300,8 @@ class _TutorialPageState extends State<TutorialPage> {
                   ],
                 ),
                 image: Container(
-                    child: Image.network('https://thumb.mt.co.kr/06/2020/04/2020040312451812893_1.jpg/dims/optimize/', width: MediaQuery.of(context).size.width,)
+                  // 옆누운자세 그림
+                    child: Image.asset('assets/image/side_pose.png', width: MediaQuery.of(context).size.width,)
                 ),
                 decoration: PageDecoration(
                     contentMargin:EdgeInsets.all(20),

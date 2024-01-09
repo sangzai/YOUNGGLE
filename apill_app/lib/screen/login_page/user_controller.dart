@@ -5,5 +5,4 @@ class UserController extends GetxController with GetSingleTickerProviderStateMix
   // TODO : 회원의 이름을 가져올 것
   RxString userName = "ApilL".obs;
 
-
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:mainproject_apill/loading_controller.dart';
 import 'package:mainproject_apill/screen/login_page/login_page.dart';
 import 'package:mainproject_apill/screen/login_page/user_controller.dart';
+import 'package:mainproject_apill/utils/db_connector.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 
 class Profile extends StatefulWidget {
@@ -29,26 +30,192 @@ class _ProfileState extends State<Profile> {
   final userCon = Get.put(UserController()); // userCon.userName.value 가 유저의 id가 담겨있는 String 변수
 
 
-
-
-
-  // 가상의 함수: DB에서 사용자 정보 가져오기
-  void fetchUserDataFromDatabase() {
-    // 여기서는 가상의 값으로 초기화
-    input_name.text = "";
-    input_gender.text = ""; // 또는 "female"
-    input_age.text = "";
-    input_height.text = "";
-    input_weight.text = "";
-  }
-
-
   @override
   void initState() {
     super.initState();
-    // 페이지가 생성될 때 DB에서 사용자 정보 가져오기
-    fetchUserDataFromDatabase();
+    updateUserProfile(); // 페이지가 처음 열릴 때 사용자 정보 불러오기
   }
+
+  void updateUserProfile() async {
+    final storage = FlutterSecureStorage();
+    String? userId = await storage.read(key: 'userId');
+
+    try {
+      String sql = 'SELECT * FROM members WHERE member_id = :id';
+      Map<String, dynamic> params = {'id': userId};
+      var result = await dbConnector(sql, params);
+
+      if (result != null && result.isNotEmpty) {
+        var userData = result.first;
+
+        setState(() {
+          input_id.text = userData.colByName('member_id').toString();
+          input_pw.text = userData.colByName('member_pw').toString();
+          input_name.text = userData.colByName('member_name').toString();
+          birth.text = userData.colByName('member_birth').toString();
+          input_weight.text = userData.colByName('member_weight').toString();
+          input_height.text = userData.colByName('member_height').toString();
+          input_gender.text = userData.colByName('member_gender').toString();
+
+          // Set radio values based on retrieved data
+          if (userData.colByName('member_gender').toString() == 'male') {
+            input_gender.text = 'male';
+          } else if (userData.colByName('member_gender').toString() == 'female') {
+            input_gender.text = 'female';
+          }
+        });
+      }
+    } catch (error) {
+      print('에러 발생: $error');
+    }
+  }
+
+  void saveUpdatedProfile() async {
+    final storage = FlutterSecureStorage();
+    String? userId = await storage.read(key: 'userId');
+
+    try {
+      String sql = '''
+        UPDATE members
+        SET member_pw = :pw,
+            member_name = :name,
+            member_birth = :birth,
+            member_weight = :weight,
+            member_height = :height,
+            member_gender = :gender
+        WHERE member_id = :id
+      ''';
+
+      Map<String, dynamic> params = {
+        'id': userId,
+        'pw': input_pw.text,
+        'name': input_name.text,
+        'birth': birth.text,
+        'weight': double.parse(input_weight.text),
+        'height': double.parse(input_height.text),
+        'gender': input_gender.text,
+      };
+
+      var result = await dbConnector(sql, params);
+
+      if (result != null) {
+        showAlertDialog('성공', '회원 정보가 업데이트되었습니다.');
+        // 회원 정보 수정 페이지로 이동
+        Get.offAll(Profile());
+      } else {
+        showAlertDialog('실패', '회원 정보 업데이트에 실패했습니다.');
+      }
+    } catch (error) {
+      print('에러 발생: $error');
+    }
+  }
+
+
+  Future<void> changePassword() async {
+    final storage = FlutterSecureStorage();
+    String? userId = await storage.read(key: 'userId');
+
+    try {
+      if (await checkPassword(userId, currentPasswordController.text)) {
+        if (newPasswordController.text == confirmPasswordController.text) {
+          String pwUpdateSql = 'UPDATE members SET member_pw = :pw WHERE member_id = :id';
+          Map<String, dynamic> pwUpdateParams = {'id': userId, 'pw': newPasswordController.text};
+          var pwUpdateResult = await dbConnector(pwUpdateSql, pwUpdateParams);
+
+          // String infoUpdateSql = 'UPDATE members SET member_name = :name WHERE member_id = :id';
+          // Map<String, dynamic> infoUpdateParams = {'id': userId, 'name': input_name.text};
+          // var infoUpdateResult = await dbConnector(infoUpdateSql, infoUpdateParams);
+
+          String infoUpdateSql = '''
+          UPDATE members
+          SET member_name = :name,
+              member_birth = :birth,
+              member_weight = :weight,
+              member_height = :height,
+              member_gender = :gender
+          WHERE member_id = :id
+        ''';
+          Map<String, dynamic> infoUpdateParams = {
+            'id': userId,
+            'name': input_name.text,
+            'birth': birth.text,
+            'weight': double.parse(input_weight.text),
+            'height': double.parse(input_height.text),
+            'gender': input_gender.text,
+          };
+          var infoUpdateResult = await dbConnector(infoUpdateSql, infoUpdateParams);
+
+          if (pwUpdateResult != null && infoUpdateResult != null) {
+            showAlertDialog('성공', '회원 정보가 변경되었습니다.',);
+            // 회원 수정 성공 후 페이지 닫기
+            Get.offAll(Profile());
+          } else {
+            showAlertDialog('실패', '변경에 실패했습니다.');
+          }
+        } else {
+          showAlertDialog('비밀번호 불일치', '새비밀번호와 확인 비밀번호가 일치하지 않습니다.');
+        }
+      } else {
+        showAlertDialog('비밀번호 오류', '현재 비밀번호가 일치하지 않습니다.');
+      }
+    } catch (error) {
+      print('에러 발생: $error');
+    }
+  }
+
+  Future<bool> checkPassword(String? userId, String password) async {
+    try {
+      String sql = 'SELECT * FROM members WHERE member_id = :id AND member_pw = :pw';
+      Map<String, dynamic> params = {'id': userId, 'pw': password};
+      var result = await dbConnector(sql, params);
+      return result != null && result.isNotEmpty;
+    } catch (error) {
+      print('에러 발생: $error');
+      return false;
+    }
+  }
+
+  void showAlertDialog(String title, String content) {
+    Get.dialog(
+      AlertDialog(
+        title: Text(title),
+        content: Text(content, style: TextStyle(fontSize:20, color: Colors.black),),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text('확인'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void deleteAccount() async {
+    final storage = FlutterSecureStorage();
+    String? userId = await storage.read(key: 'userId');
+
+    try {
+      String deleteSql = 'DELETE FROM members WHERE member_id = :id';
+      Map<String, dynamic> deleteParams = {'id': userId};
+      var deleteResult = await dbConnector(deleteSql, deleteParams);
+
+      if (deleteResult != null) {
+        showAlertDialog('성공', '회원 탈퇴가 완료되었습니다.');
+        Get.delete<UserController>();
+        Get.offAll(LoginPage());
+      } else {
+        showAlertDialog('실패', '회원 탈퇴에 실패했습니다.');
+      }
+    } catch (error) {
+      print('에러 발생: $error');
+    }
+  }
+
+
+
+
 
 
 
@@ -57,7 +224,7 @@ class _ProfileState extends State<Profile> {
     return BackGroundImageContainer(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('${userCon.userName.value} 님 환영합니다.',style: TextStyle(color:Colors.white ),), // 이름 $
+          title: Text('${input_name.text} 님 환영합니다.',style: TextStyle(color:Colors.white ),), // 이름
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -72,7 +239,7 @@ class _ProfileState extends State<Profile> {
                     // backgroundImage: AssetImage(''), 이미지를 넣어야 함
                   ),
                   Text(
-                    '${userCon.userName}', //
+                    '${input_name.text}', // 이름
                     style: TextStyle(
                       fontSize: 30.0,
                       color: Colors.white,
@@ -93,7 +260,7 @@ class _ProfileState extends State<Profile> {
                         size: 30.0,
                       ),
                       title: Text(
-                        'qwer@gmail.com', // 이메일 ${}
+                        '${userCon.userName.value}', // 아이디
                         style: TextStyle(
                           fontFamily: 'Inconsolata',
                           fontSize: 20.0,
@@ -102,7 +269,6 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                   ),
-
 
                   SingleChildScrollView(
                     child: Container(
@@ -113,7 +279,6 @@ class _ProfileState extends State<Profile> {
                           SizedBox(
                             height: 80,
                           ),
-
 
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -276,7 +441,7 @@ class _ProfileState extends State<Profile> {
                                   child: TextField(
                                     decoration: InputDecoration(
                                         label: Text(
-                                          "나이",
+                                          "생년월일",
                                           style: TextStyle(
                                               color: Colors.white.withOpacity(0.7),
                                               fontWeight: FontWeight.bold),
@@ -290,9 +455,8 @@ class _ProfileState extends State<Profile> {
                                       color: Colors.white.withOpacity(0.7),
                                     ),
                                     keyboardType: TextInputType.number,
-                                    controller: input_age,
-                                    readOnly: true,
-                                    enabled: false,
+                                    controller: birth,
+
                                   ),
                                 ),
 
@@ -358,15 +522,25 @@ class _ProfileState extends State<Profile> {
                             children: [
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blueAccent),
-                                  onPressed: () {
-                                    // 수정이 되었다고 알림창
+                                      backgroundColor: Colors.blue),
+                                  onPressed: () async{
+                                    if (newPasswordController.text.isNotEmpty) {
+                                      // 비밀번호를 변경하는 경우
+                                      await changePassword();
+                                    } else {
+                                      // 비밀번호 변경이 없는 경우
+                                      saveUpdatedProfile();
+                                    }
 
                                   },
                                   child: Text('회원 수정하기')),
+
+
+
+
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.grey),
+                                      backgroundColor: Colors.blue),
                                   onPressed: () {
                                     showDialog(context: context, builder: (context){
                                       return Dialog(
@@ -388,7 +562,7 @@ class _ProfileState extends State<Profile> {
                                                     color: Colors.red),
                                               ),
 
-                                              SizedBox(height: 40,),
+                                              SizedBox(height: 20,),
 
                                               Padding(
                                                 padding: const EdgeInsets.all(8.0),
@@ -396,11 +570,10 @@ class _ProfileState extends State<Profile> {
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
                                                     ElevatedButton.icon(onPressed: ()  {
-                                                      // 현재 페이지 삭제한 후 페이지 이동
-                                                      // Navigator.pushAndRemoveUntil(context,
-                                                      //     MaterialPageRoute(builder: (_)=>GetMaterialApp()), (route) => false);
+                                                      deleteAccount();
 
-                                                      Get.offAll(LoginPage());
+                                                      // 현재 페이지 삭제한 후 페이지 이동
+                                                      // Get.offAll(LoginPage());
 
 
                                                     }
@@ -420,10 +593,10 @@ class _ProfileState extends State<Profile> {
                                         ),
                                       );
                                     });
-                                    // 정말 회원탈퇴를 진행 하시겠습니까? 물어보기
-                                    // 회원 탈퇴하기 페이지로 이동
+
                                   },
-                                  child: Text('회원 탈퇴하기'))
+                                  child: Text('회원 탈퇴하기')
+                              )
                             ],
                           ),
                         ],
@@ -432,10 +605,8 @@ class _ProfileState extends State<Profile> {
                   ),
 
 
-
-
                   SizedBox(
-                    height: 40,
+                    height: 20,
                   ),
                   Container(
                     color: Colors.grey[200],
@@ -448,7 +619,7 @@ class _ProfileState extends State<Profile> {
 
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey),
+                          backgroundColor: Colors.blue),
                       onPressed: () {
                         showDialog(context: context, builder: (context){
                           return Dialog(
@@ -479,15 +650,12 @@ class _ProfileState extends State<Profile> {
                                       children: [
                                         ElevatedButton.icon(onPressed: ()  {
                                           // 현재 페이지 삭제한 후 페이지 이동
-                                          // Navigator.pushAndRemoveUntil(context,
-                                          //     MaterialPageRoute(builder: (_)=>GetMaterialApp()), (route) => false);
-
                                           Get.offAll(LoginPage());
 
 
                                         }
                                             , icon: Icon(Icons.circle_outlined), label: Text('로그아웃 하기'),
-                                            style: ElevatedButton.styleFrom(backgroundColor: Colors.grey)),
+                                            style: ElevatedButton.styleFrom(backgroundColor: Colors.blue)),
                                         SizedBox(width: 10,),
                                         ElevatedButton.icon(onPressed: (){
                                           Navigator.pop(context);
@@ -507,11 +675,6 @@ class _ProfileState extends State<Profile> {
                       child: Text('로그아웃'))
 
 
-                  // TextButton(onPressed: (){
-                  //   Get.offAll(LoginPage()); // 로그인 페이지로 이동
-                  //
-                  // }, child: Text('로그아웃하기'))
-
                 ],
               ),
             ),
@@ -522,55 +685,19 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-// void loginMember(id, pw, name, weight, height, gender, age,context) async {
-//   // FlutterSecureStorage 불러오기
-//   final storage = FlutterSecureStorage();
-//
-//   try {
-//     String loginsql = '''
-//       SELECT * FROM members
-//     ''';
-//
-//     // 데이터를 Map 형식으로 정의
-//     Map<String, dynamic> data = {
-//       'id': id,
-//       'pw': pw,
-//     };
-//
-//     var result = await dbConnector(loginsql, data);
-//
-//
-//     // 로그인 결과가 있고, 결과가 빈 리스트가 아닌 경우에만 로그인 성공으로 간주
-//     if (result != null && result.isNotEmpty) {
-//       // 로그인 성공 처리를 여기에 추가
-//       // 예: 로그인 성공 메시지를 출력하거나, 다음 화면으로 이동하는 등의 동작 수행
-//       print('로그인 성공!');
-//
-//       //TODO : 스토리지 저장
-//       await storage.write(
-//           key: 'userId',
-//           value: id
-//       );
-//
-//       // 다음 화면으로 이동
-//       // Navigator.pushAndRemoveUntil(
-//       //   context,
-//       //   MaterialPageRoute(builder: (_) => BottomNaviPage()),
-//       //       (route) => false,
-//       // );
-//       Get.offAllNamed('/route');
-//
-//     } else {
-//       // 로그인 실패 처리를 여기에 추가
-//       // 예: 로그인 실패 메시지를 출력하거나, 다른 처리를 수행
-//       // ScaffoldMessenger.of(context).showSnackBar(
-//       //     SnackBar(content: Text('로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.'))
-//       // );
-//       Get.snackbar('로그인 실패', '아이디 또는 비밀번호가 일치하지 않습니다.');
-//     }
-//
-//   } catch (error) {
-//     // 예외가 발생하면 에러 메시지 출력
-//     print('에러 발생: $error');
-//   }
-// }
+void showAlertDialog(String title, String content) {
+  Get.dialog(
+    AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text('확인'),
+        ),
+      ],
+    ),
+  );
+}
