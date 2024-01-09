@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
 class AlarmPage extends StatefulWidget {
@@ -13,7 +15,28 @@ class _AlarmPageState extends State<AlarmPage> {
   // TODO : 알람을 DB와 핸드폰에 저장
   // 알람 추가시 현재 선택한 시간이 보이게끔
 
+  final mqttHandler = Get.find<MqttHandler>();
+
   List<Alarm> alarms = [];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeData();
+    });
+  }
+
+  Future<void> _initializeData() async {
+    // 비동기 작업 수행
+    var response = await mqttHandler.pubGetAlarmWaitResponse();
+
+    // setState를 호출하여 UI를 업데이트
+    setState(() {
+      // 여기에서 다른 initState에서 사용할 수 있는 데이터 처리
+      print("✨알람 페이지 : $response");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

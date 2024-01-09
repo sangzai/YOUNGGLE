@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -516,7 +518,6 @@ class _JoinPageState extends State<JoinPage> {
                           onPressed: () {
                             // TODO : 회원가입 로직 구현
                             if (input_pw.text == input_pw_check.text) {
-                              print("클릭!");
                               joinMember(
                                   input_id.text,
                                   input_pw.text,
@@ -546,28 +547,31 @@ class _JoinPageState extends State<JoinPage> {
     );
   }// 빌드 끝
 
-  void joinMember(id, pw, name, birth, weight, height, gender, age) async {
-    print("함수 동작");
-    print('Received arguments:');
-    print('ID: $id');
-    print('Password: $pw');
-    print('Name: $name');
-    print('Birth: $birth');
-    print('Weight: $weight');
-    print('Height: $height');
-    print('Gender: $gender');
-    print('Age: $age');
+  void checkId(id) async {
     try {
-      String sql = '''
-      INSERT INTO members (
-        member_id, member_pw, member_name, member_birth, 
-        member_weight, member_height, member_gender, member_age
-      ) VALUES (
-        "$id", "$pw", "$name", "$birth", "$weight", "$height", "$gender", "$age"
-      )
-    ''';
+      String sql = "select count(*) from members where id = $id";
 
       String response = await mqttHandler.pubSqlWaitResponse(sql);
+
+      print(response);
+
+      if ( int.parse(response) < 1) {
+
+        // TODO : 아이디 확인
+      }else {
+
+      }
+    } catch(e) {
+      print(e);
+    }
+  }
+
+  void joinMember(id, pw, name, birth, weight, height, gender, age) async {
+    try {
+      String joinData = "$id,$pw,$name,$birth,$weight,$height,$gender,$age";
+
+      print(joinData);
+      String response = await mqttHandler.pubJoinWaitResponse(joinData);
 
       print(response);
 

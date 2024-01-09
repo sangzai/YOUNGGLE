@@ -5,14 +5,23 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttHandler extends GetxController {
 
-  static const pubTopic = 'Apill/sql';
+  static const String ip = '172.30.1.19';
 
+  // 내가 게시할 토픽 정하기
+  static const pubTopic1 = 'Apill/sql';
+  static const pubTopic2 = 'Apill/sql/join';
+  static const pubTopic3 = 'Apill/alarm/get';
+
+
+
+  // mqtt response 저장되는변수
   final RxString data = "".obs;
+
   late MqttServerClient client;
 
   Future<Object> connect() async {
     client = MqttServerClient.withPort(
-        '172.30.1.21', 'app', 1883,
+      ip, 'app', 1883,
     );
     // client.logging(on: true);
     client.onConnected = onConnected;
@@ -53,13 +62,17 @@ class MqttHandler extends GetxController {
 
     // print('MQTT_LOGS::Subscribing to the test topic');
 
-    // 토픽 1
-    const topic = 'Apill/sql/return';
-    client.subscribe(topic, MqttQos.atMostOnce);
+    // 구독 토픽 1
+    const subtopic1 = 'Apill/sql/return';
+    client.subscribe(subtopic1, MqttQos.atMostOnce);
 
-    // 토픽 2
-    // const topic2 = 'Dart/Mytt_client/flutter/graph';
-    // client.subscribe(topic2, MqttQos.atMostOnce);
+    // 구독 토픽 2
+    const subtopic2 = 'Apill/sql/join/return';
+    client.subscribe(subtopic2, MqttQos.atMostOnce);
+
+    // 구독 토픽 3
+    const subtopic3 = 'Apill/alarm/list';
+    client.subscribe(subtopic3, MqttQos.atMostOnce);
 
 
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
@@ -122,7 +135,7 @@ class MqttHandler extends GetxController {
     builder.addString(sql);
 
     if (client.connectionStatus?.state == MqttConnectionState.connected) {
-      client.publishMessage(pubTopic, MqttQos.atMostOnce, builder.payload!);
+      client.publishMessage(pubTopic1, MqttQos.atMostOnce, builder.payload!);
     }
   }
 
@@ -140,6 +153,55 @@ class MqttHandler extends GetxController {
 
     return response;
   }
+
+  Future<void> publishToJoin(String joinData) async {
+    final builder = MqttClientPayloadBuilder();
+    builder.addString(joinData);
+
+    if (client.connectionStatus?.state == MqttConnectionState.connected) {
+      client.publishMessage(pubTopic2, MqttQos.atMostOnce, builder.payload!);
+    }
+  }
+
+  Future<String> pubJoinWaitResponse(String joinData) async {
+    String response = '';
+    // 게시
+    await publishToJoin(joinData);
+
+    // 데이터 업데이트 기다리기
+    await waitForDataUpdate();
+
+    response = data.value;
+
+    await resetData();
+
+    return response;
+  }
+
+  Future<void> pubGetAlarm() async {
+    final builder = MqttClientPayloadBuilder();
+
+    if (client.connectionStatus?.state == MqttConnectionState.connected) {
+      client.publishMessage(pubTopic3, MqttQos.atMostOnce, builder.payload!);
+    }
+  }
+
+  Future<String> pubGetAlarmWaitResponse() async {
+    String response = '';
+    // 게시
+    await pubGetAlarm();
+
+    // 데이터 업데이트 기다리기
+    await waitForDataUpdate();
+
+    response = data.value;
+
+    await resetData();
+
+    return response;
+  }
+
+
 
 
 }
