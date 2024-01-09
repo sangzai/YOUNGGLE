@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -46,6 +45,7 @@ class _JoinPageState extends State<JoinPage> {
       setState(() {
         selectedDate = picked;
         birth.text = '${picked.year}-${picked.month}-${picked.day}';
+        print(birth.text);
         calculateAge();
       });
     }
@@ -62,9 +62,13 @@ class _JoinPageState extends State<JoinPage> {
       age--;
     }
 
+    if(age == 0) {
+      age = 1;
+    }
+
     // 표시된 날짜와 나이를 업데이트합니다.
     setState(() {
-      selectedDate = selectedDate;
+      // selectedDate = selectedDate;
       input_age.text = age.toString();
     });
   }
@@ -77,6 +81,9 @@ class _JoinPageState extends State<JoinPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    birth.text = '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}';
+
     return BackGroundImageContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -364,6 +371,7 @@ class _JoinPageState extends State<JoinPage> {
                         onPressed: () {
                           // TODO : 회원가입 로직 구현
                           if (input_pw.text == input_pw_check.text) {
+                            print("클릭!");
                             joinMember(
                                 input_id.text,
                                 input_pw.text,
@@ -372,9 +380,8 @@ class _JoinPageState extends State<JoinPage> {
                                 input_weight.text,
                                 input_height.text,
                                 input_gender.text,
-                                input_age.text,
-                                mqttHandler,
-                                context);
+                                input_age.text
+                            );
                           } else {
                             Get.snackbar(
                               '알람',
@@ -391,78 +398,54 @@ class _JoinPageState extends State<JoinPage> {
         ),
       ),
     );
-  }
-}
+  }// 빌드 끝
 
-// void checkId(id) async {
-//   try {
-//     String sql = '''
-//     select count(member_id) from members where member_id = :id;
-//     ''';
-//
-//     Map<String, dynamic> data = {
-//       'id': id
-//     };
-//
-//     var result = await dbConnector(sql, data);
-//
-//     if (result != null && result.isNotEmpty) {
-//
-//       if (count > 0) {
-//         Get.snackbar('알림', '이미 사용 중인 아이디입니다.');
-//       } else {
-//         Get.snackbar('알림', '아이디를 사용하실 수 있습니다.');
-//       }
-//     } else {
-//       Get.snackbar('알림', '아이디 중복 확인 중 오류발생');
-//     }
-//   } catch (error) {
-//     print('Error during registration: $error');
-//
-//     Get.snackbar('알림', '아이디 중복 확인 중 오류발생');
-//   }
-// }
-
-void joinMember(
-    id, pw, name, birth, weight, height, gender, age,
-    MqttHandler mqttHandler,
-    context) async {
-  try {
-    String sql = '''
+  void joinMember(id, pw, name, birth, weight, height, gender, age) async {
+    print("함수 동작");
+    print('Received arguments:');
+    print('ID: $id');
+    print('Password: $pw');
+    print('Name: $name');
+    print('Birth: $birth');
+    print('Weight: $weight');
+    print('Height: $height');
+    print('Gender: $gender');
+    print('Age: $age');
+    try {
+      String sql = '''
       INSERT INTO members (
         member_id, member_pw, member_name, member_birth, 
         member_weight, member_height, member_gender, member_age
       ) VALUES (
-        "id", "pw", "name", "birth", "weight", "height", "gender", "age"
+        "$id", "$pw", "$name", "$birth", "$weight", "$height", "$gender", "$age"
       )
     ''';
 
-    String response = await mqttHandler.pubSqlWaitResponse(sql);
+      String response = await mqttHandler.pubSqlWaitResponse(sql);
 
-    print(response);
+      print(response);
 
-    // 회원가입 성공 시 로그인 화면으로 이동
-    // ScaffoldMessenger.of(context)
-    //     .showSnackBar(SnackBar(content: Text('회원가입이 완료되었습니다!')));
-    // Get.snackbar(
-    //   '알림',
-    //   '회원가입이 완료되었습니다!'
-    // );
-    //
-    //
-    // // Navigator.pop(context);
-    // Get.back();
+      // 회원가입 성공 시 로그인 화면으로 이동
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text('회원가입이 완료되었습니다!')));
+      // Get.snackbar(
+      //   '알림',
+      //   '회원가입이 완료되었습니다!'
+      // );
+      //
+      //
+      // // Navigator.pop(context);
+      // Get.back();
 
 
-  } catch (error) {
-    print('Error during registration: $error');
+    } catch (error) {
+      print('Error during registration: $error');
 
-    // ScaffoldMessenger.of(context)
-    //     .showSnackBar(SnackBar(content: Text('회원가입 중 오류 발생')));
-    Get.snackbar(
-      '알림',
-      '회원가입 중 오류 발생'
-    );
+      Get.snackbar(
+          '알림',
+          '회원가입 중 오류 발생'
+      );
 
+    }
   }
-}
+} // 클래스 끝

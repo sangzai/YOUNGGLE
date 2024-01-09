@@ -55,9 +55,14 @@ class _RoutePageState extends State<RoutePage> {
       print('Error reading data: $e');
     }
     print(userId);
+    print(userName);
     print(tutorial);
 
-    await mqttHandler.connect();
+    try {
+      await mqttHandler.connect();
+    } catch(e){
+      print(e);
+    }
 
     // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
     if (userId != null) {
@@ -72,7 +77,7 @@ class _RoutePageState extends State<RoutePage> {
     if ( tutorial == 'true' ) {
 
       // 날짜 및 그래프 초기화
-      await SetInitialDate().initializeData();
+      // await SetInitialDate().initializeData();
       // 메인 화면으로 보내기
       await Get.offAllNamed('/navi');
 
