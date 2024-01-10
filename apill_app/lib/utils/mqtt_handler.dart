@@ -91,11 +91,22 @@ class MqttHandler extends GetxController {
       final recMess = c![0].payload as MqttPublishMessage;
       final pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
+      print("[${c[0].topic}]에서 데이터 도착");
+
+      // if (c[0].topic == ){
+      //
+      //
+      // } else if (c[0].topic==  ) {
+      //
+      //
+      // }
+
+
+
+
+
       data.value = pt;
       update();
-
-      // print(
-      //     '✨MQTT_LOGS:: New data arrived: topic is <${c[0].topic}>, payload is $pt');
     });
 
     return client;
