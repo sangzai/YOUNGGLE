@@ -11,7 +11,7 @@ class MqttHandler extends GetxController {
   static const pubTopic1 = 'Apill/sql';
   static const pubTopic2 = 'Apill/sql/join';
   static const pubTopic3 = 'Apill/alarm/get';
-
+  static const pubTopic4 = 'Apill/height';
 
 
   // mqtt response 저장되는변수
@@ -55,7 +55,8 @@ class MqttHandler extends GetxController {
       print('MQTT_LOGS::Mosquitto client connected');
     } else {
       print(
-          'MQTT_LOGS::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
+          'MQTT_LOGS::ERROR Mosquitto client connection failed - disconnecting, status is ${client
+              .connectionStatus}');
       client.disconnect();
       return throw Exception('MQTT connection failed');
     }
@@ -77,7 +78,8 @@ class MqttHandler extends GetxController {
 
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
       final recMess = c![0].payload as MqttPublishMessage;
-      final pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      final pt = MqttPublishPayload.bytesToStringAsString(
+          recMess.payload.message);
 
       data.value = pt;
       update();
@@ -112,7 +114,6 @@ class MqttHandler extends GetxController {
   void pong() {
     print('MQTT_LOGS:: Ping response client callback invoked');
   }
-
 
 
   Future<void> resetData() async {
@@ -162,19 +163,14 @@ class MqttHandler extends GetxController {
       client.publishMessage(pubTopic2, MqttQos.atMostOnce, builder.payload!);
     }
   }
-
   Future<String> pubJoinWaitResponse(String joinData) async {
     String response = '';
     // 게시
     await publishToJoin(joinData);
-
     // 데이터 업데이트 기다리기
     await waitForDataUpdate();
-
     response = data.value;
-
     await resetData();
-
     return response;
   }
 
@@ -200,8 +196,23 @@ class MqttHandler extends GetxController {
 
     return response;
   }
+  Future<void> publishHeight(String heightData) async {
+    final builder = MqttClientPayloadBuilder();
+    builder.addString(heightData);
 
-
-
+    if (client.connectionStatus?.state == MqttConnectionState.connected) {
+      client.publishMessage(pubTopic4, MqttQos.atMostOnce, builder.payload!);
+    }
+  }
+  Future<String> pubHeightWaitResponse(String heightData) async {
+    String response = '';
+    // 게시
+    await publishHeight(heightData);
+    // 데이터 업데이트 기다리기
+    await waitForDataUpdate();
+    response = data.value;
+    await resetData();
+    return response;
+  }
 
 }

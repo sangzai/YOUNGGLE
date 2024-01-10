@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/screen/main_page/sleep_page/pillow_height_controller.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
+import 'package:mainproject_apill/utils/mqtt_handler.dart';
 
 class SleepPage extends StatelessWidget {
   SleepPage({Key? key}) : super(key: key);
@@ -16,6 +17,8 @@ class SleepPage extends StatelessWidget {
 
   // 베개 설정용 컨트롤러
   final pillowHeightCon = Get.put(PillowHeightController());
+
+  final mqttHandler = Get.find<MqttHandler>();
 
   @override
   Widget build(BuildContext context) {
@@ -207,4 +210,17 @@ class SleepPage extends StatelessWidget {
       ),
     );
   } // 빌드 끝
-} // 클래스 끝
+// 클래스 끝
+
+void height(height_front, height_side) async {
+  try {
+    String heightData = "$height_front, $height_side";
+    print(heightData);
+    String response = await mqttHandler.pubJoinWaitResponse(heightData);
+
+    print(response);
+  } catch (error) {
+    print('height Error: $error');
+  }
+}
+}
