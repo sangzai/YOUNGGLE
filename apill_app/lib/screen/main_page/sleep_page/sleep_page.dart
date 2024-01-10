@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/screen/main_page/sleep_page/pillow_height_controller.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
+import 'package:mainproject_apill/utils/mqtt_handler.dart';
 
 class SleepPage extends StatelessWidget {
   SleepPage({Key? key}) : super(key: key);
@@ -16,6 +17,8 @@ class SleepPage extends StatelessWidget {
 
   // 베개 설정용 컨트롤러
   final pillowHeightCon = Get.put(PillowHeightController());
+
+  final mqttHandler = Get.find<MqttHandler>();
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +110,7 @@ class SleepPage extends StatelessWidget {
                                   value: pillowHeightCon.dosalHeight.value,
                                   onChanged: (value) {
                                     pillowHeightCon.dosalHeight.value = value;
+                                    height('DP',value);
 
                                   },
                                   min: 1, max: 10, divisions: 9,),
@@ -120,6 +124,7 @@ class SleepPage extends StatelessWidget {
                                   onPressed: (){
                                     final dorsal = pillowHeightCon.dosalHeight;
                                     dorsal.value < 10 ? dorsal.value += 1 : null;
+
                                   },
                                   style: ElevatedButton.styleFrom(
                                       shape: CircleBorder()
@@ -172,6 +177,7 @@ class SleepPage extends StatelessWidget {
                                 value: pillowHeightCon.lateralHeight.value,
                                 onChanged: (value) {
                                   pillowHeightCon.lateralHeight.value = value;
+                                  height('CP',value);
 
                                 },
                                 min: 1, max: 10, divisions: 9),
@@ -207,4 +213,17 @@ class SleepPage extends StatelessWidget {
       ),
     );
   } // 빌드 끝
-} // 클래스 끝
+// 클래스 끝
+
+void height(position, displayHeight) async {
+  try {
+    String heightData = "{nowposture: $position, level: $displayHeight}";
+    print(heightData);
+    String response = await mqttHandler.pubJoinWaitResponse(heightData);
+
+    print(response);
+  } catch (error) {
+    print('height Error: $error');
+  }
+}
+}

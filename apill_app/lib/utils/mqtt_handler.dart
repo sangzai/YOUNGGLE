@@ -13,6 +13,7 @@ class MqttHandler extends GetxController {
   static const pubTopic3 = 'Apill/join/idcheck';
   static const pubTopic4 = 'Apill/alarm/get';
   static const pubTopic5 = 'Apill/user/profile';
+  static const pubTopic6 = 'Apill/height';
 
 
 
@@ -57,7 +58,8 @@ class MqttHandler extends GetxController {
       print('MQTT_LOGS::Mosquitto client connected');
     } else {
       print(
-          'MQTT_LOGS::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
+          'MQTT_LOGS::ERROR Mosquitto client connection failed - disconnecting, status is ${client
+              .connectionStatus}');
       client.disconnect();
       return throw Exception('MQTT connection failed');
     }
@@ -72,15 +74,15 @@ class MqttHandler extends GetxController {
     const subtopic2 = 'Apill/join/return';
     client.subscribe(subtopic2, MqttQos.atMostOnce);
 
-    // 구독 토픽 2
+    // 구독 토픽 3
     const subtopic3 = 'Apill/join/idcheck/return';
     client.subscribe(subtopic3, MqttQos.atMostOnce);
 
-    // 구독 토픽 3
+    // 구독 토픽 4
     const subtopic4 = 'Apill/alarm/list';
     client.subscribe(subtopic4, MqttQos.atMostOnce);
 
-    // 구독 토픽 3
+    // 구독 토픽 7
     const subtopic7 = 'Apill/user/profile/return';
     client.subscribe(subtopic7, MqttQos.atMostOnce);
 
@@ -264,7 +266,25 @@ class MqttHandler extends GetxController {
     return response;
   }
 
+  // 높이값을 변경해주는 함수
+  Future<void> publishHeight(String heightData) async {
+    final builder = MqttClientPayloadBuilder();
+    builder.addString(heightData);
 
-
+    if (client.connectionStatus?.state == MqttConnectionState.connected) {
+      client.publishMessage(pubTopic6, MqttQos.atMostOnce, builder.payload!);
+    }
+  }
+  // 높이값을 변경해주는 함수
+  Future<String> pubHeightWaitResponse(String heightData) async {
+    String response = '';
+    // 게시
+    await publishHeight(heightData);
+    // 데이터 업데이트 기다리기
+    await waitForDataUpdate();
+    response = data.value;
+    await resetData();
+    return response;
+  }
 
 }

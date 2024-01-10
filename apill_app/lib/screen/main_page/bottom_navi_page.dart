@@ -45,7 +45,7 @@ class _BottomNaviPageState extends State<BottomNaviPage> {
     HomePage(),
     SleepPage(),
     AlarmPage(),
-    SettingPage(),
+    AlarmPage(),
   ];
 
   // 네비게이션 클릭시 인덱스 변경 해주는 함수
