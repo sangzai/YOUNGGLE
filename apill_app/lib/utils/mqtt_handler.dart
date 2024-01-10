@@ -98,7 +98,7 @@ class MqttHandler extends GetxController {
     client.subscribe(subtopic3, MqttQos.atMostOnce);
 
     // 구독 토픽 4
-    const subtopic4 = 'Apill/alarm/Appreturn';
+    const subtopic4 = 'Apill/alarm/App/return';
     client.subscribe(subtopic4, MqttQos.atMostOnce);
 
     // 구독 토픽 7
@@ -112,11 +112,12 @@ class MqttHandler extends GetxController {
 
       print("[${c[0].topic}]에서 데이터 도착");
 
-      if (c[0].topic == 'Apill/alarm/Appreturn'){
+      if (c[0].topic == 'Apill/alarm/App/return'){
         print("✨알람을 듣는중이예요 : $pt");
         List<AlarmModel> alarmList = alarmModelFromJson(pt);
 
         for (AlarmModel alarmModel in alarmList){
+          int id = alarmModel.id;
           TimeOfDay time = TimeOfDay(
             hour: int.parse(alarmModel.time.split(":")[0]),
             minute: int.parse(alarmModel.time.split(":")[1]),
@@ -124,7 +125,7 @@ class MqttHandler extends GetxController {
           bool isOn = alarmModel.isOn == 1;
           bool isSelected = false;
 
-          Alarm alarm = Alarm(time, isOn: isOn, isSelected: isSelected);
+          Alarm alarm = Alarm(time, id: id,isOn: isOn, isSelected: isSelected);
           // alarmCon.alarms.add(alarm);
           alarmCon.alarms.add(alarm);
         }
@@ -317,8 +318,20 @@ class MqttHandler extends GetxController {
   }
 
   // 알람 추가 함수
-  Future<void> pubAddAlarm() async {
+  Future<void> pubAddAlarm(
+      TimeOfDay addAlarmTime,
+      bool editedIsOn,
+      bool isSelected,) async {
+    final Map<String, dynamic> jsonData = {
+      'time' : "${addAlarmTime.hour}:${addAlarmTime.minute}",
+      'isOn' : editedIsOn ? 1 : 0,
+      'isSelected' : 0,
+    };
+    final String encodeJson = jsonEncode(jsonData);
+
     final builder = MqttClientPayloadBuilder();
+    builder.addString(encodeJson);
+
     if (client.connectionStatus?.state == MqttConnectionState.connected) {
       client.publishMessage(pubTopic8, MqttQos.atMostOnce, builder.payload!);
     }
@@ -328,10 +341,10 @@ class MqttHandler extends GetxController {
   Future<void> pubDeleteAlarm(List<int> selectedIds) async {
     for (int id in selectedIds){
       final Map<String, dynamic> jsonData = {'id': id};
-      final String jSonId = jsonEncode(jsonData);
+      final String encodeJson = jsonEncode(jsonData);
 
       final builder = MqttClientPayloadBuilder();
-      builder.addString(jSonId);
+      builder.addString(encodeJson);
 
       if (client.connectionStatus?.state == MqttConnectionState.connected) {
         client.publishMessage(pubTopic9, MqttQos.atMostOnce, builder.payload!);
@@ -342,19 +355,19 @@ class MqttHandler extends GetxController {
   //알람 수정 함수
   Future<void> pubUpdateAlarm(
       TimeOfDay editedAlarmTime,
-      bool editedisOn,
+      bool editedIsOn,
       bool isSelected,
       int editedAlarmId, ) async {
     final Map<String, dynamic> jsonData = {
       'time' : "${editedAlarmTime.hour}:${editedAlarmTime.minute}",
-      'isOn' : editedisOn ? 1 : 0,
+      'isOn' : editedIsOn ? 1 : 0,
       'isSelected' : 0,
       'id': editedAlarmId
     };
-    final String jSonId = jsonEncode(jsonData);
+    final String encodeJson = jsonEncode(jsonData);
 
     final builder = MqttClientPayloadBuilder();
-    builder.addString(jSonId);
+    builder.addString(encodeJson);
 
     if (client.connectionStatus?.state == MqttConnectionState.connected) {
       client.publishMessage(pubTopic10, MqttQos.atMostOnce, builder.payload!);

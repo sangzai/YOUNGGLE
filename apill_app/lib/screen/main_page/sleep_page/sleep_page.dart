@@ -38,15 +38,10 @@ class SleepPage extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Obx(() {
-                    final displayHeight = pillowHeightCon.pillowHeight.value;
-                        //   pillowHeightCon.sleepPosition.value
-                        // ? pillowHeightCon.dosalHeight.value.toInt()
-                        // : pillowHeightCon.lateralHeight.value.toInt();
-
                     return Positioned(
                       top: 10,
                       child: Text(
-                        '$displayHeight',
+                        '${pillowHeightCon.pillowHeight.value}',
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                           fontSize: 80,
@@ -97,15 +92,23 @@ class SleepPage extends StatelessWidget {
                           // 슬라이더
                           Expanded(
                             flex: 3,
-                            child: Obx(
-                                  () => Slider(
-                                value: pillowHeightCon.dosalHeight.value,
-                                onChanged: (value) {
-                                  pillowHeightCon.dosalHeight.value = value;
-                                  changeHeight('DP',value);
+                            child: Column(
+                              children: [
+                                Obx(
+                                      () => Slider(
+                                    value: pillowHeightCon.dosalHeight.value,
+                                    onChanged: (value) {
+                                      pillowHeightCon.dosalHeight.value = value;
+                                      changeHeight('DP',value);
 
-                                },
-                                min: 1, max: 10, divisions: 9,),
+                                    },
+                                    min: 1, max: 4, divisions: 3,),
+                                ),
+                                Obx(() => Text(
+                                  '${pillowHeightCon.dosalHeight.value.toInt()}',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                )),
+                              ],
                             ),
                           ),
 
@@ -115,7 +118,7 @@ class SleepPage extends StatelessWidget {
                             child: ElevatedButton(
                                 onPressed: (){
                                   final dorsal = pillowHeightCon.dosalHeight;
-                                  dorsal.value < 10 ? dorsal.value += 1 : null;
+                                  dorsal.value < 4 ? dorsal.value += 1 : null;
 
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -163,15 +166,24 @@ class SleepPage extends StatelessWidget {
                       // 슬라이더
                       Expanded(
                         flex: 3,
-                        child: Obx(
-                              () => Slider(
-                              value: pillowHeightCon.lateralHeight.value,
-                              onChanged: (value) {
-                                pillowHeightCon.lateralHeight.value = value;
-                                changeHeight('CP',value);
+                        child: Column(
+                          children: [
+                            Obx(
+                                  () => Slider(
+                                  value: pillowHeightCon.lateralHeight.value,
+                                  onChanged: (value) {
+                                    pillowHeightCon.lateralHeight.value = value;
+                                    changeHeight('CP',value);
 
-                              },
-                              min: 1, max: 10, divisions: 9),
+                                  },
+                                  min: 1, max: 4, divisions: 3),
+                            ),
+                            Obx(() => Text(
+                              '${pillowHeightCon.lateralHeight.value.toInt()}',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )),
+
+                          ],
                         ),
                       ),
 
@@ -181,12 +193,12 @@ class SleepPage extends StatelessWidget {
                         child: ElevatedButton(
                             onPressed: (){
                               final lateral = pillowHeightCon.lateralHeight;
-                              lateral.value < 10 ? lateral.value += 1 : null;
+                              lateral.value < 4 ? lateral.value += 1 : null;
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: CircleBorder()
                             ),
-                            child: Icon(Icons.add,
+                            child: const Icon(Icons.add,
                               size: 30,
                               color: AppColors.appColorWhite,
                             )
@@ -194,10 +206,17 @@ class SleepPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                ],
-                              ),
-            )
 
+                  SizedBox(height: 40,),
+                  ElevatedButton(
+                    onPressed: (){
+
+                    },
+                    child: Text('확인', style: Theme.of(context).textTheme.titleLarge,)
+                  )
+
+                ],),
+            )
           ],
         ),
       ),
@@ -205,7 +224,7 @@ class SleepPage extends StatelessWidget {
   } // 빌드 끝
 
   void changeHeight(position, displayHeight) async {
-    print("체인지 ㅇ");
+    print("체인지");
     try {
       String heightData = "{nowposture: $position, level: $displayHeight}";
       print(heightData);

@@ -15,10 +15,7 @@ class AlarmPage extends StatefulWidget {
 }
 
 class _AlarmPageState extends State<AlarmPage> {
-  // TODO : 알람을 DB와 핸드폰에 저장
   // 알람 추가시 현재 선택한 시간이 보이게끔
-
-
 
   bool checkAllbox = false;
 
@@ -34,19 +31,18 @@ class _AlarmPageState extends State<AlarmPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeData();
-
     });
   }
 
   @override
   void dispose() {
-    mqttHandler.client.unsubscribe('Apill/alarm/Appreturn');
+    mqttHandler.client.unsubscribe('Apill/alarm/App/return');
     super.dispose();
   }
 
   Future<void> _initializeData() async {
     // 비동기 작업 수행
-    await mqttHandler.client.subscribe('Apill/alarm/Appreturn', MqttQos.atMostOnce);
+    await mqttHandler.client.subscribe('Apill/alarm/App/return', MqttQos.atMostOnce);
     var response = await mqttHandler.pubGetAlarmWaitResponse();
     print("✨알람 초기화 함수");
 
@@ -61,7 +57,7 @@ class _AlarmPageState extends State<AlarmPage> {
       bool isOn = alarmModel.isOn == 1;
       bool isSelected = false;
       
-      Alarm alarm = Alarm(time,id : id, isOn: isOn, isSelected: isSelected);
+      Alarm alarm = Alarm(time, id : id, isOn: isOn, isSelected: isSelected);
       alarms.add(alarm);
     }
     // print("✨알람 목록 확인 ${alarmCon.alarms}");
@@ -74,10 +70,10 @@ class _AlarmPageState extends State<AlarmPage> {
     });
   }
 
-  Future<void> saveAlarms(Alarm alarms) async {
-    Alarm alarmsList = alarms;
-
-  }
+  // Future<void> saveAlarms(Alarm alarms) async {
+  //   Alarm alarmsList = alarms;
+  //
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +101,6 @@ class _AlarmPageState extends State<AlarmPage> {
                         alarm.isSelected = !allSelected;
                       }
                     });
-
 
                   },
 
@@ -161,18 +156,20 @@ class _AlarmPageState extends State<AlarmPage> {
                       //     alarms[alarms.indexOf(alarms[index])] = editedAlarm;
                       //   });
                       // }
-
                       final editedAlarm = await _showEditAlarmDialog(context, alarms[index]);
+
                       if (editedAlarm != null) {
                         setState(() {
-                          updateAlarmAndPublish(editedAlarm);
+                          alarms[alarms.indexOf(alarms[index])] = editedAlarm;
                         });
+                        updateAlarmAndPublish(editedAlarm);
                       }
                     },
-                    onToggle: () {
+                    onToggle: () async {
                       setState(() {
                         alarms[index].isOn = !alarms[index].isOn;
                       });
+                      await updateAlarmAndPublish(alarms[index]);
                     },
                   ),
                 );
@@ -184,26 +181,26 @@ class _AlarmPageState extends State<AlarmPage> {
 
   }
 
-  void updateAlarmAndPublish(Alarm editedAlarm) async {
-    int editedAlarmIndex = alarms.indexWhere((alarm) => alarm.id == editedAlarm.id);
+  Future<void> updateAlarmAndPublish(Alarm editedAlarm) async {
+    // int editedAlarmIndex = alarms.indexWhere((alarm) => alarm.id == editedAlarm.id);
 
     // 확인된 인덱스가 유효하다면 해당 위치에 변경된 알람을 설정
-    if (editedAlarmIndex != -1) {
-      alarms[editedAlarmIndex] = editedAlarm;
+    // if (editedAlarmIndex != -1) {
+    //   alarms[editedAlarmIndex] = editedAlarm;
 
       // 변경된 알람의 아이디와 시간 확인
-      int editedAlarmId = editedAlarm.id ?? 0; // 예시: 0은 기본값
-      TimeOfDay editedAlarmTime = editedAlarm.time;
-      bool editedisOn = editedAlarm.isOn;
-      bool isSelected = false;
-      await mqttHandler.pubUpdateAlarm(
-        editedAlarmTime,
-        editedisOn,
-        isSelected,
-        editedAlarmId,
-      );
-      mqttHandler.pubGetAlarmWaitResponse();
-    }
+    int editedAlarmId = editedAlarm.id ?? 0; // 예시: 0은 기본값
+    TimeOfDay editedAlarmTime = editedAlarm.time;
+    bool editedIsOn = editedAlarm.isOn;
+    bool isSelected = false;
+    await mqttHandler.pubUpdateAlarm(
+      editedAlarmTime,
+      editedIsOn,
+      isSelected,
+      editedAlarmId,
+    );
+    await mqttHandler.pubGetAlarmWaitResponse();
+    // }
   }
 
   // 선택된 알람 삭제
@@ -237,9 +234,24 @@ class _AlarmPageState extends State<AlarmPage> {
     );
 
     if (newAlarm != null) {
+
       setState(() {
         alarms.add(newAlarm);
       });
+
+      TimeOfDay addAlarmTime = newAlarm.time;
+      bool addIsOn = newAlarm.isOn;
+      bool isSelected = false;
+
+      await mqttHandler.pubAddAlarm(
+        addAlarmTime,
+        addIsOn,
+        isSelected
+      );
+      mqttHandler.pubGetAlarmWaitResponse();
+
+
+
     }
   }
 
