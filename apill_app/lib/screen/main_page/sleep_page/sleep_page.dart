@@ -110,7 +110,7 @@ class SleepPage extends StatelessWidget {
                                   value: pillowHeightCon.dosalHeight.value,
                                   onChanged: (value) {
                                     pillowHeightCon.dosalHeight.value = value;
-                                    height('front',value);
+                                    height('DP',value);
 
                                   },
                                   min: 1, max: 10, divisions: 9,),
@@ -177,7 +177,7 @@ class SleepPage extends StatelessWidget {
                                 value: pillowHeightCon.lateralHeight.value,
                                 onChanged: (value) {
                                   pillowHeightCon.lateralHeight.value = value;
-                                  height('side',value);
+                                  height('CP',value);
 
                                 },
                                 min: 1, max: 10, divisions: 9),
@@ -217,7 +217,7 @@ class SleepPage extends StatelessWidget {
 
 void height(position, displayHeight) async {
   try {
-    String heightData = "$position, $displayHeight";
+    String heightData = "{nowposture: $position, level: $displayHeight}";
     print(heightData);
     String response = await mqttHandler.pubJoinWaitResponse(heightData);
 
