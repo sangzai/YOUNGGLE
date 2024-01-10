@@ -53,8 +53,7 @@ class SetInitialDate {
       ''';
 
     String response = await mqttHandler.pubSqlWaitResponse(sql);
-
-    // print('✨set_initial_date.dart 파일의 getActiveDates함수');
+    print('✨set_initial_date.dart 파일의 getActiveDates함수');
     // print(response);
 
     // JSON 응답을 MemberModel 리스트로 변환

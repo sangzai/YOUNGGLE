@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:mainproject_apill/models/alarm_model.dart';
+import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_controller.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
+import 'package:mqtt_client/mqtt_client.dart';
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({Key? key});
@@ -15,31 +18,70 @@ class _AlarmPageState extends State<AlarmPage> {
   // TODO : 알람을 DB와 핸드폰에 저장
   // 알람 추가시 현재 선택한 시간이 보이게끔
 
+
+
+  bool checkAllbox = false;
+
   final mqttHandler = Get.find<MqttHandler>();
 
-  List<Alarm> alarms = [];
+  final alarmCon = Get.find<AlarmController>();
+
+  List<Alarm> get alarms => alarmCon.alarms;
+  // List<Alarm> alarms = [];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeData();
-    });
-  }
 
-  Future<void> _initializeData() async {
-    // 비동기 작업 수행
-    var response = await mqttHandler.pubGetAlarmWaitResponse();
-
-    // setState를 호출하여 UI를 업데이트
-    setState(() {
-      // 여기에서 다른 initState에서 사용할 수 있는 데이터 처리
-      print("✨알람 페이지 : $response");
     });
   }
 
   @override
+  void dispose() {
+    mqttHandler.client.unsubscribe('Apill/alarm/Appreturn');
+    super.dispose();
+  }
+
+  Future<void> _initializeData() async {
+    // 비동기 작업 수행
+    await mqttHandler.client.subscribe('Apill/alarm/Appreturn', MqttQos.atMostOnce);
+    var response = await mqttHandler.pubGetAlarmWaitResponse();
+    print("✨알람 초기화 함수");
+
+    List<AlarmModel> alarmList = alarmModelFromJson(response);
+
+    for (AlarmModel alarmModel in alarmList){
+      int id = alarmModel.id;
+      TimeOfDay time = TimeOfDay(
+        hour: int.parse(alarmModel.time.split(":")[0]),
+        minute: int.parse(alarmModel.time.split(":")[1]),
+      );
+      bool isOn = alarmModel.isOn == 1;
+      bool isSelected = false;
+      
+      Alarm alarm = Alarm(time,id : id, isOn: isOn, isSelected: isSelected);
+      alarms.add(alarm);
+    }
+    // print("✨알람 목록 확인 ${alarmCon.alarms}");
+
+
+    // setState를 호출하여 UI를 업데이트
+    setState(() {
+      // 여기에서 다른 initState에서 사용할 수 있는 데이터 처리
+      // print("✨알람 페이지 : $response");
+    });
+  }
+
+  Future<void> saveAlarms(Alarm alarms) async {
+    Alarm alarmsList = alarms;
+
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return Stack(
         fit: StackFit.expand,
         children: [
@@ -49,6 +91,26 @@ class _AlarmPageState extends State<AlarmPage> {
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             actions: [
+              Visibility(
+                visible: checkAllbox,
+                child: IconButton(
+                  icon: Icon(Icons.check_box_outline_blank),
+                  color: AppColors.appColorWhite60,
+                  onPressed: (){
+                    setState(() {
+                      // 현재 상태에 따라서 선택 또는 선택 해제를 수행
+                      bool allSelected = alarms.every((alarm) => alarm.isSelected);
+
+                      for (var alarm in alarms) {
+                        alarm.isSelected = !allSelected;
+                      }
+                    });
+
+
+                  },
+
+                ),
+              ),
               IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
@@ -56,10 +118,12 @@ class _AlarmPageState extends State<AlarmPage> {
                 },
                 color: AppColors.appColorWhite60,
               ),
+
               IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
                   _deleteSelectedAlarms();
+                  checkAllbox = false;
                 },
                 color: AppColors.appColorWhite60,
               ),
@@ -81,6 +145,8 @@ class _AlarmPageState extends State<AlarmPage> {
                     onAlarmSelected: (isSelected) {
                       setState(() {
                         alarms[index].isSelected = isSelected;
+                        checkAllbox = alarms.any((alarm) => alarm.isSelected);
+
                       });
                     },
                     onDelete: () {
@@ -89,10 +155,17 @@ class _AlarmPageState extends State<AlarmPage> {
                       });
                     },
                     onLongPress: () async {
+                      // final editedAlarm = await _showEditAlarmDialog(context, alarms[index]);
+                      // if (editedAlarm != null) {
+                      //   setState(() {
+                      //     alarms[alarms.indexOf(alarms[index])] = editedAlarm;
+                      //   });
+                      // }
+
                       final editedAlarm = await _showEditAlarmDialog(context, alarms[index]);
                       if (editedAlarm != null) {
                         setState(() {
-                          alarms[alarms.indexOf(alarms[index])] = editedAlarm;
+                          updateAlarmAndPublish(editedAlarm);
                         });
                       }
                     },
@@ -111,10 +184,48 @@ class _AlarmPageState extends State<AlarmPage> {
 
   }
 
+  void updateAlarmAndPublish(Alarm editedAlarm) async {
+    int editedAlarmIndex = alarms.indexWhere((alarm) => alarm.id == editedAlarm.id);
+
+    // 확인된 인덱스가 유효하다면 해당 위치에 변경된 알람을 설정
+    if (editedAlarmIndex != -1) {
+      alarms[editedAlarmIndex] = editedAlarm;
+
+      // 변경된 알람의 아이디와 시간 확인
+      int editedAlarmId = editedAlarm.id ?? 0; // 예시: 0은 기본값
+      TimeOfDay editedAlarmTime = editedAlarm.time;
+      bool editedisOn = editedAlarm.isOn;
+      bool isSelected = false;
+      await mqttHandler.pubUpdateAlarm(
+        editedAlarmTime,
+        editedisOn,
+        isSelected,
+        editedAlarmId,
+      );
+      mqttHandler.pubGetAlarmWaitResponse();
+    }
+  }
+
   // 선택된 알람 삭제
-  void _deleteSelectedAlarms() {
+  void _deleteSelectedAlarms() async {
+
+    print('✨리스트확인  ${alarmCon.getSelectedAlarmIds()}');
+    List<int> selectedAlarmIds = alarmCon.getSelectedAlarmIds();
+
+    // Now, the selectedIds list contains the ids of the deleted alarms (excluding null ids)
+    print("✨삭제할 알람들의 id: $selectedAlarmIds");
+
+    await mqttHandler.pubDeleteAlarm(selectedAlarmIds);
+
+    mqttHandler.pubGetAlarmWaitResponse();
+
     setState(() {
-      alarms.removeWhere((alarm) => alarm.isSelected);
+      alarms.removeWhere((alarm) {
+        if (alarm.isSelected) {
+          return true; // Remove the alarm if it is selected
+        }
+        return false; // Keep the alarm if it is not selected
+      });
     });
   }
 
@@ -242,11 +353,12 @@ class _AddAlarmDialogState extends State<AddAlarmDialog> {
 }
 
 class Alarm {
+  int? id;
   final TimeOfDay time;
   bool isOn;
   bool isSelected;
 
-  Alarm(this.time, {this.isOn = true, this.isSelected = false});
+  Alarm(this.time, {this.id, this.isOn = true, this.isSelected = false});
 }
 
 class AlarmTile extends StatefulWidget {
@@ -269,6 +381,9 @@ class AlarmTile extends StatefulWidget {
 }
 
 class _AlarmTileState extends State<AlarmTile> {
+
+  final alarmCon = Get.find<AlarmController>();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -301,6 +416,15 @@ class _AlarmTileState extends State<AlarmTile> {
                 Checkbox(
                   value: widget.alarm.isSelected,
                   onChanged: (value) {
+                    if (value ?? false) {
+                      // 만약 선택한 알람이 true라면 리스트에 추가
+                      if (!alarmCon.checkedId.contains(widget.onAlarmSelected)) {
+                        alarmCon.checkedId.add(widget.onAlarmSelected);
+                      }
+                    } else {
+                      // 만약 선택한 알람이 false라면 리스트에서 제거
+                      alarmCon.checkedId.remove(widget.onAlarmSelected);
+                    }
                     widget.onAlarmSelected(value ?? false);
                   },
                 ),

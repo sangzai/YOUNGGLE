@@ -28,6 +28,7 @@ Future<List<SelectDateData>> getSelectDateData(DateTime selectedDate, MqttHandle
       );
   ''';
   String response = await mqttHandler.pubSqlWaitResponse(sql);
+  print("✨getSelectDateData 함수실행");
 
   print(response);
 

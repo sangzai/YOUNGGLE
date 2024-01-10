@@ -60,8 +60,9 @@ class _RoutePageState extends State<RoutePage> {
 
     try {
       await mqttHandler.connect();
+      print("서버 연결 완료");
     } catch(e){
-      print(e);
+      print("서버 연결 실패 $e");
     }
 
     // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.

@@ -14,6 +14,6 @@ class PillowHeightController extends GetxController {
   // 수면 자세 판단 여부
   // true : 등누운자세
   // false : 옆누운자세
-  RxBool sleepPosition = false.obs;
+  // RxBool sleepPosition = false.obs;
 
 }

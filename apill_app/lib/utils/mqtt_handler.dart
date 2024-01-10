@@ -1,19 +1,37 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mainproject_apill/models/alarm_model.dart';
+import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_controller.dart';
+import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_page.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttHandler extends GetxController {
+  //
+  // final mqttHandler = Get.find<MqttHandler>();
+  //
+  // final alarmCon = Get.put(AlarmController());
+  final alarmCon = Get.put(AlarmController());
 
   static const String ip = '172.30.1.19';
 
-  // 내가 게시할 토픽 정하기
+  // ✨내가 게시할 토픽 정하기
   static const pubTopic1 = 'Apill/sql';
   static const pubTopic2 = 'Apill/join';
   static const pubTopic3 = 'Apill/join/idcheck';
   static const pubTopic4 = 'Apill/alarm/get';
   static const pubTopic5 = 'Apill/user/profile';
   static const pubTopic6 = 'Apill/height';
+  static const pubTopic7 = 'Apill/alarm/check';
+  static const pubTopic8 = 'Apill/alarm/add';
+  static const pubTopic9 = 'Apill/alarm/delete';
+  static const pubTopic10 = 'Apill/alarm/update';
+
+
+  // static const pubTopic8 = 'Apill/alarm/check';
 
 
 
@@ -66,6 +84,7 @@ class MqttHandler extends GetxController {
 
     // print('MQTT_LOGS::Subscribing to the test topic');
 
+    //✨구독
     // 구독 토픽 1
     const subtopic1 = 'Apill/sql/return';
     client.subscribe(subtopic1, MqttQos.atMostOnce);
@@ -79,7 +98,7 @@ class MqttHandler extends GetxController {
     client.subscribe(subtopic3, MqttQos.atMostOnce);
 
     // 구독 토픽 4
-    const subtopic4 = 'Apill/alarm/list';
+    const subtopic4 = 'Apill/alarm/Appreturn';
     client.subscribe(subtopic4, MqttQos.atMostOnce);
 
     // 구독 토픽 7
@@ -93,16 +112,31 @@ class MqttHandler extends GetxController {
 
       print("[${c[0].topic}]에서 데이터 도착");
 
-      // if (c[0].topic == ){
-      //
-      //
-      // } else if (c[0].topic==  ) {
+      if (c[0].topic == 'Apill/alarm/Appreturn'){
+        print("✨알람을 듣는중이예요 : $pt");
+        List<AlarmModel> alarmList = alarmModelFromJson(pt);
+
+        for (AlarmModel alarmModel in alarmList){
+          TimeOfDay time = TimeOfDay(
+            hour: int.parse(alarmModel.time.split(":")[0]),
+            minute: int.parse(alarmModel.time.split(":")[1]),
+          );
+          bool isOn = alarmModel.isOn == 1;
+          bool isSelected = false;
+
+          Alarm alarm = Alarm(time, isOn: isOn, isSelected: isSelected);
+          // alarmCon.alarms.add(alarm);
+          alarmCon.alarms.add(alarm);
+        }
+        print("✨알람 목록 갱신 완료! ${alarmCon.alarms}");
+
+
+
+      }
+      // else if (c[0].topic==  ) {
       //
       //
       // }
-
-
-
 
 
       data.value = pt;
@@ -155,6 +189,7 @@ class MqttHandler extends GetxController {
 
   // select용 sql함수
   Future<void> publishToSQL(String sql) async {
+    print("✨ select sql 함수 실행2 ");
     final builder = MqttClientPayloadBuilder();
     builder.addString(sql);
 
@@ -164,17 +199,21 @@ class MqttHandler extends GetxController {
   }
   // select용 sql함수
   Future<String> pubSqlWaitResponse(String sql) async {
+    print("✨ select sql 함수 실행1");
     String response = '';
     // 게시
     await publishToSQL(sql);
+    print("1");
 
     // 데이터 업데이트 기다리기
     await waitForDataUpdate();
+    print("2");
 
     response = data.value;
 
     await resetData();
 
+    print("3");
     return response;
   }
 
@@ -253,15 +292,15 @@ class MqttHandler extends GetxController {
     return response;
   }
 
-  // 알람 가져오는 함수 TODO: 수정 필요
+  // 알람 가져오는 함수
   Future<void> pubGetAlarm() async {
     final builder = MqttClientPayloadBuilder();
 
     if (client.connectionStatus?.state == MqttConnectionState.connected) {
-      client.publishMessage(pubTopic4, MqttQos.atMostOnce, builder.payload!);
+      client.publishMessage(pubTopic7, MqttQos.atMostOnce, builder.payload!);
     }
   }
-  // 알람 가져오는 함수 TODO: 수정 필요
+  // 알람 가져오는 함수
   Future<String> pubGetAlarmWaitResponse() async {
     String response = '';
     // 게시
@@ -276,6 +315,52 @@ class MqttHandler extends GetxController {
 
     return response;
   }
+
+  // 알람 추가 함수
+  Future<void> pubAddAlarm() async {
+    final builder = MqttClientPayloadBuilder();
+    if (client.connectionStatus?.state == MqttConnectionState.connected) {
+      client.publishMessage(pubTopic8, MqttQos.atMostOnce, builder.payload!);
+    }
+  }
+
+  //알람 삭제 함수
+  Future<void> pubDeleteAlarm(List<int> selectedIds) async {
+    for (int id in selectedIds){
+      final Map<String, dynamic> jsonData = {'id': id};
+      final String jSonId = jsonEncode(jsonData);
+
+      final builder = MqttClientPayloadBuilder();
+      builder.addString(jSonId);
+
+      if (client.connectionStatus?.state == MqttConnectionState.connected) {
+        client.publishMessage(pubTopic9, MqttQos.atMostOnce, builder.payload!);
+      }
+    }
+  }
+
+  //알람 수정 함수
+  Future<void> pubUpdateAlarm(
+      TimeOfDay editedAlarmTime,
+      bool editedisOn,
+      bool isSelected,
+      int editedAlarmId, ) async {
+    final Map<String, dynamic> jsonData = {
+      'time' : "${editedAlarmTime.hour}:${editedAlarmTime.minute}",
+      'isOn' : editedisOn ? 1 : 0,
+      'isSelected' : 0,
+      'id': editedAlarmId
+    };
+    final String jSonId = jsonEncode(jsonData);
+
+    final builder = MqttClientPayloadBuilder();
+    builder.addString(jSonId);
+
+    if (client.connectionStatus?.state == MqttConnectionState.connected) {
+      client.publishMessage(pubTopic10, MqttQos.atMostOnce, builder.payload!);
+    }
+  }
+
 
   // 높이값을 변경해주는 함수
   Future<void> publishHeight(String heightData) async {

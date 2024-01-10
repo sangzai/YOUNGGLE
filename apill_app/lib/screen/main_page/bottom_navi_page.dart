@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/loading_controller.dart';
-import 'package:mainproject_apill/screen/main_page/alarm_page.dart';
+import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_page.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/statistic_page.dart';
 
 import 'package:mainproject_apill/screen/main_page/sleep_page/sleep_page.dart';
@@ -45,7 +45,7 @@ class _BottomNaviPageState extends State<BottomNaviPage> {
     HomePage(),
     SleepPage(),
     AlarmPage(),
-    AlarmPage(),
+    SettingPage(),
   ];
 
   // 네비게이션 클릭시 인덱스 변경 해주는 함수

@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                                   backgroundColor: Color.fromRGBO(6, 27, 57, 1)),
                               onPressed: () async {
                                 // TODO : 로그인
-                                loginMember(idCon.text, pwCon.text, mqttHandler, context );
+                                loginMember(idCon.text, pwCon.text );
                               },
                               child: Text(
                                 '로그인',
@@ -188,52 +188,55 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
+  void loginMember(id, pw) async {
+    // FlutterSecureStorage 불러오기
+    final storage = FlutterSecureStorage();
+    print("✨로그인 버튼 클릭");
 
-void loginMember(id, pw, MqttHandler mqttHandler, context) async {
-  // FlutterSecureStorage 불러오기
-  final storage = FlutterSecureStorage();
-
-  try {
-    String sql = '''
+    try {
+      String sql = '''
       SELECT * FROM members WHERE member_id = "$id" AND member_pw = "$pw"
     ''';
+      print("실행");
 
-    String response = await mqttHandler.pubSqlWaitResponse(sql);
+      String response = await mqttHandler.pubSqlWaitResponse(sql);
 
-    // print("✨로그인 답변 : $response");
+      print("✨로그인 답변 : $response");
 
-    // 로그인 결과가 있고, 결과가 빈 리스트가 아닌 경우에만 로그인 성공으로 간주
-    if (response.isNotEmpty) {
-      List<MemberModel> memberList = memberModelFromJson(response);
-      // 로그인 성공 처리를 여기에 추가
-      // 예: 로그인 성공 메시지를 출력하거나, 다음 화면으로 이동하는 등의 동작 수행
-      print('로그인 성공!');
+      // 로그인 결과가 있고, 결과가 빈 리스트가 아닌 경우에만 로그인 성공으로 간주
+      if (response.isNotEmpty) {
+        List<MemberModel> memberList = memberModelFromJson(response);
+        // 로그인 성공 처리를 여기에 추가
+        // 예: 로그인 성공 메시지를 출력하거나, 다음 화면으로 이동하는 등의 동작 수행
+        print('로그인 성공!');
 
-      //TODO : 스토리지 저장
-      await storage.write(
-        key: 'userId',
-        value: memberList[0].memberId
-      );
+        //TODO : 스토리지 저장
+        await storage.write(
+            key: 'userId',
+            value: memberList[0].memberId
+        );
 
-      await storage.write(
-        key: 'userName',
-        value: memberList[0].memberName,
-      );
+        await storage.write(
+          key: 'userName',
+          value: memberList[0].memberName,
+        );
 
-      Get.offAllNamed('/route');
+        Get.offAllNamed('/route');
 
-    } else {
-      // 로그인 실패 처리를 여기에 추가
-      // 예: 로그인 실패 메시지를 출력하거나, 다른 처리를 수행
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(content: Text('로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.'))
-      // );
-      Get.snackbar('로그인 실패', '아이디 또는 비밀번호가 일치하지 않습니다.');
+      } else {
+        // 로그인 실패 처리를 여기에 추가
+        // 예: 로그인 실패 메시지를 출력하거나, 다른 처리를 수행
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(content: Text('로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.'))
+        // );
+        Get.snackbar('로그인 실패', '아이디 또는 비밀번호가 일치하지 않습니다.');
+      }
+
+    } catch (error) {
+      // 예외가 발생하면 에러 메시지 출력
+      print('에러 발생: $error');
     }
-
-  } catch (error) {
-    // 예외가 발생하면 에러 메시지 출력
-    print('에러 발생: $error');
   }
+
 }
+
