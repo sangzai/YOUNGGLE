@@ -6,7 +6,7 @@ import 'dart:convert';
 
 List<MemberModel> memberModelFromJson(String str) => List<MemberModel>.from(json.decode(str).map((x) => MemberModel.fromJson(x)));
 
-String memberModelToJson(List<MemberModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String memberModelToJson(List<MemberModel> data) => jsonEncode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class MemberModel {
   String memberId;
