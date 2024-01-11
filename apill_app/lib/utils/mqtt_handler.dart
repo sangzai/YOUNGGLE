@@ -98,7 +98,7 @@ class MqttHandler extends GetxController {
     client.subscribe(subtopic3, MqttQos.atMostOnce);
 
     // 구독 토픽 4
-    const subtopic4 = 'Apill/alarm/App/return';
+    const subtopic4 = 'Apill/alarm/Appreturn';
     client.subscribe(subtopic4, MqttQos.atMostOnce);
 
     // 구독 토픽 7
@@ -112,7 +112,7 @@ class MqttHandler extends GetxController {
 
       print("[${c[0].topic}]에서 데이터 도착");
 
-      if (c[0].topic == 'Apill/alarm/App/return'){
+      if (c[0].topic == 'Apill/alarm/Appreturn'){
         print("✨알람을 듣는중이예요 : $pt");
         List<AlarmModel> alarmList = alarmModelFromJson(pt);
 

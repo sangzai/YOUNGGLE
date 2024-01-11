@@ -59,15 +59,15 @@ class SleepPage extends StatelessWidget {
 
             const SizedBox(height: 40,),
 
-            Obx(
-                () {
-                  return Column(
+            Column(
                     children: [
                       Text("등누운자세 높이",style: Theme.of(context).textTheme.headlineLarge),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Text("${pillowHeightCon.dosalHeight.value}",
-                            style: Theme.of(context).textTheme.headlineLarge),
+                        child: Obx(
+                            ()=> Text("${pillowHeightCon.dosalHeight.value}",
+                              style: Theme.of(context).textTheme.headlineLarge),
+                        ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -133,14 +133,13 @@ class SleepPage extends StatelessWidget {
                         ],
                       ),
                     ],
-                  );
-                },
-            ),
+                  ),
+
+
 
             const SizedBox(height: 30),
 
-            Obx(
-                ()=> Column(
+            Column(
                 children: [
                   Text("옆누운자세 높이",style: Theme.of(context).textTheme.headlineLarge),
                   Row(
@@ -216,7 +215,7 @@ class SleepPage extends StatelessWidget {
                   )
 
                 ],),
-            )
+
           ],
         ),
       ),

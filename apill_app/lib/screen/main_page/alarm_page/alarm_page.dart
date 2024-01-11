@@ -36,13 +36,13 @@ class _AlarmPageState extends State<AlarmPage> {
 
   @override
   void dispose() {
-    mqttHandler.client.unsubscribe('Apill/alarm/App/return');
+    mqttHandler.client.unsubscribe('Apill/alarm/Appreturn');
     super.dispose();
   }
 
   Future<void> _initializeData() async {
     // 비동기 작업 수행
-    await mqttHandler.client.subscribe('Apill/alarm/App/return', MqttQos.atMostOnce);
+    await mqttHandler.client.subscribe('Apill/alarm/Appreturn', MqttQos.atMostOnce);
     var response = await mqttHandler.pubGetAlarmWaitResponse();
     print("✨알람 초기화 함수");
 
