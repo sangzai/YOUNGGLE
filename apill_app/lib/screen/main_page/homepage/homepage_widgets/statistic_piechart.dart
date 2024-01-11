@@ -53,7 +53,7 @@ class _HomePieChartState extends State<HomePieChart> {
             pieTouchData: PieTouchData(
               enabled: true,
               touchCallback: (FlTouchEvent, pieTouchResponse) {
-                print("터치 발생중");
+                // print("✨터치 발생중");
               },
             ),
 

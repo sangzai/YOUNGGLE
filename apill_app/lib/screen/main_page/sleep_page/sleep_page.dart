@@ -28,7 +28,7 @@ class SleepPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 150),
+            const SizedBox(height: 120),
 
             // 베개의 현재 높이
             SizedBox(
@@ -62,13 +62,6 @@ class SleepPage extends StatelessWidget {
             Column(
                     children: [
                       Text("등누운자세 높이",style: Theme.of(context).textTheme.headlineLarge),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Obx(
-                            ()=> Text("${pillowHeightCon.dosalHeight.value}",
-                              style: Theme.of(context).textTheme.headlineLarge),
-                        ),
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -137,7 +130,7 @@ class SleepPage extends StatelessWidget {
 
 
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
 
             Column(
                 children: [
@@ -207,11 +200,16 @@ class SleepPage extends StatelessWidget {
                   ),
 
                   SizedBox(height: 40,),
-                  ElevatedButton(
-                    onPressed: (){
+                  
+                  SizedBox(
+                    height: 150.h,
+                    width: 350.w,
+                    child: ElevatedButton(
+                      onPressed: (){
 
-                    },
-                    child: Text('확인', style: Theme.of(context).textTheme.titleLarge,)
+                      },
+                      child: Text('높이설정', style: Theme.of(context).textTheme.headlineMedium,)
+                    ),
                   )
 
                 ],),
@@ -223,15 +221,15 @@ class SleepPage extends StatelessWidget {
   } // 빌드 끝
 
   void changeHeight(position, displayHeight) async {
-    print("체인지");
+    print("✨높이 변경");
     try {
-      String heightData = "{nowposture: $position, level: $displayHeight}";
+      String heightData = "✨{nowposture: $position, level: $displayHeight}";
       print(heightData);
       String response = await mqttHandler.pubHeightWaitResponse(heightData);
 
-      print(response);
+      print('✨$response');
     } catch (error) {
-      print('height Error: $error');
+      print('✨height Error: $error');
     }
   }
 }// 클래스 끝

@@ -142,7 +142,7 @@ void onSubscribed(String topic) {
 
 /// 비초기화된 연결 콜백
 void onDisconnected() {
-  print('예제 : 클라이언트 연결 해제시 클라이언트 콜백 - 클라이언트 연결 해제');
+  print('✨예제 : 클라이언트 연결 해제시 클라이언트 콜백 - 클라이언트 연결 해제');
   if (client.connectionStatus!.disconnectionOrigin ==
       MqttDisconnectionOrigin.solicited) {
     print('✨예제 : 클라이언트 연결 해제시 콜백은 의도된 것입니다 - 올바릅니다');

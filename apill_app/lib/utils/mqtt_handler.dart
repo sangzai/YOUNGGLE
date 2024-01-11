@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/models/alarm_model.dart';
@@ -10,10 +9,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttHandler extends GetxController {
-  //
-  // final mqttHandler = Get.find<MqttHandler>();
-  //
-  // final alarmCon = Get.put(AlarmController());
+
   final alarmCon = Get.put(AlarmController());
 
   static const String ip = '172.30.1.19';
@@ -29,11 +25,7 @@ class MqttHandler extends GetxController {
   static const pubTopic8 = 'Apill/alarm/add';
   static const pubTopic9 = 'Apill/alarm/delete';
   static const pubTopic10 = 'Apill/alarm/update';
-
-
-  // static const pubTopic8 = 'Apill/alarm/check';
-
-
+  static const pubTopic11 = 'Apill/App/powercheck';
 
   // mqtt response 저장되는변수
   final RxString data = "".obs;
@@ -62,21 +54,20 @@ class MqttHandler extends GetxController {
         .startClean()
         .withWillQos(MqttQos.atLeastOnce);
 
-    print('MQTT_LOGS::Mosquitto client connecting....');
+    print('✨MQTT_LOGS::Mosquitto client connecting....');
 
     client.connectionMessage = connMessage;
     try {
       await client.connect();
     } catch (e) {
-      print('Exception: $e');
+      print('✨Exception: $e');
       client.disconnect();
     }
 
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
-      print('MQTT_LOGS::Mosquitto client connected');
+      print('✨MQTT_LOGS::MQTT 클라이언트 연결');
     } else {
-      print(
-          'MQTT_LOGS::ERROR Mosquitto client connection failed - disconnecting, status is ${client
+      print('✨MQTT_LOGS::MQTT 클라이언트 연결 실패 - 연결끊김, 현재상태 ${client
               .connectionStatus}');
       client.disconnect();
       return throw Exception('MQTT connection failed');
@@ -86,35 +77,50 @@ class MqttHandler extends GetxController {
 
     //✨구독
     // 구독 토픽 1
+    // sql select 반환
     const subtopic1 = 'Apill/sql/return';
     client.subscribe(subtopic1, MqttQos.atMostOnce);
 
     // 구독 토픽 2
+    // 회원가입 결과
     const subtopic2 = 'Apill/join/return';
     client.subscribe(subtopic2, MqttQos.atMostOnce);
 
     // 구독 토픽 3
+    // 회원가입 아이디 체크
     const subtopic3 = 'Apill/join/idcheck/return';
     client.subscribe(subtopic3, MqttQos.atMostOnce);
 
     // 구독 토픽 4
+    // 알람 목록 받기
     const subtopic4 = 'Apill/alarm/Appreturn';
     client.subscribe(subtopic4, MqttQos.atMostOnce);
 
+    // 구독 토픽 5
+    // 앱 신호 확인용
+    const subtopic5 = 'Apill/App/powercheck/return';
+    client.subscribe(subtopic5, MqttQos.atMostOnce);
+
     // 구독 토픽 7
+    // 프로필 받기
     const subtopic7 = 'Apill/user/profile/return';
     client.subscribe(subtopic7, MqttQos.atMostOnce);
 
 
+
+
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
       final recMess = c![0].payload as MqttPublishMessage;
-      final pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      var pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
-      print("[${c[0].topic}]에서 데이터 도착");
+      print("✨[${c[0].topic}]에서 데이터 도착");
 
-      if (c[0].topic == 'Apill/alarm/Appreturn'){
-        print("✨알람을 듣는중이예요 : $pt");
+      if (c[0].topic == subtopic4){
+        print("✨알람 목록 구독 토픽 감지 : $pt");
         List<AlarmModel> alarmList = alarmModelFromJson(pt);
+
+        // 기존 알람 리스트 비우기
+        alarmCon.alarms.clear();
 
         for (AlarmModel alarmModel in alarmList){
           int id = alarmModel.id;
@@ -130,8 +136,12 @@ class MqttHandler extends GetxController {
           alarmCon.alarms.add(alarm);
         }
         print("✨알람 목록 갱신 완료! ${alarmCon.alarms}");
-
-
+      }
+      else if (c[0].topic== subtopic5 ) {
+        print("✨서버의 앱 신호 확인 토픽 감지");
+        pubAppOn();
+        pt = '';
+        // print("데이터 비워졌는지 확인 ${pt}");
 
       }
       // else if (c[0].topic==  ) {
@@ -148,27 +158,29 @@ class MqttHandler extends GetxController {
   }
 
   void onConnected() {
-    print('MQTT_LOGS:: Connected');
+    print('✨MQTT_LOGS:: Connected');
+    pubAppOn();
+    print("✨앱 상태 확인 토픽 게시");
   }
 
   void onDisconnected() {
-    print('MQTT_LOGS:: Disconnected');
+    print('✨MQTT_LOGS:: Disconnected');
   }
 
   void onSubscribed(String topic) {
-    print('MQTT_LOGS:: Subscribed topic: $topic');
+    print('✨MQTT_LOGS:: 구독 토픽: $topic');
   }
 
   void onSubscribeFail(String topic) {
-    print('MQTT_LOGS:: Failed to subscribe $topic');
+    print('✨MQTT_LOGS:: 구독 실패 $topic');
   }
 
   void onUnsubscribed(String? topic) {
-    print('MQTT_LOGS:: Unsubscribed topic: $topic');
+    print('✨MQTT_LOGS:: 구독 해제: $topic');
   }
 
   void pong() {
-    print('MQTT_LOGS:: Ping response client callback invoked');
+    print('✨MQTT_LOGS:: Ping response client callback invoked');
   }
 
   // 기본 답변 초기화 함수
@@ -188,6 +200,15 @@ class MqttHandler extends GetxController {
     print('✨Data updated: ${data.value}');
   }
 
+  // 앱이 켜진 신호 보내기
+  Future<void> pubAppOn() async {
+    final builder = MqttClientPayloadBuilder();
+
+    if (client.connectionStatus?.state == MqttConnectionState.connected) {
+      client.publishMessage(pubTopic11, MqttQos.atMostOnce, builder.payload!);
+    }
+  }
+
   // select용 sql함수
   Future<void> publishToSQL(String sql) async {
     print("✨ select sql 함수 실행2 ");
@@ -204,17 +225,17 @@ class MqttHandler extends GetxController {
     String response = '';
     // 게시
     await publishToSQL(sql);
-    print("1");
+    print("✨1 게시 완료");
 
     // 데이터 업데이트 기다리기
     await waitForDataUpdate();
-    print("2");
+    print("✨2 답변 대기 완료");
 
     response = data.value;
 
     await resetData();
 
-    print("3");
+    print("✨3 응답 비우기 완료");
     return response;
   }
 
@@ -322,8 +343,12 @@ class MqttHandler extends GetxController {
       TimeOfDay addAlarmTime,
       bool editedIsOn,
       bool isSelected,) async {
+      String hour = '${addAlarmTime.hour}'.padLeft(2,'0');
+      String minute = '${addAlarmTime.minute}'.padLeft(2,'0');
+
+
     final Map<String, dynamic> jsonData = {
-      'time' : "${addAlarmTime.hour}:${addAlarmTime.minute}",
+      'time' : "$hour:$minute",
       'isOn' : editedIsOn ? 1 : 0,
       'isSelected' : 0,
     };
@@ -358,8 +383,13 @@ class MqttHandler extends GetxController {
       bool editedIsOn,
       bool isSelected,
       int editedAlarmId, ) async {
+
+      String hour = '${editedAlarmTime.hour}'.padLeft(2,'0');
+      String minute = '${editedAlarmTime.minute}'.padLeft(2,'0');
+
+
     final Map<String, dynamic> jsonData = {
-      'time' : "${editedAlarmTime.hour}:${editedAlarmTime.minute}",
+      'time' : "$hour:$minute",
       'isOn' : editedIsOn ? 1 : 0,
       'isSelected' : 0,
       'id': editedAlarmId

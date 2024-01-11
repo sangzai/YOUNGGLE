@@ -37,11 +37,6 @@ class _RoutePageState extends State<RoutePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
     });
-
-
-
-
-
   }
 
   _asyncMethod() async {
@@ -51,18 +46,20 @@ class _RoutePageState extends State<RoutePage> {
       userName = await storage.read(key: 'userName');
       userId = await storage.read(key: 'userId');
       tutorial = await storage.read(key: '$userId tutorial');
+      print("✨유저 아이디 : $userId");
+      print("✨유저 이름 : $userName");
+      print("✨튜토리얼 확인 여부 :$tutorial");
     } catch (e) {
-      print('Error reading data: $e');
+      print('✨Error reading data: $e');
     }
-    print(userId);
-    print(userName);
-    print(tutorial);
+
 
     try {
       await mqttHandler.connect();
-      print("서버 연결 완료");
+      print("✨서버 연결 완료");
+
     } catch(e){
-      print("서버 연결 실패 $e");
+      print("✨서버 연결 실패 $e");
     }
 
     // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
@@ -70,7 +67,7 @@ class _RoutePageState extends State<RoutePage> {
       userCon.userId.value = userId!;
       userCon.userName.value = userName!;
     } else {
-      print('로그인이 필요합니다');
+      print('✨로그인이 필요합니다');
       await Get.offAllNamed('/login');
     }
 

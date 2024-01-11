@@ -288,16 +288,6 @@ class _HomePageState extends State<HomePage> {
     // 바뀐 날짜에 맞게 파이차트 그래프 수정
     // 하루치 데이터 SleepNum으로 쪼개기
     statisticCon.splitSelectedDateData = RxList<List<SelectDateData>>.from(await splitDateData(statisticCon.selectedDateData));
-    // print('statistic_page.dart 출력중');
-    // for (var data in statisticCon.splitselectedDateData) {
-    //   for(var datas in data){
-    //     print('Sleep Number: ${datas.sleepNum}');
-    //     print('Start Time: ${datas.startTime.toLocal().toString()}');
-    //     print('End Time: ${datas.endTime.toLocal().toString()}');
-    //     print('Sleep Depth: ${datas.sleepDepth}');
-    //     print('------------------------');
-    //   }
-    // }
 
     // 쪼갠 데이터 중 가장 수면시간이 긴 데이터의 인덱스를 구하기
     statisticCon.pieIndex.value = await findLongestSleep(statisticCon.splitSelectedDateData as List<List<SelectDateData>>);
@@ -313,6 +303,10 @@ class _HomePageState extends State<HomePage> {
     statisticCon.lineData.assignAll(getLineData(statisticCon.splitSelectedDateData[statisticCon.pieIndex.value]));
     statisticCon.lineBottomTitle.assignAll(getLineBottomTitle(statisticCon.splitSelectedDateData[statisticCon.pieIndex.value]));
 
+    getBarChartData(
+        statisticCon.splitSelectedDateData[statisticCon.pieIndex.value],
+        mqttHandler
+    );
 
     // 만약 선택한 날짜의 주일이 다르면
     if( TimeCalculators().findSunday(selectedDate) != statisticCon.selectedDateSunday.value ){

@@ -34,19 +34,20 @@ class _AlarmPageState extends State<AlarmPage> {
     });
   }
 
-  @override
-  void dispose() {
-    mqttHandler.client.unsubscribe('Apill/alarm/Appreturn');
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   mqttHandler.client.unsubscribe('Apill/alarm/Appreturn');
+  //   super.dispose();
+  // }
 
   Future<void> _initializeData() async {
     // 비동기 작업 수행
-    await mqttHandler.client.subscribe('Apill/alarm/Appreturn', MqttQos.atMostOnce);
+    // await mqttHandler.client.subscribe('Apill/alarm/Appreturn', MqttQos.atMostOnce);
     var response = await mqttHandler.pubGetAlarmWaitResponse();
     print("✨알람 초기화 함수");
 
     List<AlarmModel> alarmList = alarmModelFromJson(response);
+    alarms.clear();
 
     for (AlarmModel alarmModel in alarmList){
       int id = alarmModel.id;
@@ -69,11 +70,6 @@ class _AlarmPageState extends State<AlarmPage> {
       // print("✨알람 페이지 : $response");
     });
   }
-
-  // Future<void> saveAlarms(Alarm alarms) async {
-  //   Alarm alarmsList = alarms;
-  //
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -125,55 +121,57 @@ class _AlarmPageState extends State<AlarmPage> {
             ],
           ),
           // 알람 목록
-          Positioned(
-            top: AppBar().preferredSize.height + 20.0,
-            left: 0.0,
-            right: 0.0,
-            bottom: 0.0,
-            child: ListView.builder(
-              itemCount: alarms.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: AlarmTile(
-                    alarm: alarms[index],
-                    onAlarmSelected: (isSelected) {
-                      setState(() {
-                        alarms[index].isSelected = isSelected;
-                        checkAllbox = alarms.any((alarm) => alarm.isSelected);
-
-                      });
-                    },
-                    onDelete: () {
-                      setState(() {
-                        alarms.removeWhere((alarm) => alarm.isSelected);
-                      });
-                    },
-                    onLongPress: () async {
-                      // final editedAlarm = await _showEditAlarmDialog(context, alarms[index]);
-                      // if (editedAlarm != null) {
-                      //   setState(() {
-                      //     alarms[alarms.indexOf(alarms[index])] = editedAlarm;
-                      //   });
-                      // }
-                      final editedAlarm = await _showEditAlarmDialog(context, alarms[index]);
-
-                      if (editedAlarm != null) {
+          Obx(
+            ()=> Positioned(
+              top: AppBar().preferredSize.height + 20.0,
+              left: 0.0,
+              right: 0.0,
+              bottom: 0.0,
+              child: ListView.builder(
+                itemCount: alarms.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: AlarmTile(
+                      alarm: alarms[index],
+                      onAlarmSelected: (isSelected) {
                         setState(() {
-                          alarms[alarms.indexOf(alarms[index])] = editedAlarm;
+                          alarms[index].isSelected = isSelected;
+                          checkAllbox = alarms.any((alarm) => alarm.isSelected);
+
                         });
-                        updateAlarmAndPublish(editedAlarm);
-                      }
-                    },
-                    onToggle: () async {
-                      setState(() {
-                        alarms[index].isOn = !alarms[index].isOn;
-                      });
-                      await updateAlarmAndPublish(alarms[index]);
-                    },
-                  ),
-                );
-              },
+                      },
+                      onDelete: () {
+                        setState(() {
+                          alarms.removeWhere((alarm) => alarm.isSelected);
+                        });
+                      },
+                      onLongPress: () async {
+                        // final editedAlarm = await _showEditAlarmDialog(context, alarms[index]);
+                        // if (editedAlarm != null) {
+                        //   setState(() {
+                        //     alarms[alarms.indexOf(alarms[index])] = editedAlarm;
+                        //   });
+                        // }
+                        final editedAlarm = await _showEditAlarmDialog(context, alarms[index]);
+
+                        if (editedAlarm != null) {
+                          setState(() {
+                            alarms[alarms.indexOf(alarms[index])] = editedAlarm;
+                          });
+                          // updateAlarmAndPublish(alarms[alarms.indexOf(alarms[index])]);
+                        }
+                      },
+                      onToggle: () async {
+                        setState(() {
+                          alarms[index].isOn = !alarms[index].isOn;
+                        });
+                        // await updateAlarmAndPublish(alarms[index]);
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -181,27 +179,27 @@ class _AlarmPageState extends State<AlarmPage> {
 
   }
 
-  Future<void> updateAlarmAndPublish(Alarm editedAlarm) async {
-    // int editedAlarmIndex = alarms.indexWhere((alarm) => alarm.id == editedAlarm.id);
-
-    // 확인된 인덱스가 유효하다면 해당 위치에 변경된 알람을 설정
-    // if (editedAlarmIndex != -1) {
-    //   alarms[editedAlarmIndex] = editedAlarm;
-
-      // 변경된 알람의 아이디와 시간 확인
-    int editedAlarmId = editedAlarm.id ?? 0; // 예시: 0은 기본값
-    TimeOfDay editedAlarmTime = editedAlarm.time;
-    bool editedIsOn = editedAlarm.isOn;
-    bool isSelected = false;
-    await mqttHandler.pubUpdateAlarm(
-      editedAlarmTime,
-      editedIsOn,
-      isSelected,
-      editedAlarmId,
-    );
-    await mqttHandler.pubGetAlarmWaitResponse();
-    // }
-  }
+  // Future<void> updateAlarmAndPublish(Alarm editedAlarm) async {
+  //   // int editedAlarmIndex = alarms.indexWhere((alarm) => alarm.id == editedAlarm.id);
+  //
+  //   // 확인된 인덱스가 유효하다면 해당 위치에 변경된 알람을 설정
+  //   // if (editedAlarmIndex != -1) {
+  //   //   alarms[editedAlarmIndex] = editedAlarm;
+  //
+  //     // 변경된 알람의 아이디와 시간 확인
+  //   int editedAlarmId = editedAlarm.id ?? 0; // 예시: 0은 기본값
+  //   TimeOfDay editedAlarmTime = editedAlarm.time;
+  //   bool editedIsOn = editedAlarm.isOn;
+  //   bool isSelected = false;
+  //   print('✨알람 수정 확인 : $editedAlarmId $editedAlarmTime $editedIsOn $isSelected');
+  //   await mqttHandler.pubUpdateAlarm(
+  //     editedAlarmTime,
+  //     editedIsOn,
+  //     isSelected,
+  //     editedAlarmId,
+  //   );
+  //   await mqttHandler.pubGetAlarmWaitResponse();
+  // }
 
   // 선택된 알람 삭제
   void _deleteSelectedAlarms() async {
@@ -214,8 +212,6 @@ class _AlarmPageState extends State<AlarmPage> {
 
     await mqttHandler.pubDeleteAlarm(selectedAlarmIds);
 
-    mqttHandler.pubGetAlarmWaitResponse();
-
     setState(() {
       alarms.removeWhere((alarm) {
         if (alarm.isSelected) {
@@ -224,6 +220,8 @@ class _AlarmPageState extends State<AlarmPage> {
         return false; // Keep the alarm if it is not selected
       });
     });
+
+    mqttHandler.pubGetAlarmWaitResponse();
   }
 
   // 알람 추가 다이얼로그 표시
@@ -257,6 +255,7 @@ class _AlarmPageState extends State<AlarmPage> {
 
   // 알람 수정 다이얼로그 표시
   Future<Alarm?> _showEditAlarmDialog(BuildContext context, Alarm alarm) async {
+
     return showDialog<Alarm>(
       context: context,
       builder: (context) => EditAlarmDialog(editingAlarm: alarm),
@@ -469,7 +468,8 @@ class _AlarmTileState extends State<AlarmTile> {
   }
 
   String _formatTime(TimeOfDay time) {
-    final hour = time.hourOfPeriod;
+    final hour = '${time.hourOfPeriod}'.padLeft(2, '0');
+    // final hour = time.hourOfPeriod;
     final minute = '${time.minute}'.padLeft(2, '0');
     final period = time.period == DayPeriod.am ? '오전' : '오후';
 
@@ -487,14 +487,22 @@ class EditAlarmDialog extends StatefulWidget {
 }
 
 class _EditAlarmDialogState extends State<EditAlarmDialog> {
+
+  final mqttHandler = Get.find<MqttHandler>();
+
+  late int id;
+
   late TimeOfDay selectedTime;
+
+  late TimeOfDay editedTime;
 
   @override
   void initState() {
     super.initState();
     selectedTime = widget.editingAlarm.time;
+    id = widget.editingAlarm.id!;
+    editedTime = selectedTime;
   }
-
   @override
   Widget build(BuildContext context) {
 
@@ -514,7 +522,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
             ),
             onPressed: () => _showTimePicker(context),
             child: Text(
-              '${_formatTime(selectedTime)}',
+              '${_formatTime(editedTime)}',
               style: TextStyle(
                 color: AppColors.appColorBlack.lighten(15),
                 fontWeight: FontWeight.w600,
@@ -538,6 +546,8 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
               onPressed: () {
 
                 _saveAlarm(context);
+
+
               },
               child: Text('저장'),
             ),
@@ -560,22 +570,35 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
 
     if (pickedTime != null) {
       setState(() {
-        selectedTime = pickedTime;
+        editedTime = pickedTime;
       });
     }
   }
 
-  void _saveAlarm(BuildContext context) {
+  Future<void> _saveAlarm(BuildContext context) async {
+
     final editedAlarm = Alarm(
-        selectedTime,
+        editedTime,
+        id: id,
         isOn: widget.editingAlarm.isOn,
         isSelected: widget.editingAlarm.isSelected
     );
+
     Navigator.of(context).pop(editedAlarm);
+  //   ✨
+
+  await mqttHandler.pubUpdateAlarm(
+    editedTime,
+    widget.editingAlarm.isOn,
+    widget.editingAlarm.isSelected,
+    id,
+  );
+  await mqttHandler.pubGetAlarmWaitResponse();
+
   }
 
   String _formatTime(TimeOfDay time) {
-    final hour = time.hourOfPeriod;
+    final hour = "${time.hourOfPeriod}".padLeft(2,'0');
     final minute = '${time.minute}'.padLeft(2, '0');
     final period = time.period == DayPeriod.am ? '오전' : '오후';
 

@@ -48,7 +48,7 @@ class _JoinPageState extends State<JoinPage> {
       setState(() {
         selectedDate = picked;
         birth.text = '${picked.year}-${picked.month}-${picked.day}';
-        print(birth.text);
+        // print('✨${birth.text}');
         calculateAge();
       });
     }
@@ -563,7 +563,7 @@ class _JoinPageState extends State<JoinPage> {
 
       if (jsonResponse.isNotEmpty) {
         Map<String, dynamic> result = jsonResponse.first;
-        print("$result: ${result.runtimeType}");
+        print("✨$result: ${result.runtimeType}");
 
         int countValue = result["count(*)"];
         print(countValue);

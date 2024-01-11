@@ -15,7 +15,7 @@ class TodaySummary extends StatelessWidget {
   Widget build(BuildContext context) {
     int positionChangeCount = statisticCon.stackBarChartData.length - 1 ;
     String totalTodaySleepTime = getTotalTodaySleepTime(statisticCon.splitSelectedDateData);
-    print(totalTodaySleepTime);
+    print("✨statistic_today_summary 오늘 수면 시간 : $totalTodaySleepTime");
 
     return Container(
         decoration: BoxDecoration(

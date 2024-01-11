@@ -121,26 +121,26 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        IconButton(
-                            onPressed: () {
-                              // TODO : 카카오 로그인
-                              print('카카오 로그인');
-                            },
-                            icon: Image.asset(
-                              'assets/image/klogo.png',
-                              width: 45,
-                              height: 45,
-                            )),
-                        IconButton(
-                            onPressed: () {
-                              // TODO : 구글 로그인
-                              print('구글 로그인');
-                            },
-                            icon: Image.asset(
-                              'assets/image/whiteGoogleIcon.png',
-                              width: 45,
-                              height: 45,
-                            )),
+                        // IconButton(
+                        //     onPressed: () {
+                        //       // TODO : 카카오 로그인
+                        //       print('카카오 로그인');
+                        //     },
+                        //     icon: Image.asset(
+                        //       'assets/image/klogo.png',
+                        //       width: 45,
+                        //       height: 45,
+                        //     )),
+                        // IconButton(
+                        //     onPressed: () {
+                        //       // TODO : 구글 로그인
+                        //       print('구글 로그인');
+                        //     },
+                        //     icon: Image.asset(
+                        //       'assets/image/whiteGoogleIcon.png',
+                        //       width: 45,
+                        //       height: 45,
+                        //     )),
                         Expanded(
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Color.fromRGBO(6, 27, 57, 1)),
                               onPressed: () {
-                                print('회원가입하기');
+                                print('✨회원가입하기');
                                 Get.toNamed('/join');
                                 // Navigator.push(
                                 //     context,

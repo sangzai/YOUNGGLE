@@ -338,6 +338,7 @@ class _TutorialPageState extends State<TutorialPage> {
   }
 
   Future<void> initalizeDataBeforeNavi() async{
+    print("✨튜토리얼 페이지의 initalizeDataBeforeNavi 함수");
     await storage.write(
         key: '${userCon.userId.value} tutorial',
         value : 'true'

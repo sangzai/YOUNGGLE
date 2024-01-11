@@ -30,7 +30,7 @@ Future<List<SelectDateData>> getSelectDateData(DateTime selectedDate, MqttHandle
   String response = await mqttHandler.pubSqlWaitResponse(sql);
   print("✨getSelectDateData 함수실행");
 
-  print(response);
+  print("✨$response");
 
   List<SelectDateData> selectDateDataList = selectDateDataFromJson(response);
 
@@ -214,6 +214,29 @@ List<String> getLineBottomTitle(List<SelectDateData> lineData){
   timeList.add(DateFormat.Hm().format(startTitleTime));
   timeList.add(DateFormat.Hm().format(endTitleTime));
 
-  print(timeList);
+  // print('그래프 하단 제목 : $timeList');
   return timeList;
+}
+
+Future<void> getBarChartData(List<SelectDateData> lineData, MqttHandler mqttHandler) async{
+  DateTime startTime = lineData.first.startTime;
+  DateTime endTime = lineData.last.endTime;
+
+  String sql = """
+                select posture,start_time,end_time 
+                from posture_history
+                where start_time >= '$startTime' 
+                  and end_time <= '$endTime'
+               """;
+
+  String response = await mqttHandler.pubSqlWaitResponse(sql);
+  print("✨자세 sql문 리턴");
+
+  // List<String> timeList = [];
+  //
+  // // 00:00 형식으로 시간을 포맷팅하여 리스트에 추가
+  // timeList.add(DateFormat.Hm().format(startTitleTime));
+  // timeList.add(DateFormat.Hm().format(endTitleTime));
+  //
+  // print(timeList);
 }
