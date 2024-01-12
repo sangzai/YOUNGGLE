@@ -7,7 +7,6 @@ import 'package:mainproject_apill/models/select_week_model.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_date_datas.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_week_datas.dart';
-import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/set_initial_date.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_piechart.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_today_body_chart.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_today_summary.dart';
@@ -32,13 +31,6 @@ class _HomePageState extends State<HomePage> {
   final userCon = Get.find<UserController>();
 
   final loading = Get.put(IsLoadingController());
-
-  @override
-  void initState() {
-    super.initState();
-    SetInitialDate().initializeData();
-    // 여기서 함수 호출
-  }
 
   @override
   Widget build(BuildContext context) {
