@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mainproject_apill/models/select_member_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 
@@ -15,6 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
   final mqttHandler = Get.find<MqttHandler>();
+  final userCon = Get.find<UserController>();
 
   TextEditingController idCon = TextEditingController();
   TextEditingController pwCon = TextEditingController();
@@ -190,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
   }
   void loginMember(id, pw) async {
     // FlutterSecureStorage 불러오기
-    final storage = FlutterSecureStorage();
+    // final storage = FlutterSecureStorage();
     print("✨로그인 버튼 클릭");
 
     try {
@@ -212,20 +215,24 @@ class _LoginPageState extends State<LoginPage> {
           print('로그인 성공!');
 
           //TODO : 스토리지 저장
-          await storage.write(
+          await userCon.storage.write(
               key: 'userId',
               value: memberList[0].memberId
           );
 
-          await storage.write(
+          await userCon.storage.write(
             key: 'userName',
             value: memberList[0].memberName,
           );
 
-          await storage.write(
+          await userCon.storage.write(
             key: 'userProfile',
-            value: '${memberList[0].memberGender},${memberList[0].memberAge}${memberList[0].memberBirth},${memberList[0].memberWeight},${memberList[0].memberHeight}'
+            value: '${memberList[0].memberGender},${memberList[0].memberAge},${DateFormat('yyyy-MM-dd').format(memberList[0].memberBirth)},${memberList[0].memberWeight},${memberList[0].memberHeight}'
           );
+          print("✨유저 정보 저장 확인");
+
+          String? value = await userCon.storage.read(key: 'userProfile');
+          print(value);
 
           Get.offAllNamed('/route');
         }

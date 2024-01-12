@@ -15,7 +15,7 @@ class JoinPage extends StatefulWidget {
 class _JoinPageState extends State<JoinPage> {
   DateTime selectedDate = DateTime.now();
 
-  final storage = FlutterSecureStorage();
+  // final storage = FlutterSecureStorage();
 
   final mqttHandler = Get.find<MqttHandler>();
 

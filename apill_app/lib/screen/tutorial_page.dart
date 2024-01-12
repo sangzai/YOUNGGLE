@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -16,7 +16,7 @@ class TutorialPage extends StatefulWidget {
 
 class _TutorialPageState extends State<TutorialPage> {
 
-  static final storage = FlutterSecureStorage();
+  // static final storage = FlutterSecureStorage();
 
   final userCon = Get.find<UserController>();
 
@@ -433,7 +433,7 @@ class _TutorialPageState extends State<TutorialPage> {
 
   Future<void> initalizeDataBeforeNavi() async{
     print("✨튜토리얼 페이지의 initalizeDataBeforeNavi 함수");
-    await storage.write(
+    await userCon.storage.write(
         key: '${userCon.userId.value} tutorial',
         value : 'true'
     );

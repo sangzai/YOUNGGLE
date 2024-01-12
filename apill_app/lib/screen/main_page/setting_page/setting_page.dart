@@ -43,8 +43,8 @@ class _SettingPageState extends State<SettingPage> {
                   SizedBox(height: 20,),
                   GestureDetector(
                     onTap: (){
-                      Get.to(SettingProfile());
-                      print('출력!');
+                      Get.to(()=>SettingProfile());
+                      // print('출력!');
                     },
                     behavior: HitTestBehavior.translucent,
                     child: Container(

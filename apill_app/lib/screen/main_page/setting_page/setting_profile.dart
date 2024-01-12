@@ -17,9 +17,7 @@ class SettingProfile extends StatefulWidget {
 
 class _SettingProfileState extends State<SettingProfile> {
 
-  static const storage = FlutterSecureStorage();
-
-  static String userInfo = '';
+  // final storage = FlutterSecureStorage();
 
   final mqttHandler = Get.find<MqttHandler>();
 
@@ -45,19 +43,24 @@ class _SettingProfileState extends State<SettingProfile> {
   }
 
   void loadUserProfile() async {
-    userInfo = (await storage.read(
-      key: 'userProfile'
-    ))!;
+    String? userinfo = await userCon.storage.read(key: 'userProfile');
+    print("✨유저 정보 로드 : ${userinfo}");
+    if(userinfo != null){
+      userCon.userInfo.value = userinfo;
+      List<String> userInfoList = userCon.userInfo.value.split(",");
+      setState(() {
+        input_id.text = userCon.userId.value;
+        input_name.text = userCon.userName.value;
+        input_gender.text = userInfoList[0];
+        input_age.text = getAge(userInfoList[2]);
+        birth.text = userInfoList[2];
+        input_weight.text = userInfoList[3];
+        input_height.text = userInfoList[4];
+      });
+    } else {
+      print("✨유저 프로필 못 찾음");
+    }
 
-    List<String> userInfoList = userInfo.split(",");
-
-    input_id.text = userCon.userId.value;
-    input_name.text = userCon.userName.value;
-    input_gender.text = userInfoList[0];
-    input_age.text = getAge(userInfoList[2]);
-    birth.text = userInfoList[2];
-    input_weight.text = userInfoList[3];
-    input_height.text = userInfoList[4];
   }
 
   String getAge(String birth){
@@ -123,16 +126,13 @@ class _SettingProfileState extends State<SettingProfile> {
 
   Future<void> deleteAccount() async {
     String deleteSql = """
-    DELETE 
-    FROM members 
-    WHERE member_id = "${userCon.userId.value}'
-    """;
+                          DELETE 
+                          FROM members 
+                          WHERE member_id = "${userCon.userId.value}'
+                       """;
     String response = await mqttHandler.pubSqlWaitResponse(deleteSql);
 
   }
-
-
-
 
 
 
@@ -492,7 +492,7 @@ class _SettingProfileState extends State<SettingProfile> {
                                                   children: [
                                                     ElevatedButton.icon(onPressed: () async  {
                                                       await deleteAccount();
-                                                      await storage.deleteAll();
+                                                      await userCon.storage.deleteAll();
                                                       Get.offAll(const RoutePage());
                                                     }
                                                         , icon: Icon(Icons.circle_outlined), label: Text('회원 탈퇴 하기'),
@@ -568,7 +568,7 @@ class _SettingProfileState extends State<SettingProfile> {
                                       children: [
                                         ElevatedButton.icon(onPressed: () async {
                                           // 현재 페이지 삭제한 후 페이지 이동
-                                          await storage.deleteAll();
+                                          await userCon.storage.deleteAll();
                                           Get.offAll(RoutePage());
                                         }
                                             , icon: Icon(Icons.circle_outlined), label: Text('로그아웃 하기'),

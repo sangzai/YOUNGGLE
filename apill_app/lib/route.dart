@@ -24,7 +24,6 @@ class _RoutePageState extends State<RoutePage> {
 
   final statisticCon = Get.put(StatisticCon());
 
-  static final storage = FlutterSecureStorage();
   String? userId = '';
   String? tutorial = '';
   String? userName = '';
@@ -43,9 +42,9 @@ class _RoutePageState extends State<RoutePage> {
     // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
     // 데이터가 없을때는 null을 반환
     try {
-      userName = await storage.read(key: 'userName');
-      userId = await storage.read(key: 'userId');
-      tutorial = await storage.read(key: '$userId tutorial');
+      userName = await userCon.storage.read(key: 'userName');
+      userId = await userCon.storage.read(key: 'userId');
+      tutorial = await userCon.storage.read(key: '$userId tutorial');
       print("✨유저 아이디 : $userId");
       print("✨유저 이름 : $userName");
       print("✨튜토리얼 확인 여부 :$tutorial");

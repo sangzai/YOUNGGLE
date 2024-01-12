@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/loading_controller.dart';
+import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_page.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/statistic_page.dart';
 import 'package:mainproject_apill/screen/main_page/setting_page/setting_page.dart';
@@ -27,7 +28,8 @@ class BottomNaviPage extends StatefulWidget {
 class _BottomNaviPageState extends State<BottomNaviPage> {
   // 바텀 네비게이션 바 인덱스
   int _selectedIndex = 0;
-  static final storage = FlutterSecureStorage();
+  // static final storage = FlutterSecureStorage();
+  final userCon = Get.find<UserController>();
 
   @override
   void initState() {
@@ -35,7 +37,7 @@ class _BottomNaviPageState extends State<BottomNaviPage> {
     _selectedIndex = widget.selectedIndex;
 
     // TODO: 디버깅용 스토리지 관리
-    storage.deleteAll();
+    // userCon.storage.deleteAll();
 
   }
 
