@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
+import 'package:mainproject_apill/models/select_posture_model.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_calculators.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
 
@@ -218,25 +219,34 @@ List<String> getLineBottomTitle(List<SelectDateData> lineData){
   return timeList;
 }
 
-Future<void> getBarChartData(List<SelectDateData> lineData, MqttHandler mqttHandler) async{
-  DateTime startTime = lineData.first.startTime;
-  DateTime endTime = lineData.last.endTime;
+Future<List<SelectPostureModel>> getBarChartData(List<SelectDateData> barData, MqttHandler mqttHandler) async{
+  DateTime startTime = barData.first.startTime;
+  DateTime endTime = barData.last.endTime;
 
   String sql = """
-                select posture,start_time,end_time 
+                select posture,TIMESTAMPDIFF(MINUTE, start_time, end_time) AS minutes 
                 from posture_history
                 where start_time >= '$startTime' 
                   and end_time <= '$endTime'
                """;
 
   String response = await mqttHandler.pubSqlWaitResponse(sql);
-  print("✨자세 sql문 리턴");
 
-  // List<String> timeList = [];
-  //
-  // // 00:00 형식으로 시간을 포맷팅하여 리스트에 추가
-  // timeList.add(DateFormat.Hm().format(startTitleTime));
-  // timeList.add(DateFormat.Hm().format(endTitleTime));
-  //
-  // print(timeList);
+  print("✨자세 sql문 리턴");
+  print(response);
+
+  final selectPostureModel = selectPostureModelFromJson(response);
+
+  List<SelectPostureModel> formattedList = [];
+
+  for (var item in selectPostureModel) {
+    formattedList.add(SelectPostureModel(
+      posture: item.posture,
+      minutes: item.minutes
+    ));
+  }
+
+  print("데이터 확인 : $formattedList");
+
+  return formattedList;
 }

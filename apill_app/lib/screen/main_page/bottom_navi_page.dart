@@ -6,10 +6,9 @@ import 'package:get/get.dart';
 import 'package:mainproject_apill/loading_controller.dart';
 import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_page.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/statistic_page.dart';
+import 'package:mainproject_apill/screen/main_page/setting_page/setting_page.dart';
 
 import 'package:mainproject_apill/screen/main_page/sleep_page/sleep_page.dart';
-import 'package:mainproject_apill/screen/setting_page/setting_page.dart';
-import 'package:mainproject_apill/screen/setting_page/test.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 

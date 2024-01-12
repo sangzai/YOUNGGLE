@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
+import 'package:mainproject_apill/models/select_posture_model.dart';
 import 'package:mainproject_apill/models/select_week_model.dart';
 import 'package:mainproject_apill/models/select_month_model.dart';
 
@@ -55,7 +56,7 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
   RxList lineBottomTitle = ["00:00","00:00"].obs;
 
   // 수평 누적 그래프 데이터
-  RxList stackBarChartData = [1,1].obs;
+  RxList stackBarChartData = [].obs;
 
   // 애니메이션
   // 버튼 누르면 사라지게 하는 변수

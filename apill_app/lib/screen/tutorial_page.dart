@@ -20,8 +20,9 @@ class _TutorialPageState extends State<TutorialPage> {
 
   final userCon = Get.find<UserController>();
 
-  // bool isPillowConnected = false; // IoT 기기 연결상태
-  // 1. Define a `GlobalKey` as part of the parent widget's state
+  RxBool frontCheck = false.obs;
+  RxBool sideCheck = false.obs;
+
   final _introKey = GlobalKey<IntroductionScreenState>();
   RxInt countdownRx = 30.obs; // 타이머 시간 설정
   Timer? _countdownTimer; // Timer?로 변경
@@ -92,7 +93,7 @@ class _TutorialPageState extends State<TutorialPage> {
               _countdownTimer?.cancel(); // 타이머 종료
               countdownRx.value = 30;
             },
-            child: Text('닫기'),
+            child: Text('확인'),
           ),
         ],
       ),
@@ -125,7 +126,7 @@ class _TutorialPageState extends State<TutorialPage> {
               _countdownTimer?.cancel(); // 타이머 종료
               countdownRx.value = 30;
             },
-            child: Text('닫기'),
+            child: Text('확인'),
           ),
         ],
       ),
@@ -148,6 +149,15 @@ class _TutorialPageState extends State<TutorialPage> {
             },
             child: Text('확인'),
           ),
+          ElevatedButton(
+            onPressed: () {
+              // 닫기 버튼을 눌렀을 때의 동작을 추가
+              Navigator.of(context).pop(); // 다이얼로그 닫기
+              // 여기에 닫기 버튼을 눌렀을 때의 추가 동작을 작성
+            },
+            child: Text('닫기'),
+          ),
+
         ],
       ),
     );
@@ -169,9 +179,6 @@ class _TutorialPageState extends State<TutorialPage> {
                   actions: [
                     ElevatedButton(onPressed: () async {
                       Get.back(); // 다이얼로그 닫기
-                      // Navigator.of(context).pushReplacement(
-                      //     MaterialPageRoute(builder: (context)=>BottomNaviPage()));
-
                       initalizeDataBeforeNavi();
                     }, child: Text('확인')),
 
@@ -184,6 +191,104 @@ class _TutorialPageState extends State<TutorialPage> {
       ),
     );
   }
+
+  void _connectPower() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('전원'),
+          content: Text('전원 연결 중...', style: TextStyle(fontSize: 20, color: Colors.black),),
+        );
+      },
+    );
+
+    bool isConnected = await _checkPowerConnection();
+
+    // 5초 동안의 카운트다운 다이얼로그
+    int countdown = 5;
+    _countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (countdown > 0) {
+        // 다이얼로그 업데이트
+        Navigator.of(context).pop(); // 현재 다이얼로그 닫기
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('전원'),
+              content: Text('전원 연결 중...남은 시간: $countdown초', style: TextStyle(fontSize: 20, color: Colors.black),),
+            );
+          },
+        );
+        countdown--;
+      } else {
+        // 5초 후에 전원 연결 여부에 따라 다이얼로그 표시
+        timer.cancel(); // 타이머 종료
+        Navigator.of(context).pop(); // 다이얼로그 닫기
+
+        if (isConnected) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('전원'),
+                content: Text('전원이 연결되었습니다.', style: TextStyle(fontSize: 20, color: Colors.black),),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // 전원 연결 완료 다이얼로그 닫기
+                      _introKey.currentState?.next(); // 온보딩의 다음 페이지로 이동
+                    },
+                    child: Text('확인'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // 닫기 버튼을 눌렀을 때의 동작을 추가
+                      Navigator.of(context).pop(); // 다이얼로그 닫기
+                      // 여기에 닫기 버튼을 눌렀을 때의 추가 동작을 작성
+                    },
+                    child: Text('닫기'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('전원'),
+                content: Text('전원 연결 실패. 다시 시도해주세요.'),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // 전원 연결 실패 다이얼로그 닫기
+                    },
+                    child: Text('확인'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      }
+    });
+  }
+
+  Future<bool> _checkPowerConnection() async {
+    // 여기에 전원 연결 여부를 확인하는 비동기 작업을 추가
+    // 예를 들어, 특정 API를 호출하거나 하드웨어 상태를 확인가능
+
+    // 여기에서는 1초 동안 딜레이 후 연결된 것으로 간주하는 코드를 작성
+    await Future.delayed(Duration(seconds: 1));
+
+    // 실제로는 여러 요인을 고려하여 전원 연결 여부를 판단해야 함
+    // 여기에서는 간단한 예시이므로 항상 true를 반환
+    return true;
+  }
+
+
 
   @override
   void dispose() {
@@ -229,38 +334,26 @@ class _TutorialPageState extends State<TutorialPage> {
                 title: '베개의 전원을 켜주세요.',
                 bodyWidget: Column(
                   children: [
-                    Container(
-                      child: Text('전원을 켠 후 버튼을 눌러주세요.', style: Theme.of(context).textTheme.titleMedium,),
-                    ),
+                    Text('전원을 켠 후 버튼을 눌러주세요.', style: Theme.of(context).textTheme.titleMedium,),
                     SizedBox(height: 30,),
-                    Container(
+                    SizedBox(
+                      width: 200,
+                      height: 60,
                       child: ElevatedButton(onPressed: (){
-                        showDialog(context: context, builder: (context){
-                          return AlertDialog(
-                            title: Text('전원'),
-                            content: Text('전원이 연결되었습니다.', style: TextStyle(fontSize: 20, color: Colors.black),),
-                            actions: [
-                              Container(
-                                child: ElevatedButton(onPressed: (){
-                                  Navigator.of(context).pop();
-                                  _introKey.currentState?.next();
-                                }, child: Text('확인')),
-                              )
-                            ],
-                          );
-                        });
-                      }, child: Text('On', style: Theme.of(context).textTheme.titleLarge,)),
+                        _connectPower();
+                      }, child: Text('연동하기', style: Theme.of(context).textTheme.titleLarge,)),
                     ),
                   ],
                 ),
                 image: Container(
                   // 베개 그림
-                    child: Image.asset('assets/image/switch.png', width: MediaQuery.of(context).size.width,)
+                    child: Image.asset('assets/image/pillow_power.png', width: MediaQuery.of(context).size.width,)
                 ),
                 decoration: PageDecoration(
                     contentMargin:EdgeInsets.all(20),
                     pageMargin: EdgeInsets.all(30))
             ),
+
             PageViewModel(
                 title: '베개를 통해 높이를 측정하겠습니다.',
                 bodyWidget: Column(
@@ -278,9 +371,15 @@ class _TutorialPageState extends State<TutorialPage> {
                     )
                   ],
                 ),
-                image: Container(
-                  // 등누운자세 그림
-                    child: Image.asset('assets/image/direct_pose.png', width: MediaQuery.of(context).size.width)
+                image: Obx(
+                  ()=> Container(
+                    // 등누운자세 그림
+                      child: Image.asset(
+                          frontCheck.value ?
+                          'assets/image/posture_front_check.png':
+                          'assets/image/posture_front.png',
+                          width: MediaQuery.of(context).size.width)
+                  ),
                 ),
                 decoration: PageDecoration(
                     contentMargin:EdgeInsets.all(20),
@@ -301,9 +400,15 @@ class _TutorialPageState extends State<TutorialPage> {
                     ),
                   ],
                 ),
-                image: Container(
-                  // 옆누운자세 그림
-                    child: Image.asset('assets/image/side_pose.png', width: MediaQuery.of(context).size.width,)
+                image: Obx(
+                  ()=> Container(
+                    // 옆누운자세 그림
+                      child: Image.asset(
+                        sideCheck.value ?
+                        'assets/image/posture_side_check.png':
+                        'assets/image/posture_side.png',
+                        width: MediaQuery.of(context).size.width,)
+                  ),
                 ),
                 decoration: PageDecoration(
                     contentMargin:EdgeInsets.all(20),
@@ -318,18 +423,7 @@ class _TutorialPageState extends State<TutorialPage> {
       
           done: Text('완료'),
           onDone: () async {
-            // 상호작용 : IoT 기기와 통신하여 연결 상태 업데이트
-            // 실제 코드에서는 적절한 IoT 통신 코드를 사용해야 함
-            // setState(() {
-            //   isPillowConnected = true;
-            // });
-      
-            // Navigator.of(context).pushReplacement(
-            //     MaterialPageRoute(builder: (context)=>BottomNaviPage())
-            // );
             // TODO : 튜토리얼에 true를 저장하면 튜토리얼 다시 안보게 됨
-
-
             initalizeDataBeforeNavi();
           },
         ),
@@ -343,10 +437,9 @@ class _TutorialPageState extends State<TutorialPage> {
         key: '${userCon.userId.value} tutorial',
         value : 'true'
     );
-    await SetInitialDate().initializeData();
+    // await SetInitialDate().initializeData();
     Get.offAllNamed('/navi');
   }
-
 }
 
 

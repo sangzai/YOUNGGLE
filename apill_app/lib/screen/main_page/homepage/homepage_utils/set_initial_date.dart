@@ -8,6 +8,7 @@ import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_date_datas.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_week_datas.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
+import 'package:mqtt_client/mqtt_client.dart';
 class SetInitialDate {
 
   final mqttHandler = Get.find<MqttHandler>();
@@ -17,30 +18,33 @@ class SetInitialDate {
 
   // 오늘 날짜를 DB 데이터가 있는 마지막 날짜로 바꿔주기
   Future<void> initializeData() async {
+    mqttHandler.client.unsubscribe('Apill/App/powercheck/return');
+    mqttHandler.data.value = '';
     // 로딩 켜
-    // IsLoadingController.to.isLoading = true;
+    IsLoadingController.to.isLoading = true;
 
     // DB에 있는 데이터를 받아오는 함수
     await getActiveDates();
-    Future.delayed(Duration(milliseconds: 5000));
+    Future.delayed(Duration(seconds: 1));
 
     // 오늘 날짜를 활성화된 날짜의 마지막 날로 바꿔주기
     await setInitialSelectedDate();
-    Future.delayed(Duration(milliseconds: 5000));
     // selectedDate가 바뀌면 selectedDateSunday 변경
     await setInitialSunday();
-    Future.delayed(Duration(milliseconds: 5000));
     // 선택한 날짜의 데이터 받기
     await setInitialDateData();
-    Future.delayed(Duration(milliseconds: 5000));
+    Future.delayed(Duration(seconds: 1));
     // 선택한 날짜의 일주일 데이터 받기
     await setInitialWeekData();
     // TODO : 선택한 날짜의 월간 데이터 받기
+    Future.delayed(Duration(seconds: 1));
 
-    Future.delayed(Duration(milliseconds: 5000));
 
     // 로딩 화면 꺼
-    // IsLoadingController.to.isLoading = false;
+    IsLoadingController.to.isLoading = false;
+    await mqttHandler.client.subscribe('Apill/App/powercheck/return',MqttQos.atMostOnce);
+    Future.delayed(Duration(seconds: 1));
+    mqttHandler.pubAppOn();
   }
 
   Future<void> getActiveDates() async {
@@ -89,36 +93,32 @@ class SetInitialDate {
     statisticCon.selectedDateData = RxList<SelectDateData>.from(
         await getSelectDateData(statisticCon.selectedDate.value, mqttHandler)
     );
-    print('✨set_initial_date.dart 파일의 setInitialDateData 함수 1');
-    Future.delayed(Duration(milliseconds: 5000));
+    print('✨set_initial_date.dart 파일의 getSelectDateData 함수 1');
+    Future.delayed(Duration(seconds: 1));
 
     // 하루치 데이터 SleepNum으로 쪼개기
     statisticCon.splitSelectedDateData = RxList<List<SelectDateData>>.from(
         await splitDateData(statisticCon.selectedDateData)
     );
-    print('✨set_initial_date.dart 파일의 setInitialDateData 함수 2');
-    Future.delayed(Duration(milliseconds: 5000));
+    print('✨set_initial_date.dart 파일의 splitDateData 함수 2');
 
     // 쪼갠 데이터 중 가장 수면시간이 긴 데이터의 인덱스를 구하기
     statisticCon.pieIndex.value = await findLongestSleep(
         statisticCon.splitSelectedDateData as List<List<SelectDateData>>
     );
-    print('✨set_initial_date.dart 파일의 setInitialDateData 함수 3');
-    Future.delayed(Duration(milliseconds: 5000));
+    print('✨set_initial_date.dart 파일의 findLongestSleep 함수 3');
 
     // 가장 수면시간이 긴 데이터를 파이차트 안쪽 텍스트에 적용(총 수면시간)
     statisticCon.totalSleepInPieChart.value = pieChartTotalSleep(
         statisticCon.splitSelectedDateData[statisticCon.pieIndex.value]
     );
-    print('✨set_initial_date.dart 파일의 setInitialDateData 함수 4');
-    Future.delayed(Duration(milliseconds: 5000));
+    print('✨set_initial_date.dart 파일의 pieChartTotalSleep 함수 4');
 
     // 가장 수면시간이 긴 데이터를 파이차트 안쪽 텍스트에 적용(수면 시작 시간 및 수면 종료 시간)
     statisticCon.startEndTimeInPieChart.value = pieChartTimeRange(
         statisticCon.splitSelectedDateData[statisticCon.pieIndex.value]
     );
-    print('✨set_initial_date.dart 파일의 setInitialDateData 함수 5');
-    Future.delayed(Duration(milliseconds: 5000));
+    print('✨set_initial_date.dart 파일의 pieChartTimeRange 함수 5');
 
 
     // 파이차트 데이터넣기
@@ -127,31 +127,33 @@ class SetInitialDate {
             statisticCon.splitSelectedDateData as List<List<SelectDateData>>,
             statisticCon.selectedDate.value)
     );
-    print('✨set_initial_date.dart 파일의 setInitialDateData 함수 6');
-    Future.delayed(Duration(milliseconds: 5000));
+    print('✨set_initial_date.dart 파일의 getPieData 함수 6');
 
 
     // 라인차트 데이터넣기
     statisticCon.lineData.assignAll(
         getLineData(statisticCon.splitSelectedDateData[statisticCon.pieIndex.value])
     );
-    print('✨set_initial_date.dart 파일의 setInitialDateData 함수 7');
-    Future.delayed(Duration(milliseconds: 5000));
+    print('✨set_initial_date.dart 파일의 getLineData 함수 7');
 
     statisticCon.lineBottomTitle.assignAll(
         getLineBottomTitle(statisticCon.splitSelectedDateData[statisticCon.pieIndex.value])
     );
-    print('✨set_initial_date.dart 파일의 setInitialDateData 함수 8');
-    Future.delayed(Duration(milliseconds: 5000));
+    print('✨set_initial_date.dart 파일의 getLineBottomTitle 함수 8');
 
 
     // 자세 차트 데이터
-    getBarChartData(
-      statisticCon.splitSelectedDateData[statisticCon.pieIndex.value],
-      mqttHandler
+    Future.delayed(Duration(seconds: 1));
+    // 자세 데이터 받기
+    statisticCon.stackBarChartData.assignAll(
+        await getBarChartData(
+            statisticCon.splitSelectedDateData[statisticCon.pieIndex.value],
+            mqttHandler)
     );
-    print('✨set_initial_date.dart 파일의 setInitialDateData 함수 9');
-    Future.delayed(Duration(milliseconds: 5000));
+    // statisticCon.stackBarChartData
+    print("나의 간절함 : ${statisticCon.stackBarChartData}");
+    print('✨set_initial_date.dart 파일의 getBarChartData 함수 9');
+    Future.delayed(Duration(seconds: 1));
 
 
   }
@@ -161,6 +163,8 @@ class SetInitialDate {
     statisticCon.selectedWeekData = RxList<SelectWeekData>.from(
         await getSelectWeekData(statisticCon.selectedDateSunday.value, mqttHandler)
     );
+    print('✨set_initial_date.dart 파일의 setInitialWeekData 함수');
+
   }
 }
 

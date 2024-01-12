@@ -36,10 +36,10 @@ class TodayCharts extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 4),
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(48, 4, 28, 4),
-                    child: HomeBarChart(),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(48, 4, 28, 4),
+                  //   child: HomeBarChart(),
+                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

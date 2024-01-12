@@ -195,8 +195,8 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       String sql = '''
-      SELECT * FROM members WHERE member_id = "$id" AND member_pw = "$pw"
-    ''';
+          SELECT * FROM members WHERE member_id = "$id" AND member_pw = "$pw"
+          ''';
       print("실행");
 
       String response = await mqttHandler.pubSqlWaitResponse(sql);
@@ -205,23 +205,33 @@ class _LoginPageState extends State<LoginPage> {
 
       // 로그인 결과가 있고, 결과가 빈 리스트가 아닌 경우에만 로그인 성공으로 간주
       if (response.isNotEmpty) {
-        List<MemberModel> memberList = memberModelFromJson(response);
-        // 로그인 성공 처리를 여기에 추가
-        // 예: 로그인 성공 메시지를 출력하거나, 다음 화면으로 이동하는 등의 동작 수행
-        print('로그인 성공!');
+        if (response != '[]') {
+          List<MemberModel> memberList = memberModelFromJson(response);
+          // 로그인 성공 처리를 여기에 추가
+          // 예: 로그인 성공 메시지를 출력하거나, 다음 화면으로 이동하는 등의 동작 수행
+          print('로그인 성공!');
 
-        //TODO : 스토리지 저장
-        await storage.write(
-            key: 'userId',
-            value: memberList[0].memberId
-        );
+          //TODO : 스토리지 저장
+          await storage.write(
+              key: 'userId',
+              value: memberList[0].memberId
+          );
 
-        await storage.write(
-          key: 'userName',
-          value: memberList[0].memberName,
-        );
+          await storage.write(
+            key: 'userName',
+            value: memberList[0].memberName,
+          );
 
-        Get.offAllNamed('/route');
+          await storage.write(
+            key: 'userProfile',
+            value: '${memberList[0].memberGender},${memberList[0].memberAge}${memberList[0].memberBirth},${memberList[0].memberWeight},${memberList[0].memberHeight}'
+          );
+
+          Get.offAllNamed('/route');
+        }
+        else{
+          Get.snackbar('로그인 실패', '아이디 또는 비밀번호가 일치하지 않습니다.');
+        }
 
       } else {
         // 로그인 실패 처리를 여기에 추가
@@ -236,6 +246,24 @@ class _LoginPageState extends State<LoginPage> {
       // 예외가 발생하면 에러 메시지 출력
       print('에러 발생: $error');
     }
+  }
+
+  // TODO : 적용
+  void showAlertDialog(String title, String content) {
+    Get.dialog(
+      AlertDialog(
+        title: Text(title),
+        content: Text(content, style: TextStyle(fontSize:20, color: Colors.black),),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text('확인'),
+          ),
+        ],
+      ),
+    );
   }
 
 }

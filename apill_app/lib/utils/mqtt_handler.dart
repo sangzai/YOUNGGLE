@@ -3,12 +3,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/models/alarm_model.dart';
+import 'package:mainproject_apill/models/pillow_height_model.dart';
 import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_controller.dart';
 import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_page.dart';
+import 'package:mainproject_apill/screen/main_page/sleep_page/pillow_height_controller.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttHandler extends GetxController {
+
+  final pillowHeightCon = Get.put(PillowHeightController());
 
   final alarmCon = Get.put(AlarmController());
 
@@ -20,7 +24,7 @@ class MqttHandler extends GetxController {
   static const pubTopic3 = 'Apill/join/idcheck';
   static const pubTopic4 = 'Apill/alarm/get';
   static const pubTopic5 = 'Apill/user/profile';
-  static const pubTopic6 = 'Apill/height';
+  static const pubTopic6 = 'Apill/App/height';
   static const pubTopic7 = 'Apill/alarm/check';
   static const pubTopic8 = 'Apill/alarm/add';
   static const pubTopic9 = 'Apill/alarm/delete';
@@ -57,20 +61,32 @@ class MqttHandler extends GetxController {
     print('✨MQTT_LOGS::Mosquitto client connecting....');
 
     client.connectionMessage = connMessage;
-    try {
-      await client.connect();
-    } catch (e) {
-      print('✨Exception: $e');
-      client.disconnect();
-    }
 
-    if (client.connectionStatus!.state == MqttConnectionState.connected) {
-      print('✨MQTT_LOGS::MQTT 클라이언트 연결');
-    } else {
-      print('✨MQTT_LOGS::MQTT 클라이언트 연결 실패 - 연결끊김, 현재상태 ${client
-              .connectionStatus}');
-      client.disconnect();
-      return throw Exception('MQTT connection failed');
+    while (true) {
+      try {
+        await client.connect();
+      } catch (e) {
+        print('✨Exception: $e');
+        client.disconnect();
+
+        Get.defaultDialog(
+          title: "✨연결 실패",
+          middleText: "✨연결 재시도중",
+          barrierDismissible: false,
+        );
+      }
+
+      if (client.connectionStatus!.state == MqttConnectionState.connected) {
+        print('✨MQTT_LOGS::MQTT 클라이언트 연결');
+        Get.back();
+        break;
+      } else {
+        print(
+            '✨MQTT_LOGS::MQTT 클라이언트 연결 실패 - 연결끊김, 현재상태 ${client.connectionStatus}');
+        client.disconnect();
+        print('✨Reconnecting in 10 seconds...');
+        await Future.delayed(Duration(seconds: 10));
+      }
     }
 
     // print('MQTT_LOGS::Subscribing to the test topic');
@@ -106,12 +122,14 @@ class MqttHandler extends GetxController {
     const subtopic7 = 'Apill/user/profile/return';
     client.subscribe(subtopic7, MqttQos.atMostOnce);
 
-
-
+    // 구독 토픽 8
+    // 높이 조절
+    const subtopic8 = 'Apill/App/height/return';
+    client.subscribe(subtopic8, MqttQos.atMostOnce);
 
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
       final recMess = c![0].payload as MqttPublishMessage;
-      var pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      final pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
       print("✨[${c[0].topic}]에서 데이터 도착");
 
@@ -140,15 +158,17 @@ class MqttHandler extends GetxController {
       else if (c[0].topic== subtopic5 ) {
         print("✨서버의 앱 신호 확인 토픽 감지");
         pubAppOn();
-        pt = '';
-        // print("데이터 비워졌는지 확인 ${pt}");
+        print("데이터 비워졌는지 확인 ${pt}");
+      }
+      else if (c[0].topic== subtopic8 ) {
+        print('✨높이 변경 신호 토픽 감지');
+        print('$pt');
+        final pillowHeight = pillowHeightFromJson(pt);
+        pillowHeightCon.pillowHeight.value = pillowHeight.nowlevel.toDouble();
+        pillowHeightCon.lateralHeight.value = pillowHeight.cplevel.toDouble();
+        pillowHeightCon.dosalHeight.value = pillowHeight.dplevel.toDouble();
 
       }
-      // else if (c[0].topic==  ) {
-      //
-      //
-      // }
-
 
       data.value = pt;
       update();
@@ -159,8 +179,7 @@ class MqttHandler extends GetxController {
 
   void onConnected() {
     print('✨MQTT_LOGS:: Connected');
-    pubAppOn();
-    print("✨앱 상태 확인 토픽 게시");
+    // print("✨앱 상태 확인 토픽 게시");
   }
 
   void onDisconnected() {
@@ -207,6 +226,8 @@ class MqttHandler extends GetxController {
     if (client.connectionStatus?.state == MqttConnectionState.connected) {
       client.publishMessage(pubTopic11, MqttQos.atMostOnce, builder.payload!);
     }
+
+    print("✨ 앱 신호확인 게시");
   }
 
   // select용 sql함수
@@ -221,6 +242,7 @@ class MqttHandler extends GetxController {
   }
   // select용 sql함수
   Future<String> pubSqlWaitResponse(String sql) async {
+    await resetData();
     print("✨ select sql 함수 실행1");
     String response = '';
     // 게시
@@ -250,6 +272,7 @@ class MqttHandler extends GetxController {
   }
   // 회원가입 아이디 중복 체크
   Future<String> pubCheckIdWaitResponse(String id) async {
+    await resetData();
     String response = '';
     // 게시
     await pubJoinCheckId(id);
@@ -275,6 +298,7 @@ class MqttHandler extends GetxController {
   }
   // 회원가입
   Future<String> pubJoinWaitResponse(String joinData) async {
+    await resetData();
     String response = '';
     // 게시
     await pubJoin(joinData);
@@ -300,6 +324,7 @@ class MqttHandler extends GetxController {
   }
   // 프로필 검색 함수
   Future<String> pubLoadProfileWaitResponse(String idData) async {
+    await resetData();
     String response = '';
     // 게시
     await pubLoadProfile(idData);
@@ -324,6 +349,7 @@ class MqttHandler extends GetxController {
   }
   // 알람 가져오는 함수
   Future<String> pubGetAlarmWaitResponse() async {
+    await resetData();
     String response = '';
     // 게시
     await pubGetAlarm();
@@ -406,19 +432,26 @@ class MqttHandler extends GetxController {
 
 
   // 높이값을 변경해주는 함수
-  Future<void> publishHeight(String heightData) async {
+  Future<void> publishHeight(int DP, int CP) async {
+    final Map<String, dynamic> jsonData = {
+      'DP' : DP,
+      'CP' : CP
+    };
+    final String encodeJson = jsonEncode(jsonData);
+
     final builder = MqttClientPayloadBuilder();
-    builder.addString(heightData);
+    builder.addString(encodeJson);
 
     if (client.connectionStatus?.state == MqttConnectionState.connected) {
       client.publishMessage(pubTopic6, MqttQos.atMostOnce, builder.payload!);
     }
   }
   // 높이값을 변경해주는 함수
-  Future<String> pubHeightWaitResponse(String heightData) async {
+  Future<String> pubHeightWaitResponse(int DP, int CP) async {
     String response = '';
+    await resetData();
     // 게시
-    await publishHeight(heightData);
+    await publishHeight(DP, CP);
     // 데이터 업데이트 기다리기
     await waitForDataUpdate();
     response = data.value;

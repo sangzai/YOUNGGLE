@@ -15,6 +15,7 @@ import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_calculators.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
+import 'package:mqtt_client/mqtt_client.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -35,6 +36,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    SetInitialDate().initializeData();
     // 여기서 함수 호출
   }
 
@@ -282,8 +284,12 @@ class _HomePageState extends State<HomePage> {
 
 
   Future<void> checkDateTime(DateTime selectedDate, MqttHandler mqttHandler) async {
+    mqttHandler.client.unsubscribe('Apill/App/powercheck/return');
+    mqttHandler.data.value = '';
+
     // 선택한 날짜의 데이터 받기
     statisticCon.selectedDateData = RxList<SelectDateData>.from(await getSelectDateData(selectedDate, mqttHandler));
+    Future.delayed(Duration(seconds: 1));
 
     // 바뀐 날짜에 맞게 파이차트 그래프 수정
     // 하루치 데이터 SleepNum으로 쪼개기
@@ -303,10 +309,15 @@ class _HomePageState extends State<HomePage> {
     statisticCon.lineData.assignAll(getLineData(statisticCon.splitSelectedDateData[statisticCon.pieIndex.value]));
     statisticCon.lineBottomTitle.assignAll(getLineBottomTitle(statisticCon.splitSelectedDateData[statisticCon.pieIndex.value]));
 
-    getBarChartData(
-        statisticCon.splitSelectedDateData[statisticCon.pieIndex.value],
-        mqttHandler
+    Future.delayed(Duration(seconds: 1));
+    // 자세 데이터 받기
+    statisticCon.stackBarChartData.assignAll(
+        await getBarChartData(
+            statisticCon.splitSelectedDateData[statisticCon.pieIndex.value],
+            mqttHandler)
     );
+    print("나의 간절함 ");
+    Future.delayed(Duration(seconds: 1));
 
     // 만약 선택한 날짜의 주일이 다르면
     if( TimeCalculators().findSunday(selectedDate) != statisticCon.selectedDateSunday.value ){
@@ -314,11 +325,16 @@ class _HomePageState extends State<HomePage> {
       statisticCon.selectedWeekData = RxList<SelectWeekData>.from(
           await getSelectWeekData(TimeCalculators().findSunday(selectedDate), mqttHandler)
       );
+      Future.delayed(Duration(seconds: 1));
+
       statisticCon.selectedDateSunday.value = TimeCalculators().findSunday(selectedDate);
     }
 
     // TODO : 만약 월이 달라진다면 데이터 받기
 
+
+
+    mqttHandler.client.subscribe('Apill/App/powercheck/return',MqttQos.atMostOnce);
   }
 
 } // 클래스 끝
