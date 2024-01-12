@@ -1,9 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/route.dart';
-import 'package:mainproject_apill/screen/login_page/login_page.dart';
 import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
@@ -89,14 +86,14 @@ class _SettingProfileState extends State<SettingProfile> {
       UPDATE members
       SET member_pw = '${newPasswordController.text}',
           member_weight = '${input_weight.text}',
-          member_height = '${input_height.text}',
+          member_height = '${input_height.text}'
       WHERE member_id = '${input_id.text}'
     ''';
 
     String sql2 = '''
       UPDATE members
       SET member_weight = '${input_weight.text}',
-          member_height = '${input_height.text}',
+          member_height = '${input_height.text}'
       WHERE member_id = '${input_id.text}'
     ''';
 
@@ -128,10 +125,10 @@ class _SettingProfileState extends State<SettingProfile> {
     String deleteSql = """
                           DELETE 
                           FROM members 
-                          WHERE member_id = "${userCon.userId.value}'
+                          WHERE member_id = '${userCon.userId.value}'
                        """;
     String response = await mqttHandler.pubSqlWaitResponse(deleteSql);
-
+    print("✨삭제 확인용 메시지 : $response");
   }
 
 
@@ -493,7 +490,7 @@ class _SettingProfileState extends State<SettingProfile> {
                                                     ElevatedButton.icon(onPressed: () async  {
                                                       await deleteAccount();
                                                       await userCon.storage.deleteAll();
-                                                      Get.offAll(const RoutePage());
+                                                      Get.offAll(()=> RoutePage());
                                                     }
                                                         , icon: Icon(Icons.circle_outlined), label: Text('회원 탈퇴 하기'),
                                                         style: ElevatedButton.styleFrom(backgroundColor: Colors.grey)),
@@ -569,7 +566,7 @@ class _SettingProfileState extends State<SettingProfile> {
                                         ElevatedButton.icon(onPressed: () async {
                                           // 현재 페이지 삭제한 후 페이지 이동
                                           await userCon.storage.deleteAll();
-                                          Get.offAll(RoutePage());
+                                          Get.offAll(()=>RoutePage());
                                         }
                                             , icon: Icon(Icons.circle_outlined), label: Text('로그아웃 하기'),
                                             style: ElevatedButton.styleFrom(backgroundColor: Colors.blue)),

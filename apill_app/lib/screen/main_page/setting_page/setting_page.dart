@@ -84,7 +84,7 @@ class _SettingPageState extends State<SettingPage> {
 
                   GestureDetector(
                     onTap: (){
-                      Get.to(SettingInformation());
+                      Get.to(()=> SettingInformation());
                       print('출력!!!');
                     },
                     behavior: HitTestBehavior.translucent,

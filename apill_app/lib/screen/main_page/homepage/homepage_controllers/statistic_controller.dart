@@ -56,11 +56,16 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
   RxList lineBottomTitle = ["00:00","00:00"].obs;
 
   // 수평 누적 그래프 데이터
-  RxList stackBarChartData = [].obs;
+  RxList stackBarChartData = [
+    SelectPostureModel(posture: 'DP',minutes: 1),
+    SelectPostureModel(posture: 'CP',minutes: 1),
+  ].obs;
 
   // 애니메이션
   // 버튼 누르면 사라지게 하는 변수
   RxBool appbarCheck = true.obs;
+
+
 
   // 애니메이션 컨트롤러
   final Rxn<AnimationController> _animationController = Rxn<AnimationController>();
@@ -77,7 +82,6 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
 
   @override
   void onInit() {
-
     super.onInit();
 
     // 애니메이션 재생시간

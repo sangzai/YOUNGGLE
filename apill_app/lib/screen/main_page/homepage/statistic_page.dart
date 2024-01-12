@@ -14,7 +14,6 @@ import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_calculators.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
-import 'package:mqtt_client/mqtt_client.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -241,7 +240,6 @@ class _HomePageState extends State<HomePage> {
   } // 빌드 끝
 
   Future<void> get_statistic_data(BuildContext context) async {
-
     // 날짜를 선택
     final selectedDate = await showDatePicker(
       context: context,
@@ -256,22 +254,11 @@ class _HomePageState extends State<HomePage> {
       },
     );
 
-    // IsLoadingController.to.isLoading = true;
-
-    // statisticCon.selectedDateData = RxList<SelectDateData>.from(await getSelectDateData(selectedDate!));
-    // for (var data in statisticCon.selectedDateData) {
-    //   print('sleepNum: ${data.sleepNum}, startTime: ${data.startTime}, endTime: ${data.endTime}, sleepDepth: ${data.sleepDepth}');
-    // }
-
     // 선택한 날짜가 현재 날짜와 다르다면 변수에 대입하고 데이터 체크
     if(selectedDate != null) {
       statisticCon.selectedDate.value = selectedDate;
       await checkDateTime(selectedDate, mqttHandler);
     }
-
-
-    // IsLoadingController.to.isLoading = false;
-
   }
 
 
@@ -309,7 +296,6 @@ class _HomePageState extends State<HomePage> {
             mqttHandler)
     );
     // statisticCon.stackBarChartData
-    print("나의 간절함 : ${statisticCon.stackBarChartData}");
     print('✨set_initial_date.dart 파일의 getBarChartData 함수 9');
     Future.delayed(Duration(seconds: 1));
 

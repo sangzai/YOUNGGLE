@@ -25,7 +25,7 @@ Future<List<SelectWeekData>> getSelectWeekData(DateTime selectedDate, MqttHandle
   ''';
 
   String response = await mqttHandler.pubSqlWaitResponse(sql);
-  print("✨get_select_week_datas.dart의 getSelectWeekData : $response");
+  // print("✨get_select_week_datas.dart의 getSelectWeekData : $response");
 
   List<SelectWeekData> selectData = selectWeekDataFromJson(response);
 

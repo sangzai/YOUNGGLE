@@ -235,18 +235,7 @@ Future<List<SelectPostureModel>> getBarChartData(List<SelectDateData> barData, M
   print("✨자세 sql문 리턴");
   print(response);
 
-  final selectPostureModel = selectPostureModelFromJson(response);
+  List<SelectPostureModel> selectPostureModel = selectPostureModelFromJson(response);
 
-  List<SelectPostureModel> formattedList = [];
-
-  for (var item in selectPostureModel) {
-    formattedList.add(SelectPostureModel(
-      posture: item.posture,
-      minutes: item.minutes
-    ));
-  }
-
-  // print("데이터 확인 : $formattedList");
-
-  return formattedList;
+  return selectPostureModel;
 }

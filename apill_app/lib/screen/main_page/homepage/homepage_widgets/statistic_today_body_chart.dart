@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
-import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statisitc_barchart.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statisitc_stackbarchart.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_linechart.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
@@ -36,10 +36,12 @@ class TodayCharts extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 4),
               child: Column(
                 children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.fromLTRB(48, 4, 28, 4),
-                  //   child: HomeBarChart(),
-                  // ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(48, 4, 28, 4),
+                      child: HomeBarChart(),
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

@@ -8,7 +8,6 @@ import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_date_datas.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_week_datas.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
-import 'package:mqtt_client/mqtt_client.dart';
 class SetInitialDate {
 
   final mqttHandler = Get.find<MqttHandler>();
@@ -149,7 +148,6 @@ class SetInitialDate {
             mqttHandler)
     );
     // statisticCon.stackBarChartData
-    print("나의 간절함 : ${statisticCon.stackBarChartData}");
     print('✨set_initial_date.dart 파일의 getBarChartData 함수 9');
     Future.delayed(Duration(seconds: 1));
 
