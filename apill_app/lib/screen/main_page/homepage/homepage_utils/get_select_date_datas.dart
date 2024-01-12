@@ -246,7 +246,7 @@ Future<List<SelectPostureModel>> getBarChartData(List<SelectDateData> barData, M
     ));
   }
 
-  print("데이터 확인 : $formattedList");
+  // print("데이터 확인 : $formattedList");
 
   return formattedList;
 }

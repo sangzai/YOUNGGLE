@@ -6,12 +6,15 @@ import 'package:mainproject_apill/models/alarm_model.dart';
 import 'package:mainproject_apill/models/pillow_height_model.dart';
 import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_controller.dart';
 import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_page.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/set_initial_date.dart';
 import 'package:mainproject_apill/screen/main_page/sleep_page/pillow_height_controller.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttHandler extends GetxController {
 
+  final RxBool initCheck = true.obs;
+  //     SetInitialDate().initializeData();
   final pillowHeightCon = Get.put(PillowHeightController());
 
   final alarmCon = Get.put(AlarmController());
@@ -19,17 +22,40 @@ class MqttHandler extends GetxController {
   static const String ip = '172.30.1.19';
 
   // ✨내가 게시할 토픽 정하기
+  // sql용
   static const pubTopic1 = 'Apill/sql';
+  // 회원가입
   static const pubTopic2 = 'Apill/join';
+  // id 중복 검사
   static const pubTopic3 = 'Apill/join/idcheck';
-  static const pubTopic4 = 'Apill/alarm/get';
-  static const pubTopic5 = 'Apill/user/profile';
+  // 높이 보내기
   static const pubTopic6 = 'Apill/App/height';
+  // 알람 불러오기
   static const pubTopic7 = 'Apill/alarm/check';
+  // 알람 더하기
   static const pubTopic8 = 'Apill/alarm/add';
+  // 알람 삭제하기
   static const pubTopic9 = 'Apill/alarm/delete';
+  // 알람 수정
   static const pubTopic10 = 'Apill/alarm/update';
+  // 앱 전원 확인
   static const pubTopic11 = 'Apill/App/powercheck';
+
+
+  //✨구독할 토픽 정하기
+  // sql 결과값 받기
+  static const subtopic1 = 'Apill/sql/return';
+  // 회원가입 결과 받기
+  static const subtopic2 = 'Apill/join/return';
+  // 아이디 중복 체크하기
+  static const subtopic3 = 'Apill/join/idcheck/return';
+  // 알람 목록 받기
+  static const subtopic4 = 'Apill/alarm/Appreturn';
+  // 앱 신호 확인용
+  static const subtopic5 = 'Apill/App/powercheck/return';
+  // 베개 높이 받기
+  static const subtopic8 = 'Apill/App/height/return';
+
 
   // mqtt response 저장되는변수
   final RxString data = "".obs;
@@ -85,7 +111,7 @@ class MqttHandler extends GetxController {
             '✨MQTT_LOGS::MQTT 클라이언트 연결 실패 - 연결끊김, 현재상태 ${client.connectionStatus}');
         client.disconnect();
         print('✨Reconnecting in 10 seconds...');
-        await Future.delayed(Duration(seconds: 10));
+        await Future.delayed(const Duration(seconds: 10));
       }
     }
 
@@ -94,37 +120,32 @@ class MqttHandler extends GetxController {
     //✨구독
     // 구독 토픽 1
     // sql select 반환
-    const subtopic1 = 'Apill/sql/return';
+    // const subtopic1 = 'Apill/sql/return';
     client.subscribe(subtopic1, MqttQos.atMostOnce);
 
     // 구독 토픽 2
     // 회원가입 결과
-    const subtopic2 = 'Apill/join/return';
+    // const subtopic2 = 'Apill/join/return';
     client.subscribe(subtopic2, MqttQos.atMostOnce);
 
     // 구독 토픽 3
     // 회원가입 아이디 체크
-    const subtopic3 = 'Apill/join/idcheck/return';
+    // const subtopic3 = 'Apill/join/idcheck/return';
     client.subscribe(subtopic3, MqttQos.atMostOnce);
 
     // 구독 토픽 4
     // 알람 목록 받기
-    const subtopic4 = 'Apill/alarm/Appreturn';
+    // const subtopic4 = 'Apill/alarm/Appreturn';
     client.subscribe(subtopic4, MqttQos.atMostOnce);
 
     // 구독 토픽 5
     // 앱 신호 확인용
-    const subtopic5 = 'Apill/App/powercheck/return';
+    // const subtopic5 = 'Apill/App/powercheck/return';
     client.subscribe(subtopic5, MqttQos.atMostOnce);
-
-    // 구독 토픽 7
-    // 프로필 받기
-    const subtopic7 = 'Apill/user/profile/return';
-    client.subscribe(subtopic7, MqttQos.atMostOnce);
 
     // 구독 토픽 8
     // 높이 조절
-    const subtopic8 = 'Apill/App/height/return';
+    // const subtopic8 = 'Apill/App/height/return';
     client.subscribe(subtopic8, MqttQos.atMostOnce);
 
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
@@ -158,7 +179,7 @@ class MqttHandler extends GetxController {
       else if (c[0].topic== subtopic5 ) {
         print("✨서버의 앱 신호 확인 토픽 감지");
         pubAppOn();
-        print("데이터 비워졌는지 확인 ${pt}");
+        print("데이터 비워졌는지 확인 $pt");
       }
       else if (c[0].topic== subtopic8 ) {
         print('✨높이 변경 신호 토픽 감지');
@@ -174,12 +195,16 @@ class MqttHandler extends GetxController {
       update();
     });
 
+    if(initCheck.value) {
+      SetInitialDate().initializeData();
+    }
+
     return client;
   }
 
   void onConnected() {
     print('✨MQTT_LOGS:: Connected');
-    // print("✨앱 상태 확인 토픽 게시");
+    // print("✨초기화용 데이터 받기");
   }
 
   void onDisconnected() {
@@ -313,32 +338,6 @@ class MqttHandler extends GetxController {
     return response;
   }
 
-  // 프로필 검색 함수
-  Future<void> pubLoadProfile(String idData) async {
-    final builder = MqttClientPayloadBuilder();
-    builder.addString(idData);
-
-    if (client.connectionStatus?.state == MqttConnectionState.connected) {
-      client.publishMessage(pubTopic5, MqttQos.atMostOnce, builder.payload!);
-    }
-  }
-  // 프로필 검색 함수
-  Future<String> pubLoadProfileWaitResponse(String idData) async {
-    await resetData();
-    String response = '';
-    // 게시
-    await pubLoadProfile(idData);
-
-    // 데이터 업데이트 기다리기
-    await waitForDataUpdate();
-
-    response = data.value;
-
-    await resetData();
-
-    return response;
-  }
-
   // 알람 가져오는 함수
   Future<void> pubGetAlarm() async {
     final builder = MqttClientPayloadBuilder();
@@ -432,10 +431,10 @@ class MqttHandler extends GetxController {
 
 
   // 높이값을 변경해주는 함수
-  Future<void> publishHeight(int DP, int CP) async {
+  Future<void> publishHeight(int dp, int cp) async {
     final Map<String, dynamic> jsonData = {
-      'DP' : DP,
-      'CP' : CP
+      'DP' : dp,
+      'CP' : cp
     };
     final String encodeJson = jsonEncode(jsonData);
 
@@ -447,16 +446,30 @@ class MqttHandler extends GetxController {
     }
   }
   // 높이값을 변경해주는 함수
-  Future<String> pubHeightWaitResponse(int DP, int CP) async {
+  Future<String> pubHeightWaitResponse(int dp, int cp) async {
     String response = '';
     await resetData();
     // 게시
-    await publishHeight(DP, CP);
+    await publishHeight(dp, cp);
     // 데이터 업데이트 기다리기
     await waitForDataUpdate();
     response = data.value;
     await resetData();
     return response;
+  }
+
+  Future<void> setUnsubscribe() async {
+    client.unsubscribe(subtopic5);
+    client.unsubscribe(subtopic4);
+    client.unsubscribe(subtopic8);
+    data.value = '';
+  }
+
+  Future<void> setSubscribe() async {
+    client.subscribe(subtopic5,MqttQos.atMostOnce);
+    client.subscribe(subtopic4,MqttQos.atMostOnce);
+    client.subscribe(subtopic8,MqttQos.atMostOnce);
+    data.value = '';
   }
 
 }

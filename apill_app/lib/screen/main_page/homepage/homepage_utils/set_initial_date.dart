@@ -18,8 +18,7 @@ class SetInitialDate {
 
   // 오늘 날짜를 DB 데이터가 있는 마지막 날짜로 바꿔주기
   Future<void> initializeData() async {
-    mqttHandler.client.unsubscribe('Apill/App/powercheck/return');
-    mqttHandler.data.value = '';
+    await mqttHandler.setUnsubscribe();
     // 로딩 켜
     IsLoadingController.to.isLoading = true;
 
@@ -42,8 +41,7 @@ class SetInitialDate {
 
     // 로딩 화면 꺼
     IsLoadingController.to.isLoading = false;
-    await mqttHandler.client.subscribe('Apill/App/powercheck/return',MqttQos.atMostOnce);
-    Future.delayed(Duration(seconds: 1));
+    await mqttHandler.setSubscribe();
     mqttHandler.pubAppOn();
   }
 

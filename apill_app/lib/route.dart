@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:mainproject_apill/loading_controller.dart';
 import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/set_initial_date.dart';
@@ -23,6 +24,8 @@ class _RoutePageState extends State<RoutePage> {
   final userCon = Get.put(UserController());
 
   final statisticCon = Get.put(StatisticCon());
+
+  final loading = Get.put(IsLoadingController());
 
   String? userId = '';
   String? tutorial = '';

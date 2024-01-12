@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   final userCon = Get.find<UserController>();
 
-  final loading = Get.put(IsLoadingController());
+  final loading = Get.find<IsLoadingController>();
 
   @override
   Widget build(BuildContext context) {
@@ -276,8 +276,8 @@ class _HomePageState extends State<HomePage> {
 
 
   Future<void> checkDateTime(DateTime selectedDate, MqttHandler mqttHandler) async {
-    mqttHandler.client.unsubscribe('Apill/App/powercheck/return');
-    mqttHandler.data.value = '';
+
+    await mqttHandler.setUnsubscribe();
 
     // 선택한 날짜의 데이터 받기
     statisticCon.selectedDateData = RxList<SelectDateData>.from(await getSelectDateData(selectedDate, mqttHandler));
@@ -302,13 +302,15 @@ class _HomePageState extends State<HomePage> {
     statisticCon.lineBottomTitle.assignAll(getLineBottomTitle(statisticCon.splitSelectedDateData[statisticCon.pieIndex.value]));
 
     Future.delayed(Duration(seconds: 1));
-    // 자세 데이터 받기
+    // 자세 차트 데이터
     statisticCon.stackBarChartData.assignAll(
         await getBarChartData(
             statisticCon.splitSelectedDateData[statisticCon.pieIndex.value],
             mqttHandler)
     );
-    print("나의 간절함 ");
+    // statisticCon.stackBarChartData
+    print("나의 간절함 : ${statisticCon.stackBarChartData}");
+    print('✨set_initial_date.dart 파일의 getBarChartData 함수 9');
     Future.delayed(Duration(seconds: 1));
 
     // 만약 선택한 날짜의 주일이 다르면
@@ -326,7 +328,10 @@ class _HomePageState extends State<HomePage> {
 
 
 
-    mqttHandler.client.subscribe('Apill/App/powercheck/return',MqttQos.atMostOnce);
+    await mqttHandler.setSubscribe();
   }
+
+
+
 
 } // 클래스 끝

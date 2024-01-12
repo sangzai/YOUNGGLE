@@ -7,7 +7,6 @@ import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_page.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/statistic_page.dart';
 import 'package:mainproject_apill/screen/main_page/setting_page/setting_page.dart';
-import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/set_initial_date.dart';
 import 'package:mainproject_apill/screen/main_page/sleep_page/sleep_page.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
@@ -37,8 +36,6 @@ class _BottomNaviPageState extends State<BottomNaviPage> {
 
     // TODO: 디버깅용 스토리지 관리
     // userCon.storage.deleteAll();
-
-    SetInitialDate().initializeData();
   }
 
   // 보여줄 화면 리스트
