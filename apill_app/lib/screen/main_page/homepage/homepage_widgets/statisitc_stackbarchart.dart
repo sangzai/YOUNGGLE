@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/models/select_posture_model.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/barchart_animation_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
@@ -14,26 +16,29 @@ class HomeBarChart extends StatefulWidget {
 class _HomeBarChartState extends State<HomeBarChart> {
   final statisticCon = Get.find<StatisticCon>();
 
-
+  final barChartCon = Get.find<BarChartAnimationController>();
+  
   @override
   void initState() {
     super.initState();
+    barChartCon.startAnimation();
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(
         () {
+          barChartCon.animationController;
 
           List<double> barChartData = getBarChartData(statisticCon.stackBarChartData);
-          print("✨✨barChartData : $barChartData");
+          // print("✨✨barChartData : $barChartData");
           String firstSleepPosition = statisticCon.stackBarChartData[0].posture;
           Color firstColor =
           firstSleepPosition == "DP" ? AppColors.appColorBlue : AppColors.appColorGreen;
 
 
           return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: List.generate(barChartData.length, (index) {
                 // 좀 더 알기 쉬운 코드
                 Color barColor;
@@ -47,15 +52,13 @@ class _HomeBarChartState extends State<HomeBarChart> {
                       : AppColors.appColorBlue;
                 }
 
-                return Expanded(
-                  child: TweenAnimationBuilder(
-                    duration: Duration(seconds: 3),
-                    tween: Tween<double>(begin: 0.0, end: barChartData[index]),
-                    builder: (BuildContext context, double value, Widget? child) {
-                      return StackedBar(
-                          width: value, color: barColor);
-                    }
-                  ),
+                return TweenAnimationBuilder(
+                  duration: Duration(seconds: 1),
+                  tween: Tween(begin: 0.0, end: barChartData[index]),
+                  builder: (BuildContext context, double value, Widget? child) {
+                    return StackedBar(
+                        width: value, color: barColor);
+                  }
                 );
               })
 
@@ -68,9 +71,9 @@ class _HomeBarChartState extends State<HomeBarChart> {
     List<double>barChartData = [];
     int totalLength = stackBarChartData.fold(0, (sum, model) => sum + model.minutes);
     for (SelectPostureModel model in stackBarChartData) {
-      barChartData.add(model.minutes/totalLength);
+      barChartData.add(model.minutes/totalLength * ScreenUtil().screenWidth * 0.72776 );
     }
-    print("✨✨바 차트 데이터 변환 : $barChartData");
+    // print("✨✨바 차트 데이터 변환 : $barChartData");
     return barChartData;
   }
 }

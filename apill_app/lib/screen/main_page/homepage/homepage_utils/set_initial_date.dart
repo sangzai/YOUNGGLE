@@ -4,6 +4,7 @@ import 'package:mainproject_apill/models/active_date_model.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/models/select_week_model.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_month_datas.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_calculators.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_date_datas.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_week_datas.dart';
@@ -34,9 +35,10 @@ class SetInitialDate {
     Future.delayed(Duration(seconds: 1));
     // 선택한 날짜의 일주일 데이터 받기
     await setInitialWeekData();
-    // TODO : 선택한 날짜의 월간 데이터 받기
     Future.delayed(Duration(seconds: 1));
 
+    await setInitialMonthData();
+    Future.delayed(Duration(seconds: 1));
 
     // 로딩 화면 꺼
     IsLoadingController.to.isLoading = false;
@@ -156,11 +158,31 @@ class SetInitialDate {
 
   // 초기 데이터 받아서 주간 데이터 적용
   Future<void> setInitialWeekData() async {
-    statisticCon.selectedWeekData = RxList<SelectWeekData>.from(
-        await getSelectWeekData(statisticCon.selectedDateSunday.value, mqttHandler)
+    statisticCon.selectedWeekSleepData = RxList<SelectWeekSleepModel>.from(
+        await getSelectWeekSleepTimeData(statisticCon.selectedDateSunday.value, mqttHandler)
     );
     print('✨set_initial_date.dart 파일의 setInitialWeekData 함수');
 
+
+    statisticCon.weekPostureTimeData.assignAll(
+        await getSelectWeekPostureData(statisticCon.selectedDateSunday.value, mqttHandler)
+    );
+    print('✨set_initial_date.dart 파일의 getSelectWeekPostureData 함수 완료');
+
   }
+
+  // ✨월간 데이터 적용하기
+  Future<void> setInitialMonthData() async {
+    statisticCon.setMonthStartEndData.assignAll(getMonthStartEndList(statisticCon.selectedDate.value)) ;
+
+    statisticCon.monthChartData.assignAll(await getSelectMonthData(statisticCon.setMonthStartEndData, mqttHandler));
+
+    print('✨월간 데이터 적용');
+  }
+
+
+
+
+
 }
 

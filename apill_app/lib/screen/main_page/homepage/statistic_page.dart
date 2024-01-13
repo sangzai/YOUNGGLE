@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -12,8 +14,11 @@ import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/sta
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_today_summary.dart';
 import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/time_calculators.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_week_barchart.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
+
+import 'homepage_utils/get_select_month_datas.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,6 +35,28 @@ class _HomePageState extends State<HomePage> {
   final userCon = Get.find<UserController>();
 
   final loading = Get.find<IsLoadingController>();
+
+  Random random = Random();
+
+  List<String> sleepTips = [
+    "오늘은 숙면을 위해 캐모마일티를 마셔보는건 어떠신가요?",
+    "숙면을 위해서 뱃속을 가볍게 해주는게 좋아요",
+    "규칙적인 수면을 가지면 숙면에 도움이 된답니다",
+    "꾸준한 운동은 수면의 질을 향상시키고 숙면을 도와줘요",
+    "수면 전 스트레칭은 근육을 풀어주고 수면을 도와줄 수 있어요",
+    "차분하고 안정적인 음악을 듣는건 어떠신가요?",
+    "수면 전에는 카페인 섭취를 피하는게 좋아요",
+    "자기 전에 일기를 써보시는 건 어떠신가요?",
+    "따뜻한 목욕은 근육을 풀어줘서 수면을 촉진합니다",
+    "수면 전 명상과 심호흡은 스트레스를 줄여줘요",
+  ];
+
+
+  @override
+  void initState() {
+    super.initState();
+    statisticCon.comment.value = sleepTips[random.nextInt(10)];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +87,7 @@ class _HomePageState extends State<HomePage> {
                                       Text('${userCon.userName}님',
                                         style: Theme.of(context).textTheme.headlineLarge,),
                                       Text(
-                                        // TODO : 대화하는 듯한 느낌이 들게 멘트 추가할 것
-                                        "${statisticCon.goodSleep.value}",
+                                        statisticCon.comment.value,
                                         style: Theme.of(context).textTheme.headlineLarge,
                                       ),
                                     ],
@@ -134,7 +160,6 @@ class _HomePageState extends State<HomePage> {
                               child: HomePieChart(),
                             ),
 
-                            // TODO : 파이차트 구현
                             SizedBox(
                               height: 220,
                               width: 220,
@@ -150,12 +175,10 @@ class _HomePageState extends State<HomePage> {
                                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                                     fontSize: 18
                                   ),),
-                                // TODO : 수면시간 연동
                                 Text(statisticCon.totalSleepInPieChart.value,
                                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                                     fontSize: 22
                                   ),),
-                                // TODO : 수면시간 연동
                                 Text(statisticCon.startEndTimeInPieChart.value,
                                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                                     fontSize: 12
@@ -212,7 +235,7 @@ class _HomePageState extends State<HomePage> {
                   // ✨ 달력 아이콘
                   IconButton(
                     onPressed: () async {
-                      await get_statistic_data(context);
+                      await getStatisticData(context);
                     },
                     icon: Icon(Icons.calendar_month_outlined),
                     color: Colors.white.withOpacity(0.6),
@@ -222,13 +245,18 @@ class _HomePageState extends State<HomePage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8,bottom: 4),
-                // 따로 만들어서 뺌
+                // ✨따로 만들어서 뺌
                 child: TodayCharts(data: statisticCon.selectedDateData)
               ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 8,bottom: 4),
-                // 따로 만들어서 뺌
+                // ✨따로 만들어서 뺌
                 child: TodaySummary(),
+              ),
+
+              Padding(padding: const EdgeInsets.only(top: 8,bottom: 4),
+                child: BarChartSample(),
               ),
 
             ],)
@@ -239,7 +267,7 @@ class _HomePageState extends State<HomePage> {
 
   } // 빌드 끝
 
-  Future<void> get_statistic_data(BuildContext context) async {
+  Future<void> getStatisticData(BuildContext context) async {
     // 날짜를 선택
     final selectedDate = await showDatePicker(
       context: context,
@@ -302,22 +330,35 @@ class _HomePageState extends State<HomePage> {
     // 만약 선택한 날짜의 주일이 다르면
     if( TimeCalculators().findSunday(selectedDate) != statisticCon.selectedDateSunday.value ){
       // 선택한 날짜의 일주일 데이터 받기
-      statisticCon.selectedWeekData = RxList<SelectWeekData>.from(
-          await getSelectWeekData(TimeCalculators().findSunday(selectedDate), mqttHandler)
+      statisticCon.selectedWeekSleepData = RxList<SelectWeekSleepModel>.from(
+          await getSelectWeekSleepTimeData(TimeCalculators().findSunday(selectedDate), mqttHandler)
       );
       Future.delayed(Duration(seconds: 1));
 
       statisticCon.selectedDateSunday.value = TimeCalculators().findSunday(selectedDate);
+
+      // 일주일 자세 데이터 받기
+      statisticCon.weekPostureTimeData.assignAll(
+          await getSelectWeekPostureData(statisticCon.selectedDateSunday.value, mqttHandler)
+      );
+      print('✨set_initial_date.dart 파일의 getSelectWeekPostureData 함수 완료');
     }
 
     // TODO : 만약 월이 달라진다면 데이터 받기
 
+    var checkMonth = getMonthStartEndList(selectedDate);
 
+    if(statisticCon.setMonthStartEndData[0] != checkMonth[0]){
+      statisticCon.setMonthStartEndData.assignAll(
+          checkMonth) ;
+
+      statisticCon.monthChartData.assignAll(
+          await getSelectMonthData(statisticCon.setMonthStartEndData, mqttHandler));
+
+      print('✨월간 데이터 적용');
+    }
 
     await mqttHandler.setSubscribe();
   }
-
-
-
 
 } // 클래스 끝

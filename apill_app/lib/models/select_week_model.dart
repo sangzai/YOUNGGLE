@@ -4,22 +4,22 @@
 
 import 'dart:convert';
 
-List<SelectWeekData> selectWeekDataFromJson(String str) => List<SelectWeekData>.from(json.decode(str).map((x) => SelectWeekData.fromJson(x)));
+List<SelectWeekSleepModel> selectWeekDataFromJson(String str) => List<SelectWeekSleepModel>.from(json.decode(str).map((x) => SelectWeekSleepModel.fromJson(x)));
 
-String selectWeekDataToJson(List<SelectWeekData> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String selectWeekDataToJson(List<SelectWeekSleepModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class SelectWeekData {
+class SelectWeekSleepModel {
   int sleepNum;
   int totalSleepTime;
   DateTime date;
 
-  SelectWeekData({
+  SelectWeekSleepModel({
     required this.sleepNum,
     required this.totalSleepTime,
     required this.date,
   });
 
-  factory SelectWeekData.fromJson(Map<String, dynamic> json) => SelectWeekData(
+  factory SelectWeekSleepModel.fromJson(Map<String, dynamic> json) => SelectWeekSleepModel(
     sleepNum: json["sleep_num"],
     totalSleepTime: json["total_sleep_time"],
     date: DateTime.parse(json["date"]),

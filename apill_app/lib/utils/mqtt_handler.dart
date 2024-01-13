@@ -19,7 +19,11 @@ class MqttHandler extends GetxController {
 
   final alarmCon = Get.put(AlarmController());
 
-  static const String ip = '172.30.1.19';
+  // 건중씨 IP
+  // static const String ip = '172.30.1.19';
+  // 상원씨 노트북 IP
+  static const String ip = '192.168.205.146';
+
 
   // ✨내가 게시할 토픽 정하기
   // sql용
@@ -179,7 +183,7 @@ class MqttHandler extends GetxController {
       else if (c[0].topic== subtopic5 ) {
         print("✨서버의 앱 신호 확인 토픽 감지");
         pubAppOn();
-        print("데이터 비워졌는지 확인 $pt");
+        print("✨데이터 비워졌는지 확인 : [$pt]");
       }
       else if (c[0].topic== subtopic8 ) {
         print('✨높이 변경 신호 토픽 감지');

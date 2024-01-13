@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:mainproject_apill/loading_controller.dart';
 import 'package:mainproject_apill/screen/login_page/user_controller.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/barchart_animation_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/set_initial_date.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
@@ -26,6 +27,8 @@ class _RoutePageState extends State<RoutePage> {
   final statisticCon = Get.put(StatisticCon());
 
   final loading = Get.put(IsLoadingController());
+
+  final barChartCon = Get.put(BarChartAnimationController());
 
   String? userId = '';
   String? tutorial = '';

@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
           title: "ApilL",
           theme: myTheme,
 
-          home: BackGroundImageContainer(
+          home: const BackGroundImageContainer(
               child: RoutePage()
           ),
         );
