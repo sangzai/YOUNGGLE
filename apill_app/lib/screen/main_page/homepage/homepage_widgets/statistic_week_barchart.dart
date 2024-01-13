@@ -5,23 +5,21 @@ import 'package:get/get.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 
-class BarChartSample extends StatefulWidget {
-  BarChartSample({super.key});
+class BarChartWeek extends StatefulWidget {
+  BarChartWeek({super.key});
   final Color centerBarColor = AppColors.appColorBlue;
   final Color rightBarColor = AppColors.appColorGreen;
   final Color leftBarColor = AppColors.appColorWhite.darken(50);
 
   @override
-  State<StatefulWidget> createState() => BarChartSampleState();
+  State<StatefulWidget> createState() => BarChartWeekState();
 }
 
-class BarChartSampleState extends State<BarChartSample> {
+class BarChartWeekState extends State<BarChartWeek> {
 
   final statisticCon = Get.find<StatisticCon>();
 
   final double width = 9;
-
-  late List<BarChartGroupData> rawBarGroups;
 
   static const double maxY = 100;
 

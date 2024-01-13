@@ -85,7 +85,7 @@ class StatisticCon extends GetxController with GetSingleTickerProviderStateMixin
   ].obs;
 
   //월간용 데이터 저장
-  List monthChartData = [];
+  RxList monthChartData = [].obs;
 
   // 애니메이션
   // 버튼 누르면 사라지게 하는 변수

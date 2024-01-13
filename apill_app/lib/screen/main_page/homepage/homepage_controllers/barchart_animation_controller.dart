@@ -38,9 +38,5 @@ class BarChartAnimationController
       animationController.forward(from: 0.0);
       // animationController.repeat();
     }
-
-
-
-
   }
 }

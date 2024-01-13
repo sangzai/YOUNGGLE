@@ -30,81 +30,105 @@ class _SettingPageState extends State<SettingPage> {
           Center(
             child: Text('${userCon.userName} 님', style: Theme.of(context).textTheme.titleLarge,),
           ),
-          SizedBox(height: 150,),
-          Container(
-              height: 510,
-              width: 420,
-              decoration: BoxDecoration(
-                  color: Colors.blueGrey.withOpacity(0.2),
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),)
-              ),
-              child: Column(
-                children: [
-                  SizedBox(height: 20,),
-                  GestureDetector(
-                    onTap: (){
-                      Get.to(()=>SettingProfile());
-                      // print('출력!');
-                    },
-                    behavior: HitTestBehavior.translucent,
-                    child: Container(
-                      height: 50,
-                      width: 350,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('프로필', style: Theme.of(context).textTheme.titleLarge,),
-                          Icon(Icons.keyboard_arrow_right, color: AppColors.appColorWhite90,),
-                        ],
+          SizedBox(height: 90,),
+          Expanded(
+            child: Container(
+                padding: EdgeInsets.all(10),
+                width: 420,
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey.withOpacity(0.2),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),)
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 20,),
+                    GestureDetector(
+                      onTap: (){
+                        Get.to(()=>SettingProfile());
+                        // print('출력!');
+                      },
+                      behavior: HitTestBehavior.translucent,
+                      child: Container(
+                        height: 50,
+                        width: 350,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('프로필', style: Theme.of(context).textTheme.titleLarge,),
+                            Icon(Icons.keyboard_arrow_right, color: AppColors.appColorWhite90,),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                  Container(height: 3, width: 370, color: Colors.white,),
+                    SizedBox(height: 5,),
+                    Container(height: 3, width: 370, color: Colors.white,),
 
-                  GestureDetector(
-                    onTap: (){
-                      // TODO : 베개 연결
-                      print('출력!!');
-                    },
-                    behavior: HitTestBehavior.translucent,
-                    child: Container(
-                      height: 50,
-                      width: 350,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('ApilL연결', style: Theme.of(context).textTheme.titleLarge,),
-                          Icon(Icons.keyboard_arrow_right, color: AppColors.appColorWhite90,),
-                        ],
+                    GestureDetector(
+                      onTap: (){
+                        // TODO : 베개 연결
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('ApilL 연결'),
+                              content: Text('다이얼로그 내용'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // 다이얼로그를 닫습니다.
+                                  },
+                                  child: Text('닫기'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      behavior: HitTestBehavior.translucent,
+                      child: Container(
+                        height: 50,
+                        width: 350,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('ApilL연결', style: Theme.of(context).textTheme.titleLarge,),
+                            Icon(Icons.keyboard_arrow_right, color: AppColors.appColorWhite90,),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Container(height: 3, width: 370, color: AppColors.appColorWhite90,),
+                    SizedBox(height: 5,),
+                    Container(height: 3, width: 370, color: AppColors.appColorWhite90,),
 
-                  GestureDetector(
-                    onTap: (){
-                      Get.to(()=> SettingInformation());
-                      print('출력!!!');
-                    },
-                    behavior: HitTestBehavior.translucent,
-                    child: Container(
-                      height: 50,
-                      width: 350,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('ApilL정보', style: Theme.of(context).textTheme.titleLarge,),
-                          Icon(Icons.keyboard_arrow_right, color: AppColors.appColorWhite90,),
-                        ],
+                    GestureDetector(
+                      onTap: (){
+                        Get.to(()=> SettingInformation());
+                        print('출력!!!');
+                      },
+                      behavior: HitTestBehavior.translucent,
+                      child: Expanded(
+                        child: Container(
+                          height: 50,
+                          width: 350,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('ApilL정보', style: Theme.of(context).textTheme.titleLarge,),
+                              Icon(Icons.keyboard_arrow_right, color: AppColors.appColorWhite90,),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
 
-
-                  Container(height: 3, width: 370, color: AppColors.appColorWhite90,),
-                ],
-              )
+                    SizedBox(height: 5,),
+                    Container(height: 3, width: 370, color: AppColors.appColorWhite90,),
+                  ],
+                )
+            ),
           )
         ],
       ),

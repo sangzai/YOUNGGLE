@@ -175,14 +175,12 @@ class SetInitialDate {
   Future<void> setInitialMonthData() async {
     statisticCon.setMonthStartEndData.assignAll(getMonthStartEndList(statisticCon.selectedDate.value)) ;
 
-    statisticCon.monthChartData.assignAll(await getSelectMonthData(statisticCon.setMonthStartEndData, mqttHandler));
+    statisticCon.monthChartData.assignAll(
+        await getSelectMonthData(
+        statisticCon.setMonthStartEndData, mqttHandler)
+    );
 
     print('✨월간 데이터 적용');
   }
-
-
-
-
-
 }
 

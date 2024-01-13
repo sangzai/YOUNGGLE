@@ -100,8 +100,9 @@ class MqttHandler extends GetxController {
         client.disconnect();
 
         Get.defaultDialog(
-          title: "✨연결 실패",
-          middleText: "✨연결 재시도중",
+          middleTextStyle: TextStyle(color: Colors.black),
+          title: "연결 실패",
+          middleText: "연결 재시도중",
           barrierDismissible: false,
         );
       }

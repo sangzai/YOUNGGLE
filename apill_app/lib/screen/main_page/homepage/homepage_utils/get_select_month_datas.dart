@@ -47,17 +47,18 @@ List<DateTime> getMonthStartEndList (DateTime selectedDate) {
 
 
 
-Future<List<List<double>>> getSelectMonthData(
+Future<List> getSelectMonthData(
     List<DateTime> setMonthStartEndData,
     MqttHandler mqttHandler) async {
 
   // 검색 시작 날짜
   DateTime startDate = setMonthStartEndData[0];
+  print("✨✨✨startDate : $startDate");
   // 검색 끝 날짜
   DateTime endDate = setMonthStartEndData[1];
-
+  print("✨✨✨endDate : $endDate");
   int Datelength = startDate.difference(endDate).inDays + 1;
-
+  print("✨✨✨endDate : $endDate");
   String sql1 = '''
         SELECT
       MiN(start_time) AS start_time,
@@ -75,7 +76,9 @@ Future<List<List<double>>> getSelectMonthData(
         Between "$startDate" and "$endDate";
   ''';
 
+
   String response1 = await mqttHandler.pubSqlWaitResponse(sql1);
+  print('✨✨월 함수 sql1 실행 완료 : ✨$response1');
   await Future.delayed(Duration(seconds: 1));
   // 한달치 수면시작 수면 끝 날짜 데이터가 들어있음
   List<MonthSleepModel>monthSleepList =  monthSleepModelFromJson(response1);
@@ -100,72 +103,61 @@ Future<List<List<double>>> getSelectMonthData(
           """;
 
   String response2 = await mqttHandler.pubSqlWaitResponse(sql2);
+  print('✨✨월 함수 sql2 실행 완료 : ✨$response2');
   await Future.delayed(Duration(seconds: 1));
   // 자세와 날짜와 수면시간(분) 들어있음
   List<WeekMonthPostureModel> monthPostureList = weekMonthPostureModelFromJson(response2);
 
-  List<List<double>> result = [];
+  var totalList = [];
 
-  // 최대 날짜로 반복
+  double sumA = 0.0;
+  double sumDP = 0.0;
+  double sumCP = 0.0;
 
-  double sumSleepValue = 0.0;
-  int sleepNotNullCount = 0;
+  int countA = 0;
+  int countDP = 0;
+  int countCP = 0;
 
-  double sumFrontValue = 0.0;
-  int frontNotNullCount = 0;
-
-  double sumSideValue = 0.0;
-  int sideNotNullCount = 0;
-
-  for (int i = 0; i < Datelength; i++){
-    var findMonthSleep = monthSleepList.where(
-            (element) => element.date == startTime.add(Duration(days: i))
+  for (int i = 0; i < Datelength ; i++){
+    MonthSleepModel? findElementA = monthSleepList.where(
+            (element) => element.date == startDate.add(Duration(days: i))
     ).firstOrNull;
-
-    if (findMonthSleep != null){
-      sumSleepValue += findMonthSleep.startTime.difference(findMonthSleep.endTime).inMinutes.toDouble();
-      sleepNotNullCount ++;
+    if (findElementA != null ) {
+      sumA += findElementA.startTime.difference(
+          findElementA.endTime).inMinutes.toDouble();
+      countA ++;
     }
 
-    var findFrontSleep = monthPostureList.where(
-            (element) => (element.date == startTime.add(Duration(days: i))
-            && (element.postureType == "DP"))
+    WeekMonthPostureModel? findElementDP = monthPostureList.where(
+            (element) => (element.date == startDate.add(Duration(days: i)))
+                && element.postureType == 'DP'
     ).firstOrNull;
-
-    if (findFrontSleep != null){
-      sumFrontValue += findFrontSleep.totalSleepTime.toDouble();
-      frontNotNullCount ++;
+    if (findElementDP != null ) {
+      sumDP += findElementDP.totalSleepTime.toDouble();
+      countDP ++;
     }
 
-    var findSideSleep = monthPostureList.where(
-            (element) => (element.date == startTime.add(Duration(days: i))
-            && (element.postureType == "CP"))
+    WeekMonthPostureModel? findElementCP = monthPostureList.where(
+            (element) => (element.date == startDate.add(Duration(days: i)))
+                && element.postureType == 'CP'
     ).firstOrNull;
-
-    if (findSideSleep != null){
-      sumSideValue += findSideSleep.totalSleepTime.toDouble();
-      sideNotNullCount ++;
+    if (findElementCP != null ) {
+      sumCP += findElementCP.totalSleepTime.toDouble();
+      countCP ++;
     }
 
-    if ((i+1) % 7 == 0){
-      double sleep = 0.0;
-      double front = 0.0;
-      double side = 0.0;
+    if ( (i + 1) % 7 == 0 ){
+      totalList.add([sumA/countA,sumDP/countDP,sumCP/countCP]);
+      sumA = 0.0;
+      sumDP = 0.0;
+      sumCP = 0.0;
 
-      (sleepNotNullCount != 0) ? (sleep = sumSleepValue/sleepNotNullCount) : 0;
-      (frontNotNullCount != 0) ? (front = sumFrontValue/frontNotNullCount) : 0;
-      (sideNotNullCount != 0) ? (side = sumSideValue/sideNotNullCount) : 0;
-      result.add([sleep,front,side]);
-
-      sumSleepValue = 0.0;
-      sleepNotNullCount = 0;
-
-      sumFrontValue = 0.0;
-      frontNotNullCount = 0;
-
-      sumSideValue = 0.0;
-      sideNotNullCount = 0;
+      countA = 0;
+      countDP = 0;
+      countCP = 0;
     }
-  }
-  return result;
+
+  }//for끝
+
+  return totalList;
 }

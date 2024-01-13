@@ -9,6 +9,7 @@ import 'package:mainproject_apill/models/select_week_model.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_date_datas.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_controllers/statistic_controller.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_utils/get_select_week_datas.dart';
+import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_month_barchart.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_piechart.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_today_body_chart.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_today_summary.dart';
@@ -256,7 +257,11 @@ class _HomePageState extends State<HomePage> {
               ),
 
               Padding(padding: const EdgeInsets.only(top: 8,bottom: 4),
-                child: BarChartSample(),
+                child: BarChartWeek(),
+              ),
+
+              Padding(padding: const EdgeInsets.only(top: 8,bottom: 4),
+                child: BarChartMonth(),
               ),
 
             ],)
@@ -353,7 +358,7 @@ class _HomePageState extends State<HomePage> {
           checkMonth) ;
 
       statisticCon.monthChartData.assignAll(
-          await getSelectMonthData(statisticCon.setMonthStartEndData, mqttHandler));
+          (await getSelectMonthData(statisticCon.setMonthStartEndData, mqttHandler)) as Iterable<List<double>>);
 
       print('✨월간 데이터 적용');
     }
