@@ -5,7 +5,6 @@ import 'package:mainproject_apill/models/alarm_model.dart';
 import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_controller.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
-import 'package:mqtt_client/mqtt_client.dart';
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({Key? key});

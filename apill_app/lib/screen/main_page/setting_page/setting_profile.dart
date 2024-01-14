@@ -128,6 +128,7 @@ class _SettingProfileState extends State<SettingProfile> {
                           WHERE member_id = "${userCon.userId.value}'
                        """;
     String response = await mqttHandler.pubSqlWaitResponse(deleteSql);
+    print('✨회원탈퇴 : $response');
 
   }
 
