@@ -21,8 +21,6 @@ class BarChartMonthState extends State<BarChartMonth> {
 
   final double width = 9;
 
-  late List<BarChartGroupData> rawBarGroups;
-
   static const double maxY = 100;
 
   @override
@@ -33,129 +31,130 @@ class BarChartMonthState extends State<BarChartMonth> {
   @override
   Widget build(BuildContext context) {
     return Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: AppColors.containerBackColor
-          ),
-          height: 330,
-          width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: AppColors.containerBackColor
+        ),
+        height: 330,
+        width: MediaQuery.of(context).size.width,
 
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                const Text(
-                  '월간 수면정보',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500
-                  ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              const Text(
+                '월간 수면정보',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: Obx((){
-                    List<BarChartGroupData> items = [];
-                    var count = 0;
-                    double maxElement = double.negativeInfinity;
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                child: Obx((){
+                  print("✨월간 Obx 실행");
+                  List<BarChartGroupData> items = [];
+                  var count = 0;
+                  double maxElement = 0.0;
 
-                    for (List<double> sublist in statisticCon.monthChartData) {
-                      // print("✨sublist : $sublist");
-                      for (double element in sublist) {
-                        // print('✨element : $element');
-                        if (element > maxElement) {
-                          maxElement = element;
-                        }
+                  for (var sublist in statisticCon.monthChartData) {
+                    // print("✨sublist : $sublist");
+                    for (double element in sublist) {
+                      // print('✨element : $element');
+                      if (element > maxElement) {
+                        maxElement = element;
                       }
                     }
-                    // print('✨maxElement 확인 : $maxElement');
-
-                    for (var eachList in statisticCon.monthChartData ){
-                      // print('✨eachList : $eachList');
-                      double totalSleep = 0.0;
-                      double frontSleep = 0.0;
-                      double sideSleep = 0.0;
-                      if (maxElement != 0.0) {
-                        totalSleep = (eachList[0] / maxElement) * maxY;
-                        frontSleep = (eachList[1] / maxElement) * maxY;
-                        sideSleep = (eachList[2] / maxElement) * maxY;
-                        // print('✨✨totalSleep : $totalSleep, frontSleep : $frontSleep, sideSleep : $sideSleep');
-                      }
-
-                      items.add(makeGroupData(count,totalSleep,frontSleep,sideSleep));
-                      count ++;
-                      // print('✨items 확인 : $items');
-
-
-                    }
-                    return BarChart(
-                      BarChartData(
-                        barTouchData: BarTouchData(enabled: false),
-                        maxY: maxY,
-
-                        titlesData: FlTitlesData(
-                          show: true,
-
-                          rightTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-
-                          topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: bottomTitles,
-                              reservedSize: 40,
-                            ),
-                          ),
-
-                          leftTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 35,
-                              interval: 1,
-                              getTitlesWidget: leftTitles,
-                            ),
-                          ),
-                        ),
-
-                        borderData: FlBorderData(
-                          show: false,
-                        ),
-
-
-                        barGroups: items,
-
-
-                        gridData: const FlGridData(show: false),
-                      ),
-                    );
                   }
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    indicatorBox(AppColors.appColorWhite.darken(50),'수면시간'),
-                    indicatorBox(AppColors.appColorBlue,'등누운자세'),
-                    indicatorBox(AppColors.appColorGreen,'옆누운자세'),
-                  ],
-                )
+                  print('✨maxElement 확인 : $maxElement');
+
+                  for (var eachList in statisticCon.monthChartData ){
+                    // print('✨eachList : $eachList');
+                    double totalSleep = 0.0;
+                    double frontSleep = 0.0;
+                    double sideSleep = 0.0;
+                    if (maxElement != 0.0) {
+                      totalSleep = (eachList[0] / maxElement) * maxY;
+                      frontSleep = (eachList[1] / maxElement) * maxY;
+                      sideSleep = (eachList[2] / maxElement) * maxY;
+                      // print('✨✨totalSleep : $totalSleep, frontSleep : $frontSleep, sideSleep : $sideSleep');
+                    }
+
+                    items.add(makeGroupData(count,totalSleep,frontSleep,sideSleep));
+                    count ++;
+
+                  }
+                  // print('✨items 확인 : $items');
 
 
-              ],
-            ),
+                  return BarChart(
+                    BarChartData(
+                      barTouchData: BarTouchData(enabled: false),
+                      maxY: maxY,
+
+                      titlesData: FlTitlesData(
+                        show: true,
+
+                        rightTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+
+                        topTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: bottomTitles,
+                            reservedSize: 40,
+                          ),
+                        ),
+
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 35,
+                            interval: 1,
+                            getTitlesWidget: leftTitles,
+                          ),
+                        ),
+                      ),
+
+                      borderData: FlBorderData(
+                        show: false,
+                      ),
+
+
+                      barGroups: items,
+
+
+                      gridData: const FlGridData(show: false),
+                    ),
+                  );
+                }),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  indicatorBox(AppColors.appColorWhite.darken(50),'수면시간'),
+                  indicatorBox(AppColors.appColorBlue,'등누운자세'),
+                  indicatorBox(AppColors.appColorGreen,'옆누운자세'),
+                ],
+              )
+
+
+            ],
           ),
-        );
+        ),
+      );
 
   }
 

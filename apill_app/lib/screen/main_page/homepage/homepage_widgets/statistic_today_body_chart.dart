@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mainproject_apill/models/select_date_model.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statisitc_stackbarchart.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/homepage_widgets/statistic_linechart.dart';
@@ -38,7 +39,7 @@ class TodayCharts extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(48, 4, 28, 4),
+                      padding: EdgeInsets.fromLTRB(140.w, 4, 48.w, 4),
                       child: HomeBarChart(),
                     ),
                   ),

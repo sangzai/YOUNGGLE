@@ -5,23 +5,29 @@ import 'package:mainproject_apill/screen/main_page/sleep_page/pillow_height_cont
 import 'package:mainproject_apill/widgets/appcolors.dart';
 import 'package:mainproject_apill/utils/mqtt_handler.dart';
 
-class SleepPage extends StatelessWidget {
+class SleepPage extends StatefulWidget {
   SleepPage({Key? key}) : super(key: key);
 
 
+  static const height = 5;
+
+  @override
+  State<SleepPage> createState() => _SleepPageState();
+}
+
+class _SleepPageState extends State<SleepPage> {
   // TODO : 기능 흐름도
-  // 베개 허브와 통신으로 사용자의 자세를 받아옴
-  // 사용자의 자세에 따라서 sleepPosiotion의 상태를 true, false로 변경
-  // 사용자의 자세에 따라서 그 자세의 설정값을 베개 허브에 보내줌
-  // 설정을 보내주고 베개의 현재 높이를 통신으로 받아서 현재 높이에 보여줌
-
-
-  // 베개 설정용 컨트롤러
   final pillowHeightCon = Get.find<PillowHeightController>();
 
   final mqttHandler = Get.find<MqttHandler>();
 
-  static const height = 5;
+  @override
+  void initState() {
+    super.initState();
+
+    mqttHandler.pubCheckPillowWaitResponse();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,28 +39,58 @@ class SleepPage extends StatelessWidget {
           children: [
             const SizedBox(height: 120),
 
+            Column(
+              children: [
+                Text('현재 사용자의 자세는',
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      fontSize: 25),
+                ),
+                SizedBox(height: 5,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx((){
+                      String nowPosture = pillowHeightCon.nowPosture.value == 'DP' ? '등누운자세' : '옆누운자세';
+
+                      return Text('$nowPosture',
+                        style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                            fontSize: 40,color: AppColors.appColorBlue),
+                      );
+
+                    }),
+
+                    Text("입니다.",
+                      style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          fontSize: 25),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 20,),
+
             // 베개의 현재 높이
             SizedBox(
-              height : 160,
+              height : 260.h,
               child: Stack(
                 fit: StackFit.expand,
                 alignment: Alignment.center,
                 children: [
-                  Obx(() {
-                    return Positioned(
+                    Positioned(
                       top: 10,
-                      child: Text(
-                        '${pillowHeightCon.pillowHeight.value.toInt()}',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          fontSize: 80,
+                      child: Obx(
+                            ()=> Text(
+                          '${pillowHeightCon.pillowHeight.value.toInt()}',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                            fontSize: 80,
+                          ),
                         ),
                       ),
-                    );
-                  }),
+                    ),
                   Positioned(
                       top: 0,
-                      child: Text('현재높이',style: Theme.of(context).textTheme.bodyLarge)
+                      child: Text('현재높이',style: Theme.of(context).textTheme.headlineLarge)
                   ),
                 ],
               ),
@@ -70,23 +106,18 @@ class SleepPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // 높이 낮추는 버튼
-                          Expanded(
-                            child: ElevatedButton(
-                                onPressed: (){
-                                  final dorsal = pillowHeightCon.dosalHeight;
-                                  if (dorsal.value > 1) {
-                                    dorsal.value -= 1;
-                                    // changeHeight();
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    shape: CircleBorder()
-                                ),
-                                child: Icon(Icons.remove,
-                                  size: 30,
-                                  color: AppColors.appColorWhite,
-                                )
-                            ),
+                          IconButton(
+                              onPressed: (){
+                                final dorsal = pillowHeightCon.dosalHeight;
+                                if (dorsal.value > 1) {
+                                  dorsal.value -= 1;
+                                  // changeHeight();
+                                }
+                              },
+                              icon: Icon(Icons.remove,
+                                size: 30,
+                                color: AppColors.appColorWhite,
+                              )
                           ),
 
                           // 슬라이더
@@ -101,7 +132,7 @@ class SleepPage extends StatelessWidget {
                                       pillowHeightCon.dosalHeight.value = value;
                                       // changeHeight();
                                     },
-                                    min: 1, max: height.toDouble(), divisions: height-1,),
+                                    min: 1, max: SleepPage.height.toDouble(), divisions: SleepPage.height-1,),
                                 ),
                                 Obx(() => Text(
                                   '${pillowHeightCon.dosalHeight.value.toInt()}',
@@ -113,23 +144,19 @@ class SleepPage extends StatelessWidget {
 
 
                           // 높이 높이는 버튼
-                          Expanded(
-                            child: ElevatedButton(
-                                onPressed: (){
-                                  final dorsal = pillowHeightCon.dosalHeight;
-                                  if (dorsal.value < height.toDouble()) {
-                                    dorsal.value += 1;
-                                    // changeHeight();
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    shape: CircleBorder()
-                                ),
-                                child: Icon(Icons.add,
-                                  size: 30,
-                                  color: AppColors.appColorWhite,
-                                )
-                            ),
+                          IconButton(
+                              onPressed: (){
+                                final dorsal = pillowHeightCon.dosalHeight;
+                                if (dorsal.value < SleepPage.height.toDouble()) {
+                                  dorsal.value += 1;
+                                  // changeHeight();
+                                }
+                              },
+
+                              icon: Icon(Icons.add,
+                                size: 30,
+                                color: AppColors.appColorWhite,
+                              )
                           ),
                         ],
                       ),
@@ -147,23 +174,21 @@ class SleepPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // 높이 낮추는 버튼
-                      Expanded(
-                        child: ElevatedButton(
-                            onPressed: (){
-                              final lateral = pillowHeightCon.lateralHeight;
-                              if (lateral.value > 1){
-                                lateral.value -= 1;
-                                // changeHeight();
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: CircleBorder()
-                            ),
-                            child: Icon(Icons.remove,
-                              size: 30,
-                              color: AppColors.appColorWhite,
-                            )
-                        ),
+                      IconButton(
+
+                          onPressed: (){
+                            final lateral = pillowHeightCon.lateralHeight;
+                            if (lateral.value > 1){
+                              lateral.value -= 1;
+                              // changeHeight();
+                            }
+                          },
+
+                          icon: Icon(Icons.remove,
+                            size: 30,
+                            color: AppColors.appColorWhite,
+
+                          )
                       ),
 
                       // 슬라이더
@@ -178,7 +203,7 @@ class SleepPage extends StatelessWidget {
                                     pillowHeightCon.lateralHeight.value = value;
                                     // changeHeight();
                                   },
-                                  min: 1, max: height.toDouble(), divisions: height-1),
+                                  min: 1, max: SleepPage.height.toDouble(), divisions: SleepPage.height-1),
                             ),
                             Obx(() => Text(
                               '${pillowHeightCon.lateralHeight.value.toInt()}',
@@ -191,29 +216,25 @@ class SleepPage extends StatelessWidget {
 
 
                       // 높이 높이는 버튼
-                      Expanded(
-                        child: ElevatedButton(
-                            onPressed: (){
-                              final lateral = pillowHeightCon.lateralHeight;
-                              if(lateral.value < height.toDouble()){
-                                lateral.value += 1;
-                                // changeHeight();
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: CircleBorder()
-                            ),
-                            child: const Icon(Icons.add,
-                              size: 30,
-                              color: AppColors.appColorWhite,
-                            )
-                        ),
+                      IconButton(
+                          onPressed: (){
+                            final lateral = pillowHeightCon.lateralHeight;
+                            if(lateral.value < SleepPage.height.toDouble()){
+                              lateral.value += 1;
+                              // changeHeight();
+                            }
+                          },
+
+                          icon: const Icon(Icons.add,
+                            size: 30,
+                            color: AppColors.appColorWhite,
+                          )
                       ),
                     ],
                   ),
 
                   SizedBox(height: 40,),
-                  
+
                   SizedBox(
                     height: 150.h,
                     width: 350.w,
@@ -231,8 +252,8 @@ class SleepPage extends StatelessWidget {
         ),
       ),
     );
-  } // 빌드 끝
-
+  }
+ // 빌드 끝
   void changeHeight() async {
     print("✨높이 변경");
     try {

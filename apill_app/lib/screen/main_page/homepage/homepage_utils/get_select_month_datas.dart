@@ -32,7 +32,11 @@ List<DateTime> getMonthStartEndList (DateTime selectedDate) {
     result.add(firstSundayDate);
   }
 
-  if ( selectedLastDateWeekday>2 && selectedLastDateWeekday<7){
+  if (selectedLastDateWeekday == 7 ){
+    lastSaturdayDate = lastDayOfMonth.subtract(Duration(days: 1));
+    result.add(lastSaturdayDate);
+  }
+  else if ( selectedLastDateWeekday>2 && selectedLastDateWeekday<7){
     lastSaturdayDate = lastDayOfMonth.add(Duration(days: 6 - selectedLastDateWeekday));
     result.add(lastSaturdayDate);
   } else {
@@ -54,11 +58,14 @@ Future<List> getSelectMonthData(
   // 검색 시작 날짜
   DateTime startDate = setMonthStartEndData[0];
   print("✨✨✨startDate : $startDate");
+
   // 검색 끝 날짜
   DateTime endDate = setMonthStartEndData[1];
   print("✨✨✨endDate : $endDate");
-  int Datelength = startDate.difference(endDate).inDays + 1;
-  print("✨✨✨endDate : $endDate");
+
+  int Datelength = endDate.difference(startDate).inDays + 1;
+  print("✨✨✨Datelength : $Datelength");
+
   String sql1 = '''
         SELECT
       MiN(start_time) AS start_time,
@@ -114,18 +121,21 @@ Future<List> getSelectMonthData(
   double sumDP = 0.0;
   double sumCP = 0.0;
 
-  int countA = 0;
-  int countDP = 0;
-  int countCP = 0;
+  int countA = 1;
+  int countDP = 1;
+  int countCP = 1;
 
   for (int i = 0; i < Datelength ; i++){
+    // print("함수확인검색");
+
     MonthSleepModel? findElementA = monthSleepList.where(
             (element) => element.date == startDate.add(Duration(days: i))
     ).firstOrNull;
     if (findElementA != null ) {
-      sumA += findElementA.startTime.difference(
-          findElementA.endTime).inMinutes.toDouble();
+      sumA += findElementA.endTime.difference(
+          findElementA.startTime).inMinutes.toDouble();
       countA ++;
+      // print("sumA : $sumA, countA : $countA");
     }
 
     WeekMonthPostureModel? findElementDP = monthPostureList.where(
@@ -135,6 +145,7 @@ Future<List> getSelectMonthData(
     if (findElementDP != null ) {
       sumDP += findElementDP.totalSleepTime.toDouble();
       countDP ++;
+      // print("sumDP : $sumDP, countDP : $countDP");
     }
 
     WeekMonthPostureModel? findElementCP = monthPostureList.where(
@@ -144,10 +155,14 @@ Future<List> getSelectMonthData(
     if (findElementCP != null ) {
       sumCP += findElementCP.totalSleepTime.toDouble();
       countCP ++;
+      // print("sumCP : $sumCP, countA : $countA");
     }
 
     if ( (i + 1) % 7 == 0 ){
-      totalList.add([sumA/countA,sumDP/countDP,sumCP/countCP]);
+      totalList.add([sumA/(countA == 0 ? 1 : countA),
+        sumDP/(countDP == 0 ? 1 : countA),
+        sumCP/(countCP == 0 ? 1 : countA)]
+      );
       sumA = 0.0;
       sumDP = 0.0;
       sumCP = 0.0;
@@ -158,6 +173,8 @@ Future<List> getSelectMonthData(
     }
 
   }//for끝
+
+  print("✨함수의 데이터 변환 :  $totalList");
 
   return totalList;
 }

@@ -42,7 +42,7 @@ class MqttHandler extends GetxController {
   static const pubTopic9 = 'Apill/alarm/delete';
   // 알람 수정
   static const pubTopic10 = 'Apill/alarm/update';
-  // 앱 전원 확인
+  // 베개 전원 확인
   static const pubTopic11 = 'Apill/App/powercheck';
 
 
@@ -55,10 +55,12 @@ class MqttHandler extends GetxController {
   static const subtopic3 = 'Apill/join/idcheck/return';
   // 알람 목록 받기
   static const subtopic4 = 'Apill/alarm/Appreturn';
-  // 앱 신호 확인용
+  // 베개 신호 확인용
   static const subtopic5 = 'Apill/App/powercheck/return';
   // 베개 높이 받기
   static const subtopic8 = 'Apill/App/height/return';
+  // 베개 신호 반기
+  static const subtopic9 = 'Apill/App/pillow/return';
 
 
   // mqtt response 저장되는변수
@@ -153,6 +155,8 @@ class MqttHandler extends GetxController {
     // const subtopic8 = 'Apill/App/height/return';
     client.subscribe(subtopic8, MqttQos.atMostOnce);
 
+
+
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
       final recMess = c![0].payload as MqttPublishMessage;
       final pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
@@ -182,18 +186,18 @@ class MqttHandler extends GetxController {
         print("✨알람 목록 갱신 완료! ${alarmCon.alarms}");
       }
       else if (c[0].topic== subtopic5 ) {
+        pillowHeightCon.pillowCheck.value = true;
         print("✨서버의 앱 신호 확인 토픽 감지");
-        pubAppOn();
         print("✨데이터 비워졌는지 확인 : [$pt]");
       }
       else if (c[0].topic== subtopic8 ) {
         print('✨높이 변경 신호 토픽 감지');
-        print('$pt');
+        print(pt);
         final pillowHeight = pillowHeightFromJson(pt);
         pillowHeightCon.pillowHeight.value = pillowHeight.nowlevel.toDouble();
         pillowHeightCon.lateralHeight.value = pillowHeight.cplevel.toDouble();
         pillowHeightCon.dosalHeight.value = pillowHeight.dplevel.toDouble();
-
+        pillowHeightCon.nowPosture.value = pillowHeight.nowposture;
       }
 
       data.value = pt;
@@ -246,23 +250,39 @@ class MqttHandler extends GetxController {
     }
 
     // 데이터 업데이트가 발생했을 때 이후 로직 수행
-    print('✨Data updated: ${data.value}');
+    // print('✨Data updated: ${data.value}');
   }
 
   // 앱이 켜진 신호 보내기
-  Future<void> pubAppOn() async {
+  Future<void> pubCheckPillowPowerOn() async {
+    print("✨베개 확인용");
     final builder = MqttClientPayloadBuilder();
 
     if (client.connectionStatus?.state == MqttConnectionState.connected) {
       client.publishMessage(pubTopic11, MqttQos.atMostOnce, builder.payload!);
     }
+  }
 
-    print("✨ 앱 신호확인 게시");
+  Future<String> pubCheckPillowWaitResponse() async {
+    await resetData();
+    String response = '';
+    // 게시
+    await pubCheckPillowPowerOn();
+
+    // 데이터 업데이트 기다리기
+    await waitForDataUpdate();
+
+    response = data.value;
+
+    await resetData();
+    print("✨베개 높이 확인 : $response");
+
+    return response;
   }
 
   // select용 sql함수
   Future<void> publishToSQL(String sql) async {
-    print("✨ select sql 함수 실행2 ");
+    // print("✨ select sql 함수 실행2 ");
     final builder = MqttClientPayloadBuilder();
     builder.addString(sql);
 
@@ -270,24 +290,28 @@ class MqttHandler extends GetxController {
       client.publishMessage(pubTopic1, MqttQos.atMostOnce, builder.payload!);
     }
   }
+
+
+
+
   // select용 sql함수
   Future<String> pubSqlWaitResponse(String sql) async {
     await resetData();
-    print("✨ select sql 함수 실행1");
+    // print("✨ select sql 함수 실행1");
     String response = '';
     // 게시
     await publishToSQL(sql);
-    print("✨1 게시 완료");
+    // print("✨1 게시 완료");
 
     // 데이터 업데이트 기다리기
     await waitForDataUpdate();
-    print("✨2 답변 대기 완료");
+    // print("✨2 답변 대기 완료");
 
     response = data.value;
 
     await resetData();
 
-    print("✨3 응답 비우기 완료");
+    // print("✨3 응답 비우기 완료");
     return response;
   }
 
@@ -464,16 +488,16 @@ class MqttHandler extends GetxController {
   }
 
   Future<void> setUnsubscribe() async {
-    client.unsubscribe(subtopic5);
+    // client.unsubscribe(subtopic5);
     client.unsubscribe(subtopic4);
-    client.unsubscribe(subtopic8);
+    // client.unsubscribe(subtopic8);
     data.value = '';
   }
 
   Future<void> setSubscribe() async {
-    client.subscribe(subtopic5,MqttQos.atMostOnce);
+    // client.subscribe(subtopic5,MqttQos.atMostOnce);
     client.subscribe(subtopic4,MqttQos.atMostOnce);
-    client.subscribe(subtopic8,MqttQos.atMostOnce);
+    // client.subscribe(subtopic8,MqttQos.atMostOnce);
     data.value = '';
   }
 

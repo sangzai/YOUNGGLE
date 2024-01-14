@@ -43,7 +43,8 @@ class SetInitialDate {
     // 로딩 화면 꺼
     IsLoadingController.to.isLoading = false;
     await mqttHandler.setSubscribe();
-    mqttHandler.pubAppOn();
+    await mqttHandler.pubCheckPillowWaitResponse();
+    // mqttHandler.pubAppOn();
   }
 
   Future<void> getActiveDates() async {
@@ -62,10 +63,11 @@ class SetInitialDate {
 
     String response = await mqttHandler.pubSqlWaitResponse(sql);
     print('✨set_initial_date.dart 파일의 getActiveDates함수 완료');
-    // print(response);
+    print("✨✨response : $response");
 
     // JSON 응답을 MemberModel 리스트로 변환
     List<ActiveDateModel> activeList = activeDateModelFromJson(response);
+    // print('오류 확인');
 
     // 각 MemberModel에서 DateTime 객체를 추출하여 dateList로 만듦
     List<DateTime> dateList = activeList.map((member) => member.date).toList();

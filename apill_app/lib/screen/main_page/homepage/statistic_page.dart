@@ -290,7 +290,11 @@ class _HomePageState extends State<HomePage> {
     // 선택한 날짜가 현재 날짜와 다르다면 변수에 대입하고 데이터 체크
     if(selectedDate != null) {
       statisticCon.selectedDate.value = selectedDate;
+      IsLoadingController.to.isLoading = true;
+
       await checkDateTime(selectedDate, mqttHandler);
+      IsLoadingController.to.isLoading = false;
+
     }
   }
 
@@ -352,15 +356,40 @@ class _HomePageState extends State<HomePage> {
     // TODO : 만약 월이 달라진다면 데이터 받기
 
     var checkMonth = getMonthStartEndList(selectedDate);
+    // print("✨✨✨선택한 날짜의 월간 시작날짜 : ${checkMonth[0]}");
+    print("✨✨✨기존 날짜의 월간 시작 날짜 : ${statisticCon.setMonthStartEndData[0]}");
+    print("✨✨✨기존 날짜의 월간 끝 날짜 : ${statisticCon.setMonthStartEndData[1]}");
+
 
     if(statisticCon.setMonthStartEndData[0] != checkMonth[0]){
+      print("✨✨✨월간 시작 끝 변경");
+      print("✨✨✨월간 시작 ${checkMonth[0]} ");
+      print("✨✨✨월간 끝  ${checkMonth[1]}");
+
       statisticCon.setMonthStartEndData.assignAll(
           checkMonth) ;
 
       statisticCon.monthChartData.assignAll(
-          (await getSelectMonthData(statisticCon.setMonthStartEndData, mqttHandler)) as Iterable<List<double>>);
+              await getSelectMonthData(
+                  statisticCon.setMonthStartEndData, mqttHandler)
+          );
 
-      print('✨월간 데이터 적용');
+      print('✨월간 데이터 적용 확인');
+
+      print("✨✨✨들어갔는지 확인 : ${statisticCon.monthChartData}");
+
+
+      // ✨월간 데이터 적용하기
+      // Future<void> setInitialMonthData() async {
+      //   statisticCon.setMonthStartEndData.assignAll(getMonthStartEndList(statisticCon.selectedDate.value)) ;
+      //
+      //   statisticCon.monthChartData.assignAll(
+      //       await getSelectMonthData(
+      //           statisticCon.setMonthStartEndData, mqttHandler)
+      //   );
+      //
+      //   print('✨월간 데이터 적용');
+      // }
     }
 
     await mqttHandler.setSubscribe();

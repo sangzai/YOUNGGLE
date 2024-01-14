@@ -65,10 +65,10 @@ class _AlarmPageState extends State<AlarmPage> {
 
 
     // setState를 호출하여 UI를 업데이트
-    setState(() {
-      // 여기에서 다른 initState에서 사용할 수 있는 데이터 처리
-      // print("✨알람 페이지 : $response");
-    });
+    // setState(() {
+    //   // 여기에서 다른 initState에서 사용할 수 있는 데이터 처리
+    //   // print("✨알람 페이지 : $response");
+    // });
   }
 
   @override

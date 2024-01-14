@@ -410,7 +410,7 @@ class _SettingProfileState extends State<SettingProfile> {
                                         width: MediaQuery.of(context).size.width * 0.7,
                                         height: 180,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10), color: Colors.white),
+                                            borderRadius: BorderRadius.circular(10), color: AppColors.appColorWhite.darken(20)),
                                         child: Column(
                                           children: [
                                             const SizedBox(height: 32,),
@@ -436,7 +436,7 @@ class _SettingProfileState extends State<SettingProfile> {
                                                     Get.offAll(RoutePage());
                                                   },
                                                       child: Text('로그아웃 하기'),
-                                                      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue)),
+                                                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.appColorBlue.darken(30))),
                                                   SizedBox(width: 10,),
                                                   ElevatedButton(onPressed: (){
                                                     Navigator.pop(context);
@@ -457,13 +457,21 @@ class _SettingProfileState extends State<SettingProfile> {
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.appColorBlue70),
                                 onPressed: () async{
+                                  List<String> userInfoList = userCon.userInfo.value.split(",");
                                   if (newPasswordController.text.isNotEmpty
                                       && confirmNewPasswordController.text.isNotEmpty){
-                                    if (input_height.text.isNotEmpty && input_weight.text.isNotEmpty){
-                                      updatedProfile(false);
-                                    } else {
-                                      showAlertDialog("알림","프로필 내용 중 비어있는 곳이 있습니다.");
+                                    if (input_height.text != userInfoList[4]
+                                    && input_weight.text != userInfoList[3]) {
+                                      if (input_height.text.isNotEmpty &&
+                                          input_weight.text.isNotEmpty) {
+                                        updatedProfile(false);
+                                      } else {
+                                        showAlertDialog("알림", "프로필 내용 중 비어있는 곳이 있습니다.");
+                                      }
+                                    } else{
+                                      showAlertDialog("알림", "프로필 내용 중 수정된 곳이 없습니다.");
                                     }
+
                                   }else{
                                     if (newPasswordController.text != confirmNewPasswordController.text){
                                       showAlertDialog("알림","비밀번호가 같지 않습니다.");
@@ -497,7 +505,7 @@ class _SettingProfileState extends State<SettingProfile> {
                             width: MediaQuery.of(context).size.width * 0.7,
                             height: 180,
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10), color: Colors.white),
+                                borderRadius: BorderRadius.circular(10), color: AppColors.appColorWhite.darken(20)),
                             child: Column(
                               children: [
                                 const SizedBox(height: 32,),

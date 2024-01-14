@@ -14,8 +14,11 @@ class PillowHeightController extends GetxController {
   // 현재 자세 일단 받을 용
   RxString nowPosture = 'DP'.obs;
 
+  RxBool pillowCheck = false.obs;
 
-  // 수면 자세 판단 여부
+
+
+// 수면 자세 판단 여부
   // true : 등누운자세
   // false : 옆누운자세
   // RxBool sleepPosition = false.obs;
