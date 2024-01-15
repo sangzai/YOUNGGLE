@@ -72,11 +72,11 @@ APP 기능 : 수동으로 자세별 높이 설정, 수면 모니터링
 ![App회원수정](https://github.com/sangzai/YOUNGGLE/assets/146160350/79b050c9-91dc-4599-b555-a78e1001485c)
 ![App정보](https://github.com/sangzai/YOUNGGLE/assets/146160350/0670e41a-279a-436c-a53b-6fab9bf2370c)
 
-
-
-
-
 ## 📈 ER 다이어그램    
 ![ERD](https://github.com/sangzai/YOUNGGLE/assets/146160350/3db5407a-01d2-4248-8d16-7dc58c7e6add)
 
+## 🤷‍♀️ 트러블슈팅
 
+
+## 👨‍👩‍👦‍👦 팀원역할
+![팀원역할](https://github.com/sangzai/YOUNGGLE/assets/146160350/4dcf7ce5-2d63-4575-bade-3436e0955685)
