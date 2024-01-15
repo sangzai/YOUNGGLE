@@ -4,8 +4,20 @@
 팀장 : 이상원  
 팀원 : 오승헌, 조도원, 이다현, 임유동, 이건중
 ## 서비스 소개
-VUI 기능 : 음성 인터페이스를 통한 음성 인식 및 명령 수행  
-APP 기능 : 수동으로 자세별 높이 설정, 수면 모니터링
+- 개발목표 : 사용자 체형에 맞는 베개 높이를 자동/수동으로 맞추어 수면의 질 향상 
+- 기능
+  - VUI 기능 : 음성 인터페이스를 통한 음성 인식 및 명령 수행(노래재생, 알람설정, 베개높이 조정 및 간단한 대화 수행)  
+  - APP 기능 : 수동으로 자세별 높이 설정, 수면 모니터링
+  - IoT 기능 : 베개 높이 자동 조절
+- 차별점 : MVP전략을 통한 접근성 향상, 자세에 따른 베개 높이 조절(옆누운자세, 등누운자세)
+- 기대효과
+  - 사용자 수면 품질 향상
+  - 일상 생활의 편의성
+  - 수면정보를 통한 정확한 처방
+
+
+## 📅프로젝트 기간
+2023.12.20 ~ 2024.01.16 
 ## 🔨 기술스택
 <table>
   <tr>
@@ -33,8 +45,8 @@ APP 기능 : 수동으로 자세별 높이 설정, 수면 모니터링
     
   <tr>
     <td>IDE</td>
-    <td><img src="https://img.shields.io/badge/Arduino-00979D?style=for-the-badge&logo=Arduino&logoColor=white"/> <img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=Jupyter&logoColor=white"/> 
-<img src="https://img.shields.io/badge/AndroidStudio-3DDC84?style=for-the-badge&logo=AndroidStudio&logoColor=white"/></td> 
+    <td> <img src="https://img.shields.io/badge/AndroidStudio-3DDC84?style=for-the-badge&logo=AndroidStudio&logoColor=white"/> <img src="https://img.shields.io/badge/Arduino-00979D?style=for-the-badge&logo=Arduino&logoColor=white"/> <img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=Jupyter&logoColor=white"/> 
+<img src="https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=VisualStudioCode&logoColor=white"/></td> 
   </tr>
   <tr>
     <td>Collaboration</td>
@@ -64,7 +76,7 @@ APP 기능 : 수동으로 자세별 높이 설정, 수면 모니터링
 ![App튜토리얼2](https://github.com/sangzai/YOUNGGLE/assets/146160350/eb4b9ff0-945d-4fb4-8f55-6b8c081d777e)
 ![App튜토리얼3](https://github.com/sangzai/YOUNGGLE/assets/146160350/2f241bb8-f182-48b6-b962-c5c8eeddf5e3)
 ![App튜토리얼4](https://github.com/sangzai/YOUNGGLE/assets/146160350/5901209c-317b-4f66-8d6e-45f7dbebb2aa)
-![App메인화면](https://github.com/sangzai/YOUNGGLE/assets/146160350/f227daa4-cbe7-4f19-b65a-2e87e20ea23b)
+![App메인화면](https://github.com/sangzai/YOUNGGLE/assets/146160350/ac075855-d018-4a58-acdb-421ffa6af154)
 ![App베개조절](https://github.com/sangzai/YOUNGGLE/assets/146160350/e48dc353-49f7-4558-9f9f-a547f9685aa3)
 ![App베개조절2](https://github.com/sangzai/YOUNGGLE/assets/146160350/23955532-9c99-47ba-8345-1c80d6363120)
 ![App알람1](https://github.com/sangzai/YOUNGGLE/assets/146160350/07c330dd-bea6-4254-af4a-99670bfd0d73)
