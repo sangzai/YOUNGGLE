@@ -7,7 +7,9 @@ import 'package:mainproject_apill/screen/login_page/user_controller.dart';
 import 'package:mainproject_apill/screen/main_page/alarm_page/alarm_page.dart';
 import 'package:mainproject_apill/screen/main_page/homepage/statistic_page.dart';
 import 'package:mainproject_apill/screen/main_page/setting_page/setting_page.dart';
+import 'package:mainproject_apill/screen/main_page/sleep_page/pillow_height_controller.dart';
 import 'package:mainproject_apill/screen/main_page/sleep_page/sleep_page.dart';
+import 'package:mainproject_apill/utils/mqtt_handler.dart';
 import 'package:mainproject_apill/widgets/appcolors.dart';
 import 'package:mainproject_apill/widgets/backgroundcon.dart';
 
@@ -28,6 +30,9 @@ class _BottomNaviPageState extends State<BottomNaviPage> {
   int _selectedIndex = 0;
   // static final storage = FlutterSecureStorage();
   final userCon = Get.find<UserController>();
+  final mqttHandler = Get.find<MqttHandler>();
+  final pillowHeightCon = Get.find<PillowHeightController>();
+
 
   @override
   void initState() {
@@ -48,11 +53,14 @@ class _BottomNaviPageState extends State<BottomNaviPage> {
 
   // 네비게이션 클릭시 인덱스 변경 해주는 함수
   // 페이지 렌더링을 위해 setState 사용
-  void _onNavTapped(int index) {
+  Future<void> _onNavTapped(int index) async {
+    await mqttHandler.pubCheckPillowPowerOn();
+
+    IsLoadingController.to.isLoading = false;
+
     setState(() {
       if (_selectedIndex != index) {
         _selectedIndex = index;
-
       }
     });
   }
@@ -124,8 +132,34 @@ class _BottomNaviPageState extends State<BottomNaviPage> {
                       label: '•'
                   ),
                   BottomNavigationBarItem(
-                      icon: FaIcon(FontAwesomeIcons.gear,
-                        size: _selectedIndex == 3 ? 38 : 35),
+                      icon: pillowHeightCon.pillowCheck.value ?
+                      // true면
+                      Stack(
+                        children: [
+                          FaIcon(FontAwesomeIcons.gear ,
+                              size: _selectedIndex == 3 ? 38 : 35),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: FaIcon(FontAwesomeIcons.plug,
+                              size: 18,color: Colors.yellow,)
+                          ),
+                        ],
+                      ) :
+                      //false면
+                      Stack(
+                        children: [
+                          FaIcon(FontAwesomeIcons.gear ,
+                            size: _selectedIndex == 3 ? 38 : 35),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: FaIcon(FontAwesomeIcons.circleExclamation,
+                              size: 18,color: Colors.red),
+                          )
+                        ]
+                      ),
+                      
                       label: '•'
                   ),
                 ]

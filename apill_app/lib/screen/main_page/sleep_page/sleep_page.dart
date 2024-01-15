@@ -37,7 +37,7 @@ class _SleepPageState extends State<SleepPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 120),
+            const SizedBox(height: 60),
 
             Column(
               children: [
@@ -71,7 +71,7 @@ class _SleepPageState extends State<SleepPage> {
 
             // 베개의 현재 높이
             SizedBox(
-              height : 260.h,
+              height : 320.h,
               child: Stack(
                 fit: StackFit.expand,
                 alignment: Alignment.center,
@@ -165,7 +165,7 @@ class _SleepPageState extends State<SleepPage> {
 
 
 
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
 
             Column(
                 children: [
@@ -233,7 +233,7 @@ class _SleepPageState extends State<SleepPage> {
                     ],
                   ),
 
-                  SizedBox(height: 40,),
+                  SizedBox(height: 30,),
 
                   SizedBox(
                     height: 150.h,

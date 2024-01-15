@@ -63,8 +63,9 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
 
-                    SizedBox(height: 5,),
+                    SizedBox(height: 10,),
                     Container(height: 3, width: 370, color: Colors.white,),
+                    SizedBox(height: 10,),
 
                     GestureDetector(
                       onTap: (){
@@ -100,8 +101,9 @@ class _SettingPageState extends State<SettingPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5,),
+                    SizedBox(height: 10,),
                     Container(height: 3, width: 370, color: AppColors.appColorWhite90,),
+                    SizedBox(height: 10,),
 
                     GestureDetector(
                       onTap: (){
@@ -109,22 +111,20 @@ class _SettingPageState extends State<SettingPage> {
                         print('출력!!!');
                       },
                       behavior: HitTestBehavior.translucent,
-                      child: Expanded(
-                        child: Container(
-                          height: 50,
-                          width: 350,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('ApilL정보', style: Theme.of(context).textTheme.titleLarge,),
-                              Icon(Icons.keyboard_arrow_right, color: AppColors.appColorWhite90,),
-                            ],
-                          ),
+                      child: Container(
+                        height: 50,
+                        width: 350,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('ApilL정보', style: Theme.of(context).textTheme.titleLarge,),
+                            Icon(Icons.keyboard_arrow_right, color: AppColors.appColorWhite90,),
+                          ],
                         ),
                       ),
                     ),
 
-                    SizedBox(height: 5,),
+                    SizedBox(height: 10,),
                     Container(height: 3, width: 370, color: AppColors.appColorWhite90,),
                   ],
                 )

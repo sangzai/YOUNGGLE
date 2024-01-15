@@ -66,6 +66,8 @@ class MqttHandler extends GetxController {
   // mqtt response 저장되는변수
   final RxString data = "".obs;
 
+  final RxString topics = ''.obs;
+
   late MqttServerClient client;
 
   Future<Object> connect() async {
@@ -160,6 +162,9 @@ class MqttHandler extends GetxController {
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
       final recMess = c![0].payload as MqttPublishMessage;
       final pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      final topic = c[0].topic;
+
+      topics.value = topic;
 
       print("✨[${c[0].topic}]에서 데이터 도착");
 
@@ -239,6 +244,10 @@ class MqttHandler extends GetxController {
   // 기본 답변 초기화 함수
   Future<void> resetData() async {
     data.value = '';
+  }
+
+  Future<void> resetTopics() async {
+    topics.value = '';
   }
 
   // 기본 답변 대기 함수

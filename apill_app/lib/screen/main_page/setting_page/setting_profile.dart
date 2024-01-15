@@ -171,35 +171,35 @@ class _SettingProfileState extends State<SettingProfile> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextField(
-                            decoration: InputDecoration(
-                                label: Row(
-                                  children: [
-                                    Icon(Icons.key,
-                                        color: Colors.white.withOpacity(0.7)),
-                                    Text(
-                                      "현재 비밀번호 입력",
-                                      style: TextStyle(
-                                          color: Colors.white.withOpacity(0.7),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                filled: true,
-                                fillColor: Colors.white.withOpacity(0.2),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                )),
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.7),
-                            ),
-                            keyboardType: TextInputType.text,
-                            obscureText: true,
-                            controller: currentPasswordController,
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(8.0),
+                        //   child: TextField(
+                        //     decoration: InputDecoration(
+                        //         label: Row(
+                        //           children: [
+                        //             Icon(Icons.key,
+                        //                 color: Colors.white.withOpacity(0.7)),
+                        //             Text(
+                        //               "현재 비밀번호 입력",
+                        //               style: TextStyle(
+                        //                   color: Colors.white.withOpacity(0.7),
+                        //                   fontWeight: FontWeight.bold),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         filled: true,
+                        //         fillColor: Colors.white.withOpacity(0.2),
+                        //         border: OutlineInputBorder(
+                        //           borderRadius: BorderRadius.circular(8),
+                        //         )),
+                        //     style: TextStyle(
+                        //       color: Colors.white.withOpacity(0.7),
+                        //     ),
+                        //     keyboardType: TextInputType.text,
+                        //     obscureText: true,
+                        //     controller: currentPasswordController,
+                        //   ),
+                        // ),
 
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -287,6 +287,7 @@ class _SettingProfileState extends State<SettingProfile> {
                                   enabled: false,
                                 ),
                               ),
+                              SizedBox(width: 10,),
                               Expanded(
                                 child: TextField(
                                   decoration: InputDecoration(
@@ -411,20 +412,24 @@ class _SettingProfileState extends State<SettingProfile> {
                                         width: MediaQuery.of(context).size.width * 0.7,
                                         height: 180,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10), color: AppColors.appColorWhite.darken(20)),
+                                            borderRadius: BorderRadius.circular(10), color: AppColors.appColorWhite.darken(20),
+                                        ),
                                         child: Column(
                                           children: [
                                             const SizedBox(height: 32,),
 
-                                            Text(
-                                              '정말 로그아웃을 진행 하시겠습니까?',
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.red),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                              child: Text(
+                                                '정말 로그아웃을 진행 하시겠습니까?',
+                                                style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.red),
+                                              ),
                                             ),
 
-                                            SizedBox(height: 40,),
+                                            SizedBox(height: 20,),
 
                                             Padding(
                                               padding: const EdgeInsets.all(8.0),
@@ -436,7 +441,7 @@ class _SettingProfileState extends State<SettingProfile> {
                                                     await userCon.storage.deleteAll();
                                                     Get.offAll(RoutePage());
                                                   },
-                                                      child: Text('로그아웃 하기'),
+                                                      child: Text('로그아웃'),
                                                       style: ElevatedButton.styleFrom(backgroundColor: AppColors.appColorBlue.darken(30))),
                                                   SizedBox(width: 10,),
                                                   ElevatedButton(onPressed: (){
@@ -459,10 +464,13 @@ class _SettingProfileState extends State<SettingProfile> {
                                     backgroundColor: AppColors.appColorBlue70),
                                 onPressed: () async{
                                   List<String> userInfoList = userCon.userInfo.value.split(",");
-                                  if (newPasswordController.text.isNotEmpty
-                                      && confirmNewPasswordController.text.isNotEmpty){
+                                  // 새 비밀번호 와 비밀 번호 확인 창 둘다 비어있지 않다면
+                                  if (newPasswordController.text.isEmpty
+                                      && confirmNewPasswordController.text.isEmpty){
+                                    // 프로필 내용 수정이 되었다면
                                     if (input_height.text != userInfoList[4]
                                     && input_weight.text != userInfoList[3]) {
+                                      // 수정한 내용이 빈게 아니라면
                                       if (input_height.text.isNotEmpty &&
                                           input_weight.text.isNotEmpty) {
                                         updatedProfile(false);
@@ -472,7 +480,7 @@ class _SettingProfileState extends State<SettingProfile> {
                                     } else{
                                       showAlertDialog("알림", "프로필 내용 중 수정된 곳이 없습니다.");
                                     }
-
+                                    // 새 비밀번호와 새 비밀번호 확인 창 둘다 차 있다면
                                   }else{
                                     if (newPasswordController.text != confirmNewPasswordController.text){
                                       showAlertDialog("알림","비밀번호가 같지 않습니다.");
@@ -511,12 +519,15 @@ class _SettingProfileState extends State<SettingProfile> {
                               children: [
                                 const SizedBox(height: 32,),
 
-                                Text(
-                                  '정말 회원탈퇴를 진행 하시겠습니까?',
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                  child: Text(
+                                    '정말 회원탈퇴를 진행 하시겠습니까?',
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red),
+                                  ),
                                 ),
 
                                 SizedBox(height: 20,),
