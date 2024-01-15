@@ -58,4 +58,25 @@ APP 기능 : 수동으로 자세별 높이 설정, 수면 모니터링
 ### 🖋 서비스흐름도
 ![App서비스흐름도](https://github.com/sangzai/YOUNGGLE/assets/146160350/232c9694-a230-4292-8492-13c7feabd820)
 ### 🖥 화면구성
+![App로그인](https://github.com/sangzai/YOUNGGLE/assets/146160350/a98e1929-659d-4590-ae4b-14cd1a0a03bb)
+![App회원가입](https://github.com/sangzai/YOUNGGLE/assets/146160350/8b98877f-2799-45fb-bc0c-abacd4eb98a3)
+![App튜토리얼](https://github.com/sangzai/YOUNGGLE/assets/146160350/20c35d6c-62f8-4777-824f-45f5a1fb4fb8)
+![App튜토리얼2](https://github.com/sangzai/YOUNGGLE/assets/146160350/eb4b9ff0-945d-4fb4-8f55-6b8c081d777e)
+![App튜토리얼3](https://github.com/sangzai/YOUNGGLE/assets/146160350/2f241bb8-f182-48b6-b962-c5c8eeddf5e3)
+![App튜토리얼4](https://github.com/sangzai/YOUNGGLE/assets/146160350/5901209c-317b-4f66-8d6e-45f7dbebb2aa)
+![App메인화면](https://github.com/sangzai/YOUNGGLE/assets/146160350/f227daa4-cbe7-4f19-b65a-2e87e20ea23b)
+![App베개조절](https://github.com/sangzai/YOUNGGLE/assets/146160350/e48dc353-49f7-4558-9f9f-a547f9685aa3)
+![App베개조절2](https://github.com/sangzai/YOUNGGLE/assets/146160350/23955532-9c99-47ba-8345-1c80d6363120)
+![App알람1](https://github.com/sangzai/YOUNGGLE/assets/146160350/07c330dd-bea6-4254-af4a-99670bfd0d73)
+![App설정](https://github.com/sangzai/YOUNGGLE/assets/146160350/49edfbe5-09fe-4a43-902b-b327859c516e)
+![App회원수정](https://github.com/sangzai/YOUNGGLE/assets/146160350/79b050c9-91dc-4599-b555-a78e1001485c)
+![App정보](https://github.com/sangzai/YOUNGGLE/assets/146160350/0670e41a-279a-436c-a53b-6fab9bf2370c)
+
+
+
+
+
+## 📈 ER 다이어그램    
+![ERD](https://github.com/sangzai/YOUNGGLE/assets/146160350/3db5407a-01d2-4248-8d16-7dc58c7e6add)
+
 
