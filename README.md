@@ -34,13 +34,28 @@ APP 기능 : 수동으로 자세별 높이 설정, 수면 모니터링
   <tr>
     <td>IDE</td>
     <td><img src="https://img.shields.io/badge/Arduino-00979D?style=for-the-badge&logo=Arduino&logoColor=white"/> <img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=Jupyter&logoColor=white"/> 
-<img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=Android&logoColor=white"/></td> 
+<img src="https://img.shields.io/badge/AndroidStudio-3DDC84?style=for-the-badge&logo=AndroidStudio&logoColor=white"/></td> 
   </tr>
   <tr>
     <td>Collaboration</td>
-    <td><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white"/> <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white"/> <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Discord&logoColor=white"/></td>
+    <td><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white"/> <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white"/> <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white"/></td>
   </tr>
 </table>
+
 ## APilL Web
+### 🖋 서비스흐름도
+![image](https://github.com/sangzai/YOUNGGLE/assets/146160350/90926b4b-7f1f-400c-9085-cab0d9dc8cea)  
+### 🖥 화면구성
+![Picture](https://github.com/sangzai/YOUNGGLE/assets/146160350/a94442a2-690a-4d52-9680-ce369d2bb07e)  
+![Picture (1)](https://github.com/sangzai/YOUNGGLE/assets/146160350/36d8ff3a-a9d0-4f72-bb71-30d87f980a63)  
+![Picture (2)](https://github.com/sangzai/YOUNGGLE/assets/146160350/344e5b24-0c4e-40a2-adfd-ecdec8f3a2df)
+![Picture (3)](https://github.com/sangzai/YOUNGGLE/assets/146160350/9fb2f28b-4601-4353-848d-c958d8895518)
+![Picture (4)](https://github.com/sangzai/YOUNGGLE/assets/146160350/a44bc301-f2c8-4119-9214-8b435400f970)
+![Picture (5)](https://github.com/sangzai/YOUNGGLE/assets/146160350/82d86cc7-2378-44b5-86fc-c8a2898f3951)  
+![Picture (6)](https://github.com/sangzai/YOUNGGLE/assets/146160350/2a19ba87-5589-4562-b59d-447b6a2f08ae)
 
 ## APilL APP
+### 🖋 서비스흐름도
+![App서비스흐름도](https://github.com/sangzai/YOUNGGLE/assets/146160350/232c9694-a230-4292-8492-13c7feabd820)
+### 🖥 화면구성
+
