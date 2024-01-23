@@ -124,7 +124,28 @@
 ![ERD](https://github.com/sangzai/YOUNGGLE/assets/146160350/3db5407a-01d2-4248-8d16-7dc58c7e6add)
 
 ## 🤷‍♀️ 트러블슈팅
+### 🛠HardWare
+<img width="210" alt="트러블슈팅_하드웨어" src="https://github.com/sangzai/YOUNGGLE/assets/146160350/0944414e-ad3d-4aab-b9ed-132e1ccf43b4">
 
+- 에어펌프의 출입구에서 공기가 새는 문제 발생
+  - 해결방안 : 솔레노이드 밸브를 사용하여 공기출입이 없을 시 공기 출입구를 막아 차단
+
+### 📱Application
+<img width="166" alt="트러블슈팅_어플" src="https://github.com/sangzai/YOUNGGLE/assets/146160350/3fe7b112-46f6-4bc0-a72c-a7acdc11cd12">  
+
+- MQTT를 통한 데이터 연동 후 속도 저하 문제 발생
+  - 해결방안
+    -  GetX Controller를 확장시켜 어플리케이션 전역에서 하나의 클라이언트를 사용하도록 변경
+    -  어플리케이션 시작시 MQTT클라이언트를 get.put하고 이후 get.find 하여 한개의 MQTT클라이언트를 사용하여 속도 보장
+
+### 🧠AI
+
+- 음성인터페이스
+  - 기능 수행 중 음성인식이 불가하여 다른 작업 수행 안되는 문제 발생
+    - 해결방안 : Thread를 통해 동시 작동 해결
+- 모델링
+  - 여러 사람의 데이터 수집 -> 적중률이 낮아짐
+    - 해결방안 : 개인 튜토리얼로 맞춤 모델 생성하여 해결 
 
 ## 👨‍👩‍👦‍👦 팀원역할
 ![팀원역할](https://github.com/sangzai/YOUNGGLE/assets/146160350/4dcf7ce5-2d63-4575-bade-3436e0955685)
